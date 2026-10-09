@@ -464,7 +464,7 @@ async function submitWorkForm(event) {
     button.textContent = 'กำลังส่ง...';
 
     try {
-        const response = await fetch('https://phooooomz.jirayuphoom539.workers.dev/', {
+        const response = await fetch('phooooomz.jirayuphoom539.workers.dev', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ message })
