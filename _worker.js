@@ -13,23 +13,21 @@ export default {
         const url = new URL(request.url);
 
         // 1. API ดึงสถานะสำหรับหน้าเว็บ (GET /api/status)
-if (url.pathname === '/api/status' && request.method === 'GET') {
-    // ใส่ cacheTtl: 0 เพื่อบังคับให้ดึงค่าสดใหม่จาก KV ทุกครั้ง ไม่ใช้แคชเก่า
-    const isOpen = await env.WORK_STORE.get('is_open', { cacheTtl: 0 }) || 'false';
-    const workCount = await env.WORK_STORE.get('work_count', { cacheTtl: 0 }) || '0';
+        if (url.pathname === '/api/status' && request.method === 'GET') {
+            const isOpen = await env.WORK_STORE.get('is_open', { cacheTtl: 0 }) || 'false';
+            const workCount = await env.WORK_STORE.get('work_count', { cacheTtl: 0 }) || '0';
 
-    return new Response(JSON.stringify({
-        is_open: isOpen === 'true',
-        work_count: parseInt(workCount)
-    }), {
-        headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*',
-            'Cache-Control': 'no-cache, no-store, must-revalidate' // ห้ามเบราว์เซอร์และ CDN แคชข้อมูล
+            return new Response(JSON.stringify({
+                is_open: isOpen === 'true',
+                work_count: parseInt(workCount)
+            }), {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                    'Cache-Control': 'no-cache, no-store, must-revalidate'
+                }
+            });
         }
-    });
-}
-
 
         // 2. API รับฟอร์มติดต่องานแล้วส่งเข้า Discord (POST /api/submit)
         if (url.pathname === '/api/submit' && request.method === 'POST') {
@@ -109,21 +107,21 @@ if (url.pathname === '/api/status' && request.method === 'GET') {
 
             const message = JSON.parse(rawBody);
 
-            // ตอบกลับ Ping (Type 1)
+            // 1. ตอบกลับ Ping (Type 1)
             if (message.type === 1) {
                 return new Response(JSON.stringify({ type: 1 }), {
                     headers: { 'Content-Type': 'application/json' }
                 });
             }
 
-            // --- 2. ตอบรับ Slash Command /status (Type 2) ---
+            // 2. ตอบกลับเมื่อพิมพ์คำสั่ง /status (Type 2)
             if (message.type === 2) {
-                if (message.data.name === "status") {
+                if (message.data && message.data.name === "status") {
                     return new Response(JSON.stringify({
                         type: 4,
                         data: {
                             content: "⚙️ **เลือกสถานะการรับงานที่ต้องการตั้งค่า:**",
-                            flags: 64, // แสดงให้เห็นเฉพาะผู้สั่งคำสั่ง (Ephemeral)
+                            flags: 64, // เห็นเฉพาะผู้สั่งคำสั่ง (Ephemeral)
                             components: [{
                                 type: 1,
                                 components: [
@@ -136,7 +134,7 @@ if (url.pathname === '/api/status' && request.method === 'GET') {
                 }
             }
 
-            // --- 3. ตอบรับเมื่อมีการกดปุ่ม (Type 3) ---
+            // 3. ตอบกลับเมื่อกดปุ่ม (Type 3)
             if (message.type === 3) {
                 const customId = message.data.custom_id;
 
@@ -162,7 +160,7 @@ if (url.pathname === '/api/status' && request.method === 'GET') {
                     }), { headers: { 'Content-Type': 'application/json' } });
                 }
 
-                // กดสลับสถานะ: เปิดรับงาน (อัปเดต KV + ลบปุ่มและข้อความทิ้ง)
+                // กดสลับสถานะ: เปิดรับงาน
                 if (customId === "toggle_open") {
                     ctx.waitUntil(env.WORK_STORE.put("is_open", "true"));
                     return new Response(JSON.stringify({
@@ -171,7 +169,7 @@ if (url.pathname === '/api/status' && request.method === 'GET') {
                     }), { headers: { 'Content-Type': 'application/json' } });
                 }
 
-                // กดสลับสถานะ: ปิดรับงาน (อัปเดต KV + ลบปุ่มและข้อความทิ้ง)
+                // กดสลับสถานะ: ปิดรับงาน
                 if (customId === "toggle_close") {
                     ctx.waitUntil(env.WORK_STORE.put("is_open", "false"));
                     return new Response(JSON.stringify({
@@ -187,3 +185,4 @@ if (url.pathname === '/api/status' && request.method === 'GET') {
         return env.ASSETS.fetch(request);
     }
 };
+                                    
