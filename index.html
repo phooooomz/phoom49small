@@ -191,6 +191,17 @@
 
         <!-- LINKS SECTION -->
         <section class="w-full flex flex-col gap-3 fade-in-up" style="animation-delay: 0.4s;">
+
+<button onclick="openWorkModal()"
+    class="w-full p-4 rounded-2xl flex items-center justify-center gap-3
+    bg-gradient-to-r from-cyan-500 to-purple-600 text-white
+    font-semibold shadow-lg hover:scale-[1.02] active:scale-95
+    transition-all">
+    <i class="fa-solid fa-briefcase"></i>
+    ติดต่อจ้างงาน
+    <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+</button>
+            
             <h2 class="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-400 px-1 flex items-center gap-1.5">
                 <i class="fa-solid fa-link text-cyan-500"></i> ช่องทางการติดต่อ
             </h2>
@@ -240,6 +251,96 @@
 
     </main>
 
+<!-- WORK CONTACT MODAL -->
+<div id="work-modal"
+     class="fixed inset-0 z-[100] hidden items-center justify-center
+     bg-black/70 backdrop-blur-sm p-4">
+
+    <div class="w-full max-w-md max-h-[90vh] overflow-y-auto
+        glass-card rounded-3xl p-6 shadow-2xl">
+
+        <div class="flex items-center justify-between mb-5">
+            <div>
+                <h2 class="text-xl font-bold text-white">
+                    <i class="fa-solid fa-briefcase text-cyan-400"></i>
+                    ติดต่อจ้างงาน
+                </h2>
+                <p class="text-xs text-slate-400 mt-1">
+                    กรอกข้อมูลเพื่อส่งรายละเอียดงาน
+                </p>
+            </div>
+
+            <button type="button" onclick="closeWorkModal()"
+                class="w-9 h-9 rounded-full bg-white/10 text-white">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <form onsubmit="submitWorkForm(event)" class="space-y-4">
+
+            <div>
+                <label class="block text-sm text-slate-300 mb-1">
+                    ชื่อผู้ติดต่อ
+                </label>
+                <input name="contactName" required maxlength="100"
+                    placeholder="กรอกชื่อ"
+                    class="w-full rounded-xl bg-slate-900/70 border
+                    border-white/10 p-3 text-white outline-none
+                    focus:border-cyan-400">
+            </div>
+
+            <div>
+                <label class="block text-sm text-slate-300 mb-1">
+                    อายุ
+                </label>
+                <input name="age" type="number" required min="1" max="120"
+                    placeholder="กรอกอายุ"
+                    class="w-full rounded-xl bg-slate-900/70 border
+                    border-white/10 p-3 text-white outline-none
+                    focus:border-cyan-400">
+            </div>
+
+            <div>
+                <label class="block text-sm text-slate-300 mb-1">
+                    Instagram
+                </label>
+                <input name="instagram" required maxlength="100"
+                    placeholder="@username"
+                    class="w-full rounded-xl bg-slate-900/70 border
+                    border-white/10 p-3 text-white outline-none
+                    focus:border-cyan-400">
+            </div>
+
+            <div>
+                <label class="block text-sm text-slate-300 mb-1">
+                    รายละเอียดงาน
+                </label>
+                <textarea name="details" required maxlength="3000"
+                    rows="4" placeholder="ประเภทงาน รายละเอียด และงบประมาณ (ถ้ามี)"
+                    class="w-full rounded-xl bg-slate-900/70 border
+                    border-white/10 p-3 text-white outline-none
+                    focus:border-cyan-400 resize-y"></textarea>
+            </div>
+
+            <button type="submit"
+                class="w-full rounded-xl bg-gradient-to-r
+                from-cyan-500 to-purple-600 p-3 font-semibold text-white">
+                <i class="fa-solid fa-envelope mr-2"></i>
+                ส่งรายละเอียดงาน
+            </button>
+
+            <button type="button" onclick="closeWorkModal()"
+                class="w-full rounded-xl bg-white/5 p-3 text-slate-300">
+                ยกเลิก
+            </button>
+
+            <p class="text-xs text-slate-400 text-center">
+                เมื่อกดส่ง ระบบจะเปิดแอปอีเมลให้ตรวจสอบก่อนส่ง
+            </p>
+        </form>
+    </div>
+</div>
+    
     <!-- Footer -->
     <footer class="w-full max-w-md text-center py-4 z-10 fade-in-up" style="animation-delay: 0.5s;">
         <p class="text-xs text-slate-500 dark:text-slate-400">
@@ -319,6 +420,54 @@
                 toast.classList.add('opacity-0', 'pointer-events-none', 'translate-y-4');
             }, 2500);
         }
+// Open work contact modal
+function openWorkModal() {
+    const modal = document.getElementById('work-modal');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    document.body.style.overflow = 'hidden';
+}
+
+// Close work contact modal
+function closeWorkModal() {
+    const modal = document.getElementById('work-modal');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+    document.body.style.overflow = '';
+}
+
+// Send work details through the visitor's email app
+function submitWorkForm(event) {
+    event.preventDefault();
+
+    const form = event.target;
+    const data = new FormData(form);
+
+    const name = data.get('contactName').trim();
+    const age = data.get('age');
+    const instagram = data.get('instagram').trim();
+    const details = data.get('details').trim();
+
+    const subject = 'ติดต่องานจากเว็บไซต์ Phoom49small';
+    const body = [
+        'รายละเอียดการติดต่องาน',
+        '',
+        'ชื่อ: ' + name,
+        'อายุ: ' + age,
+        'Instagram: ' + instagram,
+        '',
+        'รายละเอียดงาน:',
+        details
+    ].join('\n');
+
+    const mailto =
+        'mailto:jirayuphoom539@gmail.com' +
+        '?subject=' + encodeURIComponent(subject) +
+        '&body=' + encodeURIComponent(body);
+
+    window.location.href = mailto;
+}
+        
     </script>
 </body>
 </html>
