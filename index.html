@@ -494,6 +494,45 @@ function showStatusToast(message, type = "success") {
         toast.classList.add('opacity-0', 'pointer-events-none', 'translate-y-4');
     }, 3000);
 }
+        // ดึงสถานะ
+async function loadLiveStatus() {
+    try {
+        const res = await fetch("/api/status");
+        const data = await res.json();
+        
+        const workCountEl = document.getElementById("work-count-display");
+        if (workCountEl) workCountEl.textContent = data.work_count;
+    } catch (e) {
+        console.error(e);
+    }
+}
+
+// ส่งแบบฟอร์ม
+async function submitWorkForm(event) {
+    event.preventDefault();
+    const form = event.target;
+    const formData = new FormData(form);
+
+    const payload = {
+        name: formData.get('contactName').trim(),
+        age: formData.get('age'),
+        instagram: formData.get('instagram').trim(),
+        details: formData.get('details').trim()
+    };
+
+    const res = await fetch("/api/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+    });
+
+    if (res.ok) {
+        form.reset();
+        closeWorkModal();
+        showStatusToast("ส่งข้อมูลเรียบร้อยแล้ว!", "success");
+    }
+}
+        
         
     </script>
 </body>
