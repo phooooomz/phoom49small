@@ -1,10 +1,18 @@
-import { verifyKey } from 'discord-interactions';
+// ฟังก์ชั่นแปลง Hex String เป็น Uint8Array
+function hexToUint8Array(hex) {
+    if (!hex) return new Uint8Array();
+    const bytes = new Uint8Array(Math.ceil(hex.length / 2));
+    for (let i = 0; i < bytes.length; i++) {
+        bytes[i] = parseInt(hex.substr(i * 2, 2), 16);
+    }
+    return bytes;
+}
 
 export default {
     async fetch(request, env) {
         const url = new URL(request.url);
 
-        // 1. Endpoint สำหรับดึงสถานะไปแสดงบนหน้าเว็บ (GET /api/status)
+        // 1. Endpoint ดึงสถานะและตัวเลข (GET /api/status)
         if (url.pathname === '/api/status' && request.method === 'GET') {
             const isOpen = await env.WORK_STORE.get('is_open') || 'false';
             const workCount = await env.WORK_STORE.get('work_count') || '0';
@@ -20,7 +28,7 @@ export default {
             });
         }
 
-        // 2. Endpoint สำหรับส่งข้อมูลจากแบบฟอร์มไปหา Discord Bot (POST /api/submit)
+        // 2. Endpoint ส่งฟอร์มติดต่องานเข้า Discord (POST /api/submit)
         if (url.pathname === '/api/submit' && request.method === 'POST') {
             try {
                 const data = await request.json();
@@ -67,27 +75,41 @@ export default {
             }
         }
 
-        // 3. Endpoint สำหรับรับ Interaction จาก Discord (POST /api/interaction)
+        // 3. Endpoint รับกดปุ่มจาก Discord (POST /api/interaction)
         if (url.pathname === '/api/interaction' && request.method === 'POST') {
             const signature = request.headers.get('X-Signature-Ed25519');
             const timestamp = request.headers.get('X-Signature-Timestamp');
             const rawBody = await request.text();
 
-            // ตรวจสอบ Signature ด้วยทางการของ Discord
-            const isValidRequest = verifyKey(
-                rawBody,
-                signature,
-                timestamp,
-                env.DISCORD_PUBLIC_KEY
-            );
+            // ตรวจสอบ Signature ผ่าน Web Crypto API
+            try {
+                const PUBLIC_KEY = env.DISCORD_PUBLIC_KEY;
+                const key = await crypto.subtle.importKey(
+                    'raw',
+                    hexToUint8Array(PUBLIC_KEY),
+                    { name: 'NODE-ED25519', namedCurve: 'NODE-ED25519' },
+                    false,
+                    ['verify']
+                );
 
-            if (!isValidRequest) {
-                return new Response('Bad request signature', { status: 401 });
+                const encoder = new TextEncoder();
+                const verified = await crypto.subtle.verify(
+                    'NODE-ED25519',
+                    key,
+                    hexToUint8Array(signature),
+                    encoder.encode(timestamp + rawBody)
+                );
+
+                if (!verified) {
+                    return new Response('Invalid request signature', { status: 401 });
+                }
+            } catch (err) {
+                return new Response('Signature verification failed', { status: 401 });
             }
 
             const message = JSON.parse(rawBody);
 
-            // ตอบกลับ Ping (Type 1) เพื่อยืนยัน URL
+            // ตอบกลับ Ping (Type 1) เพื่อยืนยัน URL ใน Discord Developer Portal
             if (message.type === 1) {
                 return new Response(JSON.stringify({ type: 1 }), {
                     headers: { 'Content-Type': 'application/json' }
@@ -126,8 +148,7 @@ export default {
             return new Response('OK', { status: 200 });
         }
 
-        // หากเป็น Request อื่นๆ ให้ Cloudflare Pages ทำการส่งไฟล์ Static (index.html) ตามปกติ
+        // หากเป็น Path อื่น ให้ Cloudflare Pages เสิร์ฟไฟล์หน้าเว็บ (index.html) ตามปกติ
         return env.ASSETS.fetch(request);
     }
 };
-                      
