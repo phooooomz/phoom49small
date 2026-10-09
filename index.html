@@ -411,63 +411,90 @@
             document.body.style.overflow = '';
         }
 
-        // Send work details through Webhook
-        async function submitWorkForm(event) {
-            event.preventDefault();
+// Send work details through Webhook
+async function submitWorkForm(event) {
+    event.preventDefault();
 
-            // 📌 วาง Discord Webhook URL ของคุณที่นี่
-            const WEBHOOK_URL = "https://discord.com/api/webhooks/1558113197846823105/VN_ZaOtfUHa_tVpbSm_lRjMBo8jIgW1DyiVkF0BtWgxh48TMbRKsaem1Z5IxRzkAVLiE";
+    // 📌 วาง Discord Webhook URL ของคุณที่นี่
+    const WEBHOOK_URL = "https://discord.com/api/webhooks/1558113197846823105/VN_ZaOtfUHa_tVpbSm_lRjMBo8jIgW1DyiVkF0BtWgxh48TMbRKsaem1Z5IxRzkAVLiE";
 
-            const form = event.target;
-            const submitBtn = form.querySelector('button[type="submit"]');
-            const originalBtnText = submitBtn.innerHTML;
+    const form = event.target;
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const originalBtnText = submitBtn.innerHTML;
 
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> กำลังส่งข้อมูล...';
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> กำลังส่งข้อมูล...';
 
-            const data = new FormData(form);
-            const name = data.get('contactName').trim();
-            const age = data.get('age');
-            const instagram = data.get('instagram').trim();
-            const details = data.get('details').trim();
+    const data = new FormData(form);
+    const name = data.get('contactName').trim();
+    const age = data.get('age');
+    const instagram = data.get('instagram').trim();
+    const details = data.get('details').trim();
 
-            const payload = {
-                embeds: [{
-                    title: "📩 มีรายการติดต่องานใหม่!",
-                    color: 388988,
-                    fields: [
-                        { name: "👤 ชื่อผู้ติดต่อ", value: name || "-", inline: true },
-                        { name: "🎂 อายุ", value: age + " ปี", inline: true },
-                        { name: "📸 Instagram", value: instagram || "-", inline: true },
-                        { name: "📝 รายละเอียดงาน", value: details || "-" }
-                    ],
-                    footer: { text: "Phoom49small Contact System" },
-                    timestamp: new Date().toISOString()
-                }]
-            };
+    const payload = {
+        embeds: [{
+            title: "📩 มีรายการติดต่องานใหม่!",
+            color: 388988,
+            fields: [
+                { name: "👤 ชื่อผู้ติดต่อ", value: name || "-", inline: true },
+                { name: "🎂 อายุ", value: age + " ปี", inline: true },
+                { name: "📸 Instagram", value: instagram || "-", inline: true },
+                { name: "📝 รายละเอียดงาน", value: details || "-" }
+            ],
+            footer: { text: "Phoom49small Contact System" },
+            timestamp: new Date().toISOString()
+        }]
+    };
 
-            try {
-                const response = await fetch(WEBHOOK_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
+    try {
+        const response = await fetch(WEBHOOK_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
 
-                if (response.ok) {
-                    alert('ส่งข้อมูลเรียบร้อยแล้ว! ขอบคุณที่ติดต่องานครับ');
-                    form.reset();
-                    closeWorkModal();
-                } else {
-                    alert('เกิดข้อผิดพลาดในการส่งข้อมูล กรุณาตรวจสอบ Webhook URL');
-                }
-            } catch (error) {
-                console.error('Error sending webhook:', error);
-                alert('ไม่สามารถเชื่อมต่อระบบได้ กรุณาลองใหม่อีกครั้ง');
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = originalBtnText;
-            }
+        if (response.ok) {
+            // ปิด Modal และเคลียร์ฟอร์ม
+            form.reset();
+            closeWorkModal();
+            
+            // แสดง UI แจ้งเตือนความสำเร็จ
+            showStatusToast("ส่งข้อมูลเรียบร้อยแล้ว! ขอบคุณที่ติดต่องานครับ", "success");
+        } else {
+            showStatusToast("เกิดข้อผิดพลาดในการส่งข้อมูล", "error");
         }
+    } catch (error) {
+        console.error('Error sending webhook:', error);
+        showStatusToast("ไม่สามารถเชื่อมต่อระบบได้ กรุณาลองใหม่อีกครั้ง", "error");
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalBtnText;
+    }
+}
+
+// ฟังก์ชั่นสำหรับแสดง Toast แจ้งเตือนสถานะต่างๆ
+function showStatusToast(message, type = "success") {
+    const toast = document.getElementById('toast');
+    const icon = toast.querySelector('i');
+    const span = toast.querySelector('span');
+
+    span.textContent = message;
+
+    if (type === "success") {
+        icon.className = "fa-solid fa-circle-check text-emerald-400 dark:text-emerald-600";
+    } else {
+        icon.className = "fa-solid fa-circle-xmark text-rose-500 dark:text-rose-600";
+    }
+
+    toast.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
+    toast.classList.add('opacity-100', 'translate-y-0');
+
+    setTimeout(() => {
+        toast.classList.remove('opacity-100', 'translate-y-0');
+        toast.classList.add('opacity-0', 'pointer-events-none', 'translate-y-4');
+    }, 3000);
+}
+        
     </script>
 </body>
 </html>
