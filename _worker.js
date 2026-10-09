@@ -12,7 +12,7 @@ export default {
     async fetch(request, env, ctx) {
         const url = new URL(request.url);
 
-        // 1. API สำหรับหน้าเว็บอ่านค่าสถานะและจำนวนงาน (GET /api/status)
+        // 1. API ดึงสถานะสำหรับหน้าเว็บ (GET /api/status)
         if (url.pathname === '/api/status' && request.method === 'GET') {
             const isOpen = await env.WORK_STORE.get('is_open') || 'false';
             const workCount = await env.WORK_STORE.get('work_count') || '0';
@@ -75,7 +75,7 @@ export default {
             }
         }
 
-        // 3. API รับการกดปุ่มจาก Discord (POST /api/interaction)
+        // 3. API รับ Interactions จาก Discord (POST /api/interaction)
         if (url.pathname === '/api/interaction' && request.method === 'POST') {
             const signature = request.headers.get('X-Signature-Ed25519');
             const timestamp = request.headers.get('X-Signature-Timestamp');
@@ -113,7 +113,27 @@ export default {
                 });
             }
 
-            // ตอบกลับเมื่อมีการกดปุ่ม (Type 3)
+            // --- 2. ตอบรับ Slash Command /status (Type 2) ---
+            if (message.type === 2) {
+                if (message.data.name === "status") {
+                    return new Response(JSON.stringify({
+                        type: 4,
+                        data: {
+                            content: "⚙️ **เลือกสถานะการรับงานที่ต้องการตั้งค่า:**",
+                            flags: 64, // แสดงให้เห็นเฉพาะผู้สั่งคำสั่ง (Ephemeral)
+                            components: [{
+                                type: 1,
+                                components: [
+                                    { type: 2, style: 3, label: "🟢 เปิดรับงาน", custom_id: "toggle_open" },
+                                    { type: 2, style: 4, label: "🔴 ปิดรับงาน", custom_id: "toggle_close" }
+                                ]
+                            }]
+                        }
+                    }), { headers: { 'Content-Type': 'application/json' } });
+                }
+            }
+
+            // --- 3. ตอบรับเมื่อมีการกดปุ่ม (Type 3) ---
             if (message.type === 3) {
                 const customId = message.data.custom_id;
 
@@ -139,21 +159,21 @@ export default {
                     }), { headers: { 'Content-Type': 'application/json' } });
                 }
 
-                // กดสลับสถานะ: เปิดรับงาน
+                // กดสลับสถานะ: เปิดรับงาน (อัปเดต KV + ลบปุ่มและข้อความทิ้ง)
                 if (customId === "toggle_open") {
                     ctx.waitUntil(env.WORK_STORE.put("is_open", "true"));
                     return new Response(JSON.stringify({
                         type: 7,
-                        data: { content: `🟢 **เปลี่ยนสถานะเป็น: พร้อมรับงาน (Open) แล้ว!**`, components: [] }
+                        data: { content: `🟢 **เปลี่ยนสถานะเป็น: พร้อมรับงาน (Open) เรียบร้อยแล้ว!**`, components: [] }
                     }), { headers: { 'Content-Type': 'application/json' } });
                 }
 
-                // กดสลับสถานะ: ปิดรับงาน
+                // กดสลับสถานะ: ปิดรับงาน (อัปเดต KV + ลบปุ่มและข้อความทิ้ง)
                 if (customId === "toggle_close") {
                     ctx.waitUntil(env.WORK_STORE.put("is_open", "false"));
                     return new Response(JSON.stringify({
                         type: 7,
-                        data: { content: `🔴 **เปลี่ยนสถานะเป็น: ไม่พร้อมรับงาน (Close) แล้ว!**`, components: [] }
+                        data: { content: `🔴 **เปลี่ยนสถานะเป็น: ไม่พร้อมรับงาน (Close) เรียบร้อยแล้ว!**`, components: [] }
                     }), { headers: { 'Content-Type': 'application/json' } });
                 }
             }
