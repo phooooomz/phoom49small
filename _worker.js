@@ -13,20 +13,23 @@ export default {
         const url = new URL(request.url);
 
         // 1. API ดึงสถานะสำหรับหน้าเว็บ (GET /api/status)
-        if (url.pathname === '/api/status' && request.method === 'GET') {
-            const isOpen = await env.WORK_STORE.get('is_open') || 'false';
-            const workCount = await env.WORK_STORE.get('work_count') || '0';
+if (url.pathname === '/api/status' && request.method === 'GET') {
+    // ใส่ cacheTtl: 0 เพื่อบังคับให้ดึงค่าสดใหม่จาก KV ทุกครั้ง ไม่ใช้แคชเก่า
+    const isOpen = await env.WORK_STORE.get('is_open', { cacheTtl: 0 }) || 'false';
+    const workCount = await env.WORK_STORE.get('work_count', { cacheTtl: 0 }) || '0';
 
-            return new Response(JSON.stringify({
-                is_open: isOpen === 'true',
-                work_count: parseInt(workCount)
-            }), {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*'
-                }
-            });
+    return new Response(JSON.stringify({
+        is_open: isOpen === 'true',
+        work_count: parseInt(workCount)
+    }), {
+        headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            'Cache-Control': 'no-cache, no-store, must-revalidate' // ห้ามเบราว์เซอร์และ CDN แคชข้อมูล
         }
+    });
+}
+
 
         // 2. API รับฟอร์มติดต่องานแล้วส่งเข้า Discord (POST /api/submit)
         if (url.pathname === '/api/submit' && request.method === 'POST') {
