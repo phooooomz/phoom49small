@@ -14,12 +14,22 @@ export default {
 
         // 1. API ดึงสถานะสำหรับหน้าเว็บ (GET /api/status)
         if (url.pathname === '/api/status' && request.method === 'GET') {
-            const isOpen = await env.WORK_STORE.get('is_open', { cacheTtl: 0 }) || 'false';
-            const workCount = await env.WORK_STORE.get('work_count', { cacheTtl: 0 }) || '0';
+            let isOpen = 'false';
+            let workCount = '0';
+
+            try {
+                // เช็คความปลอดภัยก่อนดึง KV เพื่อป้องกัน Error 1011
+                if (env && env.WORK_STORE) {
+                    isOpen = (await env.WORK_STORE.get('is_open', { cacheTtl: 0 })) || 'false';
+                    workCount = (await env.WORK_STORE.get('work_count', { cacheTtl: 0 })) || '0';
+                }
+            } catch (e) {
+                console.error("KV Read Error:", e);
+            }
 
             return new Response(JSON.stringify({
-                is_open: isOpen === 'true',
-                work_count: parseInt(workCount)
+                is_open: isOpen === 'true' || isOpen === true,
+                work_count: parseInt(workCount) || 0
             }), {
                 headers: {
                     'Content-Type': 'application/json',
@@ -138,6 +148,13 @@ export default {
             if (message.type === 3) {
                 const customId = message.data.custom_id;
 
+                if (!env || !env.WORK_STORE) {
+                    return new Response(JSON.stringify({
+                        type: 4,
+                        data: { content: "⚠️ **เกิดข้อผิดพลาด:** ยังไม่ได้ผูก KV Binding ใน Cloudflare", flags: 64 }
+                    }), { headers: { 'Content-Type': 'application/json' } });
+                }
+
                 // กดรับงาน (+1)
                 if (customId === "accept_work") {
                     ctx.waitUntil((async () => {
@@ -185,4 +202,3 @@ export default {
         return env.ASSETS.fetch(request);
     }
 };
-                                    
