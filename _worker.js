@@ -9,7 +9,8 @@ function hexToUint8Array(hex) {
 }
 
 export default {
-    async fetch(request, env) {
+    // เพิ่ม ctx เข้ามาในพารามิเตอร์ เพื่อใช้ ctx.waitUntil
+    async fetch(request, env, ctx) {
         const url = new URL(request.url);
 
         // 1. Endpoint ดึงสถานะและตัวเลข (GET /api/status)
@@ -81,7 +82,7 @@ export default {
             const timestamp = request.headers.get('X-Signature-Timestamp');
             const rawBody = await request.text();
 
-            // ตรวจสอบ Signature ผ่าน Web Crypto API
+            // ตรวจสอบ Signature
             try {
                 const PUBLIC_KEY = env.DISCORD_PUBLIC_KEY;
                 const key = await crypto.subtle.importKey(
@@ -109,7 +110,7 @@ export default {
 
             const message = JSON.parse(rawBody);
 
-            // ตอบกลับ Ping (Type 1) เพื่อยืนยัน URL ใน Discord Developer Portal
+            // ตอบกลับ Ping (Type 1)
             if (message.type === 1) {
                 return new Response(JSON.stringify({ type: 1 }), {
                     headers: { 'Content-Type': 'application/json' }
@@ -121,14 +122,18 @@ export default {
                 const customId = message.data.custom_id;
 
                 if (customId === "accept_work") {
-                    let currentCount = parseInt(await env.WORK_STORE.get("work_count") || "0");
-                    currentCount += 1;
-                    await env.WORK_STORE.put("work_count", currentCount.toString());
+                    // ทำงานกับ KV ในเบื้องหลังผ่าน ctx.waitUntil เพื่อไม่ให้ Discord รอนาน
+                    ctx.waitUntil((async () => {
+                        let currentCount = parseInt(await env.WORK_STORE.get("work_count") || "0");
+                        currentCount += 1;
+                        await env.WORK_STORE.put("work_count", currentCount.toString());
+                    })());
 
+                    // ตอบกลับ Discord ทันทีในมิลลิวินาที (แก้ปัญหา Timeout)
                     return new Response(JSON.stringify({
                         type: 7,
                         data: {
-                            content: `✅ **รับงานเรียบร้อยแล้ว!** (ปรับสถิติบนหน้าเว็บเป็น: ${currentCount} งาน)`,
+                            content: `✅ **รับงานเรียบร้อยแล้ว!** (ระบบกำลังบันทึกสถิติลงหน้าเว็บ)`,
                             components: []
                         }
                     }), { headers: { 'Content-Type': 'application/json' } });
@@ -148,7 +153,6 @@ export default {
             return new Response('OK', { status: 200 });
         }
 
-        // หากเป็น Path อื่น ให้ Cloudflare Pages เสิร์ฟไฟล์หน้าเว็บ (index.html) ตามปกติ
         return env.ASSETS.fetch(request);
     }
 };
