@@ -291,57 +291,57 @@
         document.getElementById('year').textContent = new Date().getFullYear();
 
         // 1. ระบบดึงข้อมูลสถานะและสถิติจาก Cloudflare Pages API
-        async function loadLiveStatus() {
-            try {
-                // เพิ่ม ?t=Date.now() ป้องกันการติดแคชเบราว์เซอร์
-                const res = await fetch(window.location.origin + "/api/status?t=" + Date.now());
-                if (!res.ok) return;
-                const data = await res.json();
+async function loadLiveStatus() {
+    try {
+        // ดึง API พร้อมใส่ timestamp และ random string เพื่อทะลวงแคชเบราว์เซอร์
+        const res = await fetch("/api/status?t=" + Date.now() + "&r=" + Math.random());
+        if (!res.ok) return;
+        const data = await res.json();
 
-                // ตรวจเช็คค่า is_open ให้ครอบคลุมทุกรูปแบบ (Boolean และ String)
-                const isOpen = data.is_open === true || data.is_open === "true";
+        // แปลงค่า is_open ไม่ว่าจะมาเป็น true (boolean) หรือ "true" (string) ให้เป็น boolean ชัวร์ๆ
+        const isOpen = (data.is_open === true || data.is_open === "true" || String(data.is_open).toLowerCase() === "true");
 
-                // 1. อัปเดตตัวเลขจำนวนงานที่เคยรับ
-                const workCountEl = document.getElementById("work-count-display");
-                if (workCountEl && data.work_count !== undefined) {
-                    workCountEl.textContent = data.work_count;
-                }
+        // 1. อัปเดตตัวเลขจำนวนงาน
+        const workCountEl = document.getElementById("work-count-display");
+        if (workCountEl && data.work_count !== undefined) {
+            workCountEl.textContent = data.work_count;
+        }
 
-                // 2. อัปเดต Badge สถานะเปิด/ปิดรับงาน (อันใหญ่ด้านบน)
-                const statusBadge = document.getElementById("status-badge");
-                if (statusBadge) {
-                    if (isOpen) {
-                        statusBadge.className = "inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 backdrop-blur-md";
-                        statusBadge.innerHTML = `
-                            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
-                            <span class="w-2 h-2 rounded-full bg-emerald-500 -ml-4"></span>
-                            <span>พร้อมรับงาน (Open for work)</span>
-                        `;
-                    } else {
-                        statusBadge.className = "inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/20 backdrop-blur-md";
-                        statusBadge.innerHTML = `
-                            <span class="w-2 h-2 rounded-full bg-red-500 animate-ping"></span>
-                            <span class="w-2 h-2 rounded-full bg-red-500 -ml-4"></span>
-                            <span>ไม่พร้อมรับงาน (Close for work)</span>
-                        `;
-                    }
-                }
-
-                // 3. อัปเดตจุดสีเล็กๆ มุมขวาล่างของรูปโปรไฟล์
-                const statusDot = document.getElementById("avatar-status-dot");
-                if (statusDot) {
-                    if (isOpen) {
-                        statusDot.className = "absolute bottom-0 right-0 w-4 h-4 bg-emerald-500 border-2 border-white dark:border-slate-800 rounded-full animate-pulse";
-                        statusDot.title = "พร้อมรับงาน";
-                    } else {
-                        statusDot.className = "absolute bottom-0 right-0 w-4 h-4 bg-red-500 border-2 border-white dark:border-slate-800 rounded-full";
-                        statusDot.title = "ไม่พร้อมรับงาน";
-                    }
-                }
-            } catch (err) {
-                console.error("Error loading live status:", err);
+        // 2. อัปเดต Badge สถานะด้านบน
+        const statusBadge = document.getElementById("status-badge");
+        if (statusBadge) {
+            if (isOpen) {
+                statusBadge.className = "inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 backdrop-blur-md";
+                statusBadge.innerHTML = `
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 -ml-4"></span>
+                    <span>พร้อมรับงาน (Open for work)</span>
+                `;
+            } else {
+                statusBadge.className = "inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/20 backdrop-blur-md";
+                statusBadge.innerHTML = `
+                    <span class="w-2 h-2 rounded-full bg-red-500 animate-ping"></span>
+                    <span class="w-2 h-2 rounded-full bg-red-500 -ml-4"></span>
+                    <span>ไม่พร้อมรับงาน (Close for work)</span>
+                `;
             }
         }
+
+        // 3. อัปเดตจุดสีมุมขวาล่างของรูปโปรไฟล์
+        const statusDot = document.getElementById("avatar-status-dot");
+        if (statusDot) {
+            if (isOpen) {
+                statusDot.className = "absolute bottom-0 right-0 w-4 h-4 bg-emerald-500 border-2 border-white dark:border-slate-800 rounded-full animate-pulse";
+                statusDot.title = "พร้อมรับงาน";
+            } else {
+                statusDot.className = "absolute bottom-0 right-0 w-4 h-4 bg-red-500 border-2 border-white dark:border-slate-800 rounded-full";
+                statusDot.title = "ไม่พร้อมรับงาน";
+            }
+        }
+    } catch (err) {
+        console.error("Error loading live status:", err);
+    }
+}
 
         // โหลดครั้งแรกทันทีเมื่อเปิดหน้า และตั้งเช็คสถานะอัตโนมัติทุกๆ 3 วินาที
         document.addEventListener("DOMContentLoaded", () => {
