@@ -298,6 +298,9 @@
                 if (!res.ok) return;
                 const data = await res.json();
 
+                // ตรวจเช็คค่า is_open ให้ครอบคลุมทุกรูปแบบ (Boolean และ String)
+                const isOpen = data.is_open === true || data.is_open === "true";
+
                 // 1. อัปเดตตัวเลขจำนวนงานที่เคยรับ
                 const workCountEl = document.getElementById("work-count-display");
                 if (workCountEl && data.work_count !== undefined) {
@@ -307,7 +310,7 @@
                 // 2. อัปเดต Badge สถานะเปิด/ปิดรับงาน (อันใหญ่ด้านบน)
                 const statusBadge = document.getElementById("status-badge");
                 if (statusBadge) {
-                    if (data.is_open === true) {
+                    if (isOpen) {
                         statusBadge.className = "inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 backdrop-blur-md";
                         statusBadge.innerHTML = `
                             <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
@@ -327,7 +330,7 @@
                 // 3. อัปเดตจุดสีเล็กๆ มุมขวาล่างของรูปโปรไฟล์
                 const statusDot = document.getElementById("avatar-status-dot");
                 if (statusDot) {
-                    if (data.is_open === true) {
+                    if (isOpen) {
                         statusDot.className = "absolute bottom-0 right-0 w-4 h-4 bg-emerald-500 border-2 border-white dark:border-slate-800 rounded-full animate-pulse";
                         statusDot.title = "พร้อมรับงาน";
                     } else {
