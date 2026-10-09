@@ -436,53 +436,36 @@ function closeWorkModal() {
     document.body.style.overflow = '';
 }
 
-// Send work details to Discord through Cloudflare Worker
-async function submitWorkForm(event) {
+// Send work details through the visitor's email app
+function submitWorkForm(event) {
     event.preventDefault();
 
-    const form = event.currentTarget;
-    const button = form.querySelector('button[type="submit"]');
-    const originalButtonHTML = button.innerHTML;
+    const form = event.target;
     const data = new FormData(form);
 
-    const name = String(data.get('contactName') || '').trim();
-    const age = String(data.get('age') || '').trim();
-    const instagram = String(data.get('instagram') || '').trim();
-    const details = String(data.get('details') || '').trim();
+    const name = data.get('contactName').trim();
+    const age = data.get('age');
+    const instagram = data.get('instagram').trim();
+    const details = data.get('details').trim();
 
-    const message = [
-        '📩 รายละเอียดการติดต่องานจากเว็บไซต์ Phoom49small',
-        `ชื่อ: ${name}`,
-        `อายุ: ${age}`,
-        `Instagram: ${instagram}`,
+    const subject = 'ติดต่องานจากเว็บไซต์ Phoom49small';
+    const body = [
+        'รายละเอียดการติดต่องาน',
+        '',
+        'ชื่อ: ' + name,
+        'อายุ: ' + age,
+        'Instagram: ' + instagram,
         '',
         'รายละเอียดงาน:',
         details
-    ].join('\\n');
+    ].join('\n');
 
-    button.disabled = true;
-    button.textContent = 'กำลังส่ง...';
+    const mailto =
+        'mailto:jirayuphoom539@gmail.com' +
+        '?subject=' + encodeURIComponent(subject) +
+        '&body=' + encodeURIComponent(body);
 
-    try {
-        const response = await fetch('https://phooooomz.jirayuphoom539.workers.dev', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message })
-        });
-
-        if (!response.ok) {
-            throw new Error('Worker ส่งข้อมูลไม่สำเร็จ');
-        }
-
-        alert('ส่งรายละเอียดงานเรียบร้อยแล้ว!');
-        form.reset();
-        closeWorkModal();
-    } catch (error) {
-        alert('ส่งไม่สำเร็จ กรุณาตรวจสอบ URL Worker และการตั้งค่า แล้วลองใหม่');
-    } finally {
-        button.disabled = false;
-        button.innerHTML = originalButtonHTML;
-    }
+    window.location.href = mailto;
 }
         
     </script>
