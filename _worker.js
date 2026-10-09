@@ -18,23 +18,28 @@ export default {
             let workCount = '0';
 
             try {
-                // เช็คความปลอดภัยก่อนดึง KV เพื่อป้องกัน Error 1011
+                // เรียกใช้ env.WORK_STORE โดยตรงแบบบังคับไม่ใช้แคช
                 if (env && env.WORK_STORE) {
-                    isOpen = (await env.WORK_STORE.get('is_open', { cacheTtl: 0 })) || 'false';
-                    workCount = (await env.WORK_STORE.get('work_count', { cacheTtl: 0 })) || '0';
+                    const kvOpen = await env.WORK_STORE.get('is_open');
+                    const kvCount = await env.WORK_STORE.get('work_count');
+                    
+                    if (kvOpen !== null) isOpen = kvOpen;
+                    if (kvCount !== null) workCount = kvCount;
                 }
-            } catch (e) {
-                console.error("KV Read Error:", e);
+            } catch (err) {
+                console.error("KV Fetch Error:", err);
             }
 
+            const isTrue = (isOpen === 'true' || isOpen === true);
+
             return new Response(JSON.stringify({
-                is_open: isOpen === 'true' || isOpen === true,
+                is_open: isTrue,
                 work_count: parseInt(workCount) || 0
             }), {
                 headers: {
                     'Content-Type': 'application/json',
                     'Access-Control-Allow-Origin': '*',
-                    'Cache-Control': 'no-cache, no-store, must-revalidate'
+                    'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate'
                 }
             });
         }
@@ -131,7 +136,7 @@ export default {
                         type: 4,
                         data: {
                             content: "⚙️ **เลือกสถานะการรับงานที่ต้องการตั้งค่า:**",
-                            flags: 64, // เห็นเฉพาะผู้สั่งคำสั่ง (Ephemeral)
+                            flags: 64,
                             components: [{
                                 type: 1,
                                 components: [
