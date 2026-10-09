@@ -294,7 +294,7 @@
         async function loadLiveStatus() {
             try {
                 // เพิ่ม ?t=Date.now() ป้องกันการติดแคชเบราว์เซอร์
-                const res = await fetch("/api/status?t=" + Date.now());
+                const res = await fetch(window.location.origin + "/api/status?t=" + Date.now());
                 if (!res.ok) return;
                 const data = await res.json();
 
