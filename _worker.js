@@ -9,11 +9,10 @@ function hexToUint8Array(hex) {
 }
 
 export default {
-    // เพิ่ม ctx เข้ามาในพารามิเตอร์ เพื่อใช้ ctx.waitUntil
     async fetch(request, env, ctx) {
         const url = new URL(request.url);
 
-        // 1. Endpoint ดึงสถานะและตัวเลข (GET /api/status)
+        // 1. API สำหรับหน้าเว็บอ่านค่าสถานะและจำนวนงาน (GET /api/status)
         if (url.pathname === '/api/status' && request.method === 'GET') {
             const isOpen = await env.WORK_STORE.get('is_open') || 'false';
             const workCount = await env.WORK_STORE.get('work_count') || '0';
@@ -29,7 +28,7 @@ export default {
             });
         }
 
-        // 2. Endpoint ส่งฟอร์มติดต่องานเข้า Discord (POST /api/submit)
+        // 2. API รับฟอร์มติดต่องานแล้วส่งเข้า Discord (POST /api/submit)
         if (url.pathname === '/api/submit' && request.method === 'POST') {
             try {
                 const data = await request.json();
@@ -76,13 +75,12 @@ export default {
             }
         }
 
-        // 3. Endpoint รับกดปุ่มจาก Discord (POST /api/interaction)
+        // 3. API รับการกดปุ่มจาก Discord (POST /api/interaction)
         if (url.pathname === '/api/interaction' && request.method === 'POST') {
             const signature = request.headers.get('X-Signature-Ed25519');
             const timestamp = request.headers.get('X-Signature-Timestamp');
             const rawBody = await request.text();
 
-            // ตรวจสอบ Signature
             try {
                 const PUBLIC_KEY = env.DISCORD_PUBLIC_KEY;
                 const key = await crypto.subtle.importKey(
@@ -101,9 +99,7 @@ export default {
                     encoder.encode(timestamp + rawBody)
                 );
 
-                if (!verified) {
-                    return new Response('Invalid request signature', { status: 401 });
-                }
+                if (!verified) return new Response('Invalid request signature', { status: 401 });
             } catch (err) {
                 return new Response('Signature verification failed', { status: 401 });
             }
@@ -117,35 +113,47 @@ export default {
                 });
             }
 
-            // ตอบกลับเมื่อกดปุ่ม (Type 3)
+            // ตอบกลับเมื่อมีการกดปุ่ม (Type 3)
             if (message.type === 3) {
                 const customId = message.data.custom_id;
 
+                // กดรับงาน (+1)
                 if (customId === "accept_work") {
-                    // ทำงานกับ KV ในเบื้องหลังผ่าน ctx.waitUntil เพื่อไม่ให้ Discord รอนาน
                     ctx.waitUntil((async () => {
                         let currentCount = parseInt(await env.WORK_STORE.get("work_count") || "0");
                         currentCount += 1;
                         await env.WORK_STORE.put("work_count", currentCount.toString());
                     })());
 
-                    // ตอบกลับ Discord ทันทีในมิลลิวินาที (แก้ปัญหา Timeout)
                     return new Response(JSON.stringify({
                         type: 7,
-                        data: {
-                            content: `✅ **รับงานเรียบร้อยแล้ว!** (ระบบกำลังบันทึกสถิติลงหน้าเว็บ)`,
-                            components: []
-                        }
+                        data: { content: `✅ **รับงานเรียบร้อยแล้ว!**`, components: [] }
                     }), { headers: { 'Content-Type': 'application/json' } });
                 }
 
+                // กดปฏิเสธงาน
                 if (customId === "reject_work") {
                     return new Response(JSON.stringify({
                         type: 7,
-                        data: {
-                            content: `❌ **ปฏิเสธงานนี้แล้ว**`,
-                            components: []
-                        }
+                        data: { content: `❌ **ปฏิเสธงานนี้แล้ว**`, components: [] }
+                    }), { headers: { 'Content-Type': 'application/json' } });
+                }
+
+                // กดสลับสถานะ: เปิดรับงาน
+                if (customId === "toggle_open") {
+                    ctx.waitUntil(env.WORK_STORE.put("is_open", "true"));
+                    return new Response(JSON.stringify({
+                        type: 7,
+                        data: { content: `🟢 **เปลี่ยนสถานะเป็น: พร้อมรับงาน (Open) แล้ว!**`, components: [] }
+                    }), { headers: { 'Content-Type': 'application/json' } });
+                }
+
+                // กดสลับสถานะ: ปิดรับงาน
+                if (customId === "toggle_close") {
+                    ctx.waitUntil(env.WORK_STORE.put("is_open", "false"));
+                    return new Response(JSON.stringify({
+                        type: 7,
+                        data: { content: `🔴 **เปลี่ยนสถานะเป็น: ไม่พร้อมรับงาน (Close) แล้ว!**`, components: [] }
                     }), { headers: { 'Content-Type': 'application/json' } });
                 }
             }
