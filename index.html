@@ -68,15 +68,13 @@
             position: relative;
         }
 
-        /* เพิ่มชั้นฟิลเตอร์มืดบางๆ ทับรูป GIF เพื่อให้อ่านตัวหนังสือชัดขึ้น */
         .bg-animated-dark::before {
             content: '';
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(0, 0, 0, 0.6); /* ปรับความมืด 0.6 ตามชอบ */
+            background-color: rgba(0, 0, 0, 0.6);
             z-index: -1;
         }
-
 
         @keyframes gradient {
             0% { background-position: 0% 50%; }
@@ -103,14 +101,7 @@
 <body class="bg-animated-dark dark:text-slate-100 text-slate-800 min-h-screen flex flex-col items-center justify-between p-4 sm:p-6 md:p-8 relative selection:bg-cyan-500 selection:text-white" id="body-bg">
 
     <!-- Top Action Bar -->
-    <div class="w-full max-w-md flex justify-between items-center mb-6 z-10 fade-in-up" style="animation-delay: 0.1s;">
-        <!-- Status Badge (อัปเดตแบบเรียลไทม์จาก KV) -->
-        <div id="status-badge" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/20 backdrop-blur-md">
-            <span class="w-2 h-2 rounded-full bg-red-500 animate-ping"></span>
-            <span class="w-2 h-2 rounded-full bg-red-500 -ml-4"></span>
-            <span>ไม่พร้อมรับงาน (Close for work)</span>
-        </div>
-
+    <div class="w-full max-w-md flex justify-end items-center mb-6 z-10 fade-in-up" style="animation-delay: 0.1s;">
         <!-- Action Buttons -->
         <div class="flex items-center gap-2">
             <button id="share-btn" onclick="copyProfileLink()" title="คัดลอกลิงก์โปรไฟล์" class="w-10 h-10 rounded-full glass-card flex items-center justify-center text-slate-700 dark:text-slate-200 hover:scale-110 active:scale-95 transition-all shadow-sm">
@@ -135,9 +126,6 @@
                 <img id="avatar-img" src="https://cdn.discordapp.com/attachments/1033367771247022174/1557879815942438912/Screenshot_20261009_051714.jpg?ex=6ac96824&is=6ac816a4&hm=b8c994f92f883c837c645b063a79097bc3fdecfc3d88c280ab109c5472fc487d&auto=format&fit=crop&q=80&w=400" 
                      alt="Profile Picture" 
                      class="w-full h-full object-cover rounded-2xl shadow-md border-2 border-white/50 dark:border-slate-700/50 group-hover:scale-105 transition-transform duration-300">
-                
-                <!-- จุดสีแสดงสถานะมุมขวาล่าง -->
-                <span id="avatar-status-dot" class="absolute bottom-0 right-0 w-4 h-4 bg-red-500 border-2 border-white dark:border-slate-800 rounded-full" title="ไม่พร้อมรับงาน"></span>
             </div>
 
             <h1 class="text-2xl font-bold tracking-tight text-slate-800 dark:text-white flex items-center justify-center gap-2">
@@ -151,16 +139,11 @@
                 ลีลา ความเสียว บ้ากาม ครบจบในคนเดียว 💯
             </p>
 
-            <!-- Mini Stats / Highlights -->
-            <div class="grid grid-cols-3 gap-2 mt-5 pt-5 border-t border-slate-200/50 dark:border-slate-700/50 text-center">
-                <div class="p-1">
+            <!-- Mini Stats -->
+            <div class="grid grid-cols-2 gap-2 mt-5 pt-5 border-t border-slate-200/50 dark:border-slate-700/50 text-center">
+                <div class="p-1 border-r border-slate-200/50 dark:border-slate-700/50">
                     <div class="text-base sm:text-lg font-bold text-slate-800 dark:text-white">-99</div>
                     <div class="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400">ประสบการณ์</div>
-                </div>
-                <div class="p-1 border-x border-slate-200/50 dark:border-slate-700/50">
-                    <!-- ตัวเลขการรับงานดึงมาจาก KV -->
-                    <div id="work-count-display" class="text-base sm:text-lg font-bold text-slate-800 dark:text-white">0</div>
-                    <div class="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400">เคยรับงาน</div>
                 </div>
                 <div class="p-1">
                     <div class="text-base sm:text-lg font-bold text-slate-800 dark:text-white">0.01K</div>
@@ -186,21 +169,10 @@
 
         <!-- LINKS SECTION -->
         <section class="w-full flex flex-col gap-3 fade-in-up" style="animation-delay: 0.4s;">
-            <button onclick="openWorkModal()"
-                class="w-full p-4 rounded-2xl flex items-center justify-center gap-3
-                bg-gradient-to-r from-cyan-500 to-purple-600 text-white
-                font-semibold shadow-lg hover:scale-[1.02] active:scale-95
-                transition-all">
-                <i class="fa-solid fa-briefcase"></i>
-                ติดต่อจ้างงาน
-                <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
-            </button>
-            
             <h2 class="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-400 px-1 flex items-center gap-1.5">
                 <i class="fa-solid fa-link text-cyan-500"></i> ช่องทางการติดตาม
             </h2>
 
-            <!-- Instagram -->
             <!-- Instagram -->
             <a href="https://instagram.com/ppppphhhhho0o0o0o0o0mmmmm" target="_blank" rel="noopener noreferrer" 
                class="glass-card group w-full p-3 rounded-2xl flex items-center justify-between hover:scale-[1.01] active:scale-[0.98] transition-all duration-200 shadow-sm hover:border-pink-500/50">
@@ -240,61 +212,6 @@
 
     </main>
     
-    <!-- WORK CONTACT MODAL -->
-    <div id="work-modal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/70 backdrop-blur-sm p-4">
-        <div class="w-full max-w-md max-h-[90vh] overflow-y-auto glass-card rounded-3xl p-6 shadow-2xl">
-            <div class="flex items-center justify-between mb-5">
-                <div>
-                    <h2 class="text-xl font-bold text-white">
-                        <i class="fa-solid fa-briefcase text-cyan-400"></i>
-                        ติดต่อจ้างงาน
-                    </h2>
-                    <p class="text-xs text-slate-400 mt-1">
-                        กรอกข้อมูลเพื่อส่งรายละเอียดงาน
-                    </p>
-                </div>
-                <button type="button" onclick="closeWorkModal()" class="w-9 h-9 rounded-full bg-white/10 text-white">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
-
-            <form onsubmit="submitWorkForm(event)" class="space-y-4">
-                <div>
-                    <label class="block text-sm text-slate-300 mb-1">ชื่อผู้ติดต่อ</label>
-                    <input name="contactName" required maxlength="100" placeholder="กรอกชื่อ" class="w-full rounded-xl bg-slate-900/70 border border-white/10 p-3 text-white outline-none focus:border-cyan-400">
-                </div>
-
-                <div>
-                    <label class="block text-sm text-slate-300 mb-1">อายุ</label>
-                    <input name="age" type="number" required min="1" max="120" placeholder="กรอกอายุ" class="w-full rounded-xl bg-slate-900/70 border border-white/10 p-3 text-white outline-none focus:border-cyan-400">
-                </div>
-
-                <div>
-                    <label class="block text-sm text-slate-300 mb-1">Instagram</label>
-                    <input name="instagram" required maxlength="100" placeholder="@username" class="w-full rounded-xl bg-slate-900/70 border border-white/10 p-3 text-white outline-none focus:border-cyan-400">
-                </div>
-
-                <div>
-                    <label class="block text-sm text-slate-300 mb-1">รายละเอียดงาน</label>
-                    <textarea name="details" required maxlength="3000" rows="4" placeholder="ประเภทงาน รายละเอียด และงบประมาณ (ถ้ามี)" class="w-full rounded-xl bg-slate-900/70 border border-white/10 p-3 text-white outline-none focus:border-cyan-400 resize-y"></textarea>
-                </div>
-
-                <button type="submit" class="w-full rounded-xl bg-gradient-to-r from-cyan-500 to-purple-600 p-3 font-semibold text-white flex items-center justify-center">
-                    <i class="fa-solid fa-paper-plane mr-2"></i>
-                    ส่งรายละเอียดงาน
-                </button>
-
-                <button type="button" onclick="closeWorkModal()" class="w-full rounded-xl bg-white/5 p-3 text-slate-300">
-                    ยกเลิก
-                </button>
-
-                <p class="text-xs text-slate-400 text-center">
-                    เมื่อกดส่งข้อมูลแล้ว กรุณารอทางเราติดต่อกลับ
-                </p>
-            </form>
-        </div>
-    </div>
-    
     <!-- Footer -->
     <footer class="w-full max-w-md text-center py-4 z-10 fade-in-up" style="animation-delay: 0.5s;">
         <p class="text-xs text-slate-500 dark:text-slate-400">
@@ -310,122 +227,14 @@
 
     <!-- JavaScript Logic -->
     <script>
-        // กำหนดปี ค.ศ. ปัจจุบันใน Footer
+        // กำหนดปีปัจจุบัน
         document.getElementById('year').textContent = new Date().getFullYear();
 
-        // 1. ระบบดึงข้อมูลสถานะและสถิติจาก Cloudflare Pages API
-        async function loadLiveStatus() {
-            try {
-                const res = await fetch("/api/status?t=" + Date.now() + "&r=" + Math.random());
-                if (!res.ok) return;
-                const data = await res.json();
-
-                // เช็คค่า is_open แบบยืดหยุ่น ป้องกันประเภทข้อมูลและเคสตัวอักษร
-                const isOpen = String(data.is_open ?? "").trim().toLowerCase() === "true";
-
-                // 1. อัปเดตตัวเลขจำนวนงาน
-                const workCountEl = document.getElementById("work-count-display");
-                if (workCountEl && data.work_count !== undefined) {
-                    workCountEl.textContent = data.work_count;
-                }
-
-                // 2. อัปเดต Badge สถานะด้านบน
-                const statusBadge = document.getElementById("status-badge");
-                if (statusBadge) {
-                    if (isOpen) {
-                        statusBadge.className = "inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 backdrop-blur-md";
-                        statusBadge.innerHTML = `
-                            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
-                            <span class="w-2 h-2 rounded-full bg-emerald-500 -ml-4"></span>
-                            <span>พร้อมรับงาน (Open for work)</span>
-                        `;
-                    } else {
-                        statusBadge.className = "inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/20 backdrop-blur-md";
-                        statusBadge.innerHTML = `
-                            <span class="w-2 h-2 rounded-full bg-red-500 animate-ping"></span>
-                            <span class="w-2 h-2 rounded-full bg-red-500 -ml-4"></span>
-                            <span>ไม่พร้อมรับงาน (Close for work)</span>
-                        `;
-                    }
-                }
-
-                // 3. อัปเดตจุดสีมุมขวาล่างของรูปโปรไฟล์
-                const statusDot = document.getElementById("avatar-status-dot");
-                if (statusDot) {
-                    if (isOpen) {
-                        statusDot.className = "absolute bottom-0 right-0 w-4 h-4 bg-emerald-500 border-2 border-white dark:border-slate-800 rounded-full animate-pulse";
-                        statusDot.title = "พร้อมรับงาน";
-                    } else {
-                        statusDot.className = "absolute bottom-0 right-0 w-4 h-4 bg-red-500 border-2 border-white dark:border-slate-800 rounded-full";
-                        statusDot.title = "ไม่พร้อมรับงาน";
-                    }
-                }
-            } catch (err) {
-                console.error("Error loading live status:", err);
-            }
-        }
-
-        // โหลดครั้งแรกทันทีเมื่อเปิดหน้า และตั้งเช็คสถานะอัตโนมัติทุกๆ 3 วินาที
-        document.addEventListener("DOMContentLoaded", () => {
-            loadLiveStatus();
-            setInterval(loadLiveStatus, 3000);
-        });
-
-        // 2. ระบบส่งแบบฟอร์มเข้า Cloudflare Pages API -> Discord Webhook
-        async function submitWorkForm(event) {
-            event.preventDefault();
-
-            const form = event.target;
-            const submitBtn = form.querySelector('button[type="submit"]');
-            const originalBtnText = submitBtn.innerHTML;
-
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> กำลังส่งข้อมูล...';
-
-            const formData = new FormData(form);
-            const payload = {
-                name: formData.get('contactName').trim(),
-                age: formData.get('age'),
-                instagram: formData.get('instagram').trim(),
-                details: formData.get('details').trim()
-            };
-
-            try {
-                const res = await fetch("/api/submit", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(payload)
-                });
-
-                if (res.ok) {
-                    form.reset();
-                    closeWorkModal();
-                    showStatusToast("ส่งข้อมูลเรียบร้อยแล้ว! ขอบคุณที่ติดต่องานครับ", "success");
-                } else {
-                    showStatusToast("เกิดข้อผิดพลาดในการส่งข้อมูล กรุณาลองใหม่อีกครั้ง", "error");
-                }
-            } catch (err) {
-                console.error("Submit error:", err);
-                showStatusToast("ไม่สามารถเชื่อมต่อระบบได้ กรุณาลองใหม่อีกครั้ง", "error");
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = originalBtnText;
-            }
-        }
-
-        // 3. ฟังก์ชั่นแสดง UI Toast แจ้งเตือน
-        function showStatusToast(message, type = "success") {
+        // แสดง Toast แจ้งเตือน
+        function showStatusToast(message) {
             const toast = document.getElementById('toast');
-            const icon = toast.querySelector('i');
             const span = toast.querySelector('span');
-
             span.textContent = message;
-
-            if (type === "success") {
-                icon.className = "fa-solid fa-circle-check text-emerald-400 dark:text-emerald-600";
-            } else {
-                icon.className = "fa-solid fa-circle-xmark text-rose-500 dark:text-rose-600";
-            }
 
             toast.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
             toast.classList.add('opacity-100', 'translate-y-0');
@@ -436,7 +245,7 @@
             }, 3000);
         }
 
-        // 4. สลับธีม Dark / Light Mode
+        // สลับธีม Dark / Light Mode
         function toggleTheme() {
             const html = document.documentElement;
             const bodyBg = document.getElementById('body-bg');
@@ -480,22 +289,7 @@
             document.execCommand('copy');
             document.body.removeChild(tempInput);
 
-            showStatusToast("คัดลอกลิงก์โปรไฟล์เรียบร้อยแล้ว!", "success");
-        }
-
-        // เปิด-ปิด Modal แบบฟอร์ม
-        function openWorkModal() {
-            const modal = document.getElementById('work-modal');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeWorkModal() {
-            const modal = document.getElementById('work-modal');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-            document.body.style.overflow = '';
+            showStatusToast("คัดลอกลิงก์โปรไฟล์เรียบร้อยแล้ว!");
         }
     </script>
 </body>
