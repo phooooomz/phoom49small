@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Phoom49small</title>
+    <title>Phoom49small | Link-in-Bio</title>
     
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -14,8 +14,7 @@
                 extend: {
                     colors: {
                         brand: {
-                            50: '#f0f9ff',
-                            100: '#e0f2fe',
+                            400: '#38bdf8',
                             500: '#06b6d4',
                             600: '#0891b2',
                             700: '#0e7490',
@@ -29,268 +28,186 @@
         }
     </script>
     
-    <!-- Google Fonts: Kanit -->
+    <!-- Google Fonts: Kanit & Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-    <!-- Custom CSS -->
-    <style>
-        body {
-            font-family: 'Kanit', sans-serif;
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
-        
-        .glass-card {
-            background: rgba(255, 255, 255, 0.45);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-        .dark .glass-card {
-            background: rgba(18, 24, 38, 0.55);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-        }
-
-        .bg-animated-light {
-            background: linear-gradient(-45deg, #e0f2fe, #f0fdf4, #fae8ff, #fef3c7);
-            background-size: 400% 400%;
-            animation: gradient 15s ease infinite;
-        }
-        .bg-animated-dark {
-            background: url('https://img2.pic.in.th/2470.gif') no-repeat center center fixed;
-            background-size: cover;
-            position: relative;
-        }
-
-        .bg-animated-dark::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(0, 0, 0, 0.6);
-            z-index: -1;
-        }
-
-        @keyframes gradient {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        .fade-in-up {
-            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-    </style>
+    <!-- External CSS -->
+    <link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-animated-dark dark:text-slate-100 text-slate-800 min-h-screen flex flex-col items-center justify-between p-4 sm:p-6 md:p-8 relative selection:bg-cyan-500 selection:text-white" id="body-bg">
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col items-center justify-between p-4 sm:p-6 md:p-8 relative selection:bg-cyan-500 selection:text-white" id="app-body">
 
-    <!-- Top Action Bar -->
-    <div class="w-full max-w-md flex justify-end items-center mb-6 z-10 fade-in-up" style="animation-delay: 0.1s;">
-        <!-- Action Buttons -->
+    <!-- Ambient Dynamic Background -->
+    <div class="ambient-bg">
+        <div class="ambient-orb orb-1"></div>
+        <div class="ambient-orb orb-2"></div>
+        <div class="ambient-orb orb-3"></div>
+    </div>
+
+    <!-- Header Navigation / Top Action Bar -->
+    <header class="w-full max-w-md flex justify-between items-center mb-6 z-10 fade-in-up" style="animation-delay: 0.1s;">
+        <!-- Brand Tagline Badge -->
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold bg-cyan-500/10 text-cyan-700 dark:text-cyan-300 border border-cyan-500/20 backdrop-blur-md shadow-sm">
+            <span class="w-2 h-2 rounded-full bg-cyan-500 animate-pulse"></span>
+            <span>Phoom49small Bio Space</span>
+        </div>
+
+        <!-- Action Control Buttons -->
         <div class="flex items-center gap-2">
-            <button id="share-btn" onclick="copyProfileLink()" title="คัดลอกลิงก์โปรไฟล์" class="w-10 h-10 rounded-full glass-card flex items-center justify-center text-slate-700 dark:text-slate-200 hover:scale-110 active:scale-95 transition-all shadow-sm">
+            <button id="share-btn" onclick="copyProfileLink()" aria-label="Share Link" title="คัดลอกลิงก์โปรไฟล์" 
+                    class="w-10 h-10 rounded-2xl glass-card flex items-center justify-center text-slate-700 dark:text-slate-200 hover:scale-110 active:scale-95 transition-all duration-200 shadow-sm hover:border-cyan-500/40">
                 <i class="fa-solid fa-share-nodes"></i>
             </button>
-            <button id="theme-toggle" onclick="toggleTheme()" title="เปลี่ยนธีม" class="w-10 h-10 rounded-full glass-card flex items-center justify-center text-slate-700 dark:text-slate-200 hover:scale-110 active:scale-95 transition-all shadow-sm">
+            <button id="theme-toggle" onclick="toggleTheme()" aria-label="Toggle Theme" title="เปลี่ยนธีม" 
+                    class="w-10 h-10 rounded-2xl glass-card flex items-center justify-center text-slate-700 dark:text-slate-200 hover:scale-110 active:scale-95 transition-all duration-200 shadow-sm hover:border-cyan-500/40">
                 <i class="fa-solid fa-sun text-amber-400 hidden dark:block"></i>
                 <i class="fa-solid fa-moon text-indigo-600 block dark:hidden"></i>
             </button>
         </div>
-    </div>
+    </header>
 
-    <!-- Main Content Container -->
-    <main class="w-full max-w-md flex flex-col items-center gap-6 z-10 mb-8">
+    <!-- Main Profile Card Container -->
+    <main class="w-full max-w-md flex flex-col items-center gap-5 z-10 mb-8">
 
         <!-- PROFILE SECTION -->
         <section class="w-full glass-card rounded-3xl p-6 text-center shadow-xl relative overflow-hidden fade-in-up" style="animation-delay: 0.2s;">
-            <div class="absolute -top-12 -left-12 w-32 h-32 bg-cyan-500/20 rounded-full blur-2xl pointer-events-none"></div>
-            <div class="absolute -bottom-12 -right-12 w-32 h-32 bg-purple-500/20 rounded-full blur-2xl pointer-events-none"></div>
+            <!-- Background Decorative Glows -->
+            <div class="absolute -top-14 -left-14 w-36 h-36 bg-cyan-500/20 rounded-full blur-2xl pointer-events-none"></div>
+            <div class="absolute -bottom-14 -right-14 w-36 h-36 bg-purple-500/20 rounded-full blur-2xl pointer-events-none"></div>
 
-            <div class="relative w-28 h-28 mx-auto mb-4 group">
-                <img id="avatar-img" src="https://cdn.discordapp.com/attachments/1033367771247022174/1557879815942438912/Screenshot_20261009_051714.jpg?ex=6ac96824&is=6ac816a4&hm=b8c994f92f883c837c645b063a79097bc3fdecfc3d88c280ab109c5472fc487d&auto=format&fit=crop&q=80&w=400" 
-                     alt="Profile Picture" 
-                     class="w-full h-full object-cover rounded-2xl shadow-md border-2 border-white/50 dark:border-slate-700/50 group-hover:scale-105 transition-transform duration-300">
+            <!-- Profile Avatar with Glowing Ring & Status Indicator -->
+            <div class="relative w-28 h-28 mx-auto mb-4 group cursor-pointer">
+                <div class="avatar-ring shadow-lg transition-transform duration-300 group-hover:scale-105">
+                    <img id="avatar-img" 
+                         src="https://cdn.discordapp.com/attachments/1033367771247022174/1557879815942438912/Screenshot_20261009_051714.jpg?ex=6ac96824&is=6ac816a4&hm=b8c994f92f883c837c645b063a79097bc3fdecfc3d88c280ab109c5472fc487d&auto=format&fit=crop&q=80&w=400" 
+                         onerror="this.onerror=null; this.src='https://placehold.co/400x400/0891b2/ffffff?text=P49';"
+                         alt="Phoom49small Profile Picture" 
+                         class="w-full h-full object-cover rounded-[1.3rem] bg-slate-800">
+                </div>
+                
+                <!-- Online Status Dot Indicator -->
+                <span class="absolute bottom-0.5 right-0.5 w-4 h-4 bg-emerald-500 border-2 border-white dark:border-slate-900 rounded-full shadow-md animate-pulse" title="ออนไลน์ในขณะนี้"></span>
             </div>
 
-            <h1 class="text-2xl font-bold tracking-tight text-slate-800 dark:text-white flex items-center justify-center gap-2">
+            <!-- Name & Username Tag -->
+            <h1 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white flex items-center justify-center gap-2">
                 Phoom49small
-                <i class="fa-solid fa-circle-check text-cyan-500 text-sm" title="ยืนยันแล้ว"></i>
+                <i class="fa-solid fa-circle-check text-cyan-500 text-base" title="บัญชีได้รับการยืนยัน"></i>
             </h1>
-            <p class="text-sm font-medium text-cyan-600 dark:text-cyan-400 mt-0.5">@phooooomz</p>
+            <p class="text-sm font-semibold text-cyan-600 dark:text-cyan-400 mt-0.5 tracking-wide">@phooooomz</p>
 
-            <p class="mt-3 text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-light">
+            <!-- Bio Description -->
+            <p class="mt-3 text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-light px-2">
                 👅 นักจิตวิทยาสายดาร์ก 👅 <br>
                 ลีลา ความเสียว บ้ากาม ครบจบในคนเดียว 💯
             </p>
 
-            <!-- Mini Stats -->
-            <div class="grid grid-cols-2 gap-2 mt-5 pt-5 border-t border-slate-200/50 dark:border-slate-700/50 text-center">
-                <div class="p-1 border-r border-slate-200/50 dark:border-slate-700/50">
-                    <div class="text-base sm:text-lg font-bold text-slate-800 dark:text-white">-99</div>
-                    <div class="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400">ประสบการณ์</div>
+            <!-- Stats Grid -->
+            <div class="grid grid-cols-2 gap-3 mt-5 pt-5 border-t border-slate-200/60 dark:border-slate-800/80 text-center">
+                <div class="p-2 rounded-2xl bg-white/40 dark:bg-slate-900/40 border border-white/40 dark:border-slate-800/50 backdrop-blur-sm">
+                    <div class="text-lg font-bold text-slate-900 dark:text-white tracking-tight">-99</div>
+                    <div class="text-[11px] font-medium text-slate-500 dark:text-slate-400 mt-0.5">ประสบการณ์</div>
                 </div>
-                <div class="p-1">
-                    <div class="text-base sm:text-lg font-bold text-slate-800 dark:text-white">0.01K</div>
-                    <div class="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400">ผู้ติดตาม</div>
+                <div class="p-2 rounded-2xl bg-white/40 dark:bg-slate-900/40 border border-white/40 dark:border-slate-800/50 backdrop-blur-sm">
+                    <div class="text-lg font-bold text-slate-900 dark:text-white tracking-tight">0.01K</div>
+                    <div class="text-[11px] font-medium text-slate-500 dark:text-slate-400 mt-0.5">ผู้ติดตาม</div>
                 </div>
             </div>
         </section>
 
-        <!-- SKILLS SECTION -->
-        <section class="w-full glass-card rounded-2xl p-4 shadow-lg fade-in-up" style="animation-delay: 0.3s;">
-            <h2 class="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-400 mb-3 px-1 flex items-center gap-1.5">
-                <i class="fa-solid fa-user text-cyan-500"></i> ทักษะและความเชี่ยวชาญ
+        <!-- SKILLS & EXPERTISE SECTION -->
+        <section class="w-full glass-card rounded-3xl p-5 shadow-lg fade-in-up" style="animation-delay: 0.3s;">
+            <h2 class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-3 px-1 flex items-center gap-2">
+                <i class="fa-solid fa-wand-magic-sparkles text-cyan-500"></i> ทักษะและความเชี่ยวชาญ
             </h2>
-            <div class="flex flex-wrap gap-1.5">
-                <span class="px-2.5 py-1 text-xs rounded-lg font-medium bg-cyan-500/10 text-cyan-700 dark:text-cyan-300 border border-cyan-500/20">ซดน้ำเงาะ</span>
-                <span class="px-2.5 py-1 text-xs rounded-lg font-medium bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/20">ล่อลวง</span>
-                <span class="px-2.5 py-1 text-xs rounded-lg font-medium bg-blue-500/10 text-blue-700 dark:text-blue-300 border border-blue-500/20">54</span>
-                <span class="px-2.5 py-1 text-xs rounded-lg font-medium bg-sky-500/10 text-sky-700 dark:text-sky-300 border border-sky-500/20">ลิ้นเทพ</span>
-                <span class="px-2.5 py-1 text-xs rounded-lg font-medium bg-purple-500/10 text-purple-700 dark:text-purple-300 border border-purple-500/20">มือปลาหมึก</span>
-                <span class="px-2.5 py-1 text-xs rounded-lg font-medium bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border border-emerald-500/20">นิ้วติดเทอร์โบ</span>
+            <div class="flex flex-wrap gap-2">
+                <span class="px-3 py-1.5 text-xs rounded-xl font-medium bg-cyan-500/10 text-cyan-700 dark:text-cyan-300 border border-cyan-500/20 hover:scale-105 transition-transform cursor-default">ซดน้ำเงาะ</span>
+                <span class="px-3 py-1.5 text-xs rounded-xl font-medium bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/20 hover:scale-105 transition-transform cursor-default">ล่อลวง</span>
+                <span class="px-3 py-1.5 text-xs rounded-xl font-medium bg-blue-500/10 text-blue-700 dark:text-blue-300 border border-blue-500/20 hover:scale-105 transition-transform cursor-default">54</span>
+                <span class="px-3 py-1.5 text-xs rounded-xl font-medium bg-sky-500/10 text-sky-700 dark:text-sky-300 border border-sky-500/20 hover:scale-105 transition-transform cursor-default">ลิ้นเทพ</span>
+                <span class="px-3 py-1.5 text-xs rounded-xl font-medium bg-purple-500/10 text-purple-700 dark:text-purple-300 border border-purple-500/20 hover:scale-105 transition-transform cursor-default">มือปลาหมึก</span>
+                <span class="px-3 py-1.5 text-xs rounded-xl font-medium bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border border-emerald-500/20 hover:scale-105 transition-transform cursor-default">นิ้วติดเทอร์โบ</span>
             </div>
         </section>
 
-        <!-- LINKS SECTION -->
+        <!-- SOCIAL MEDIA LINKS SECTION -->
         <section class="w-full flex flex-col gap-3 fade-in-up" style="animation-delay: 0.4s;">
-            <h2 class="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-400 px-1 flex items-center gap-1.5">
+            <h2 class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 px-1 flex items-center gap-2">
                 <i class="fa-solid fa-link text-cyan-500"></i> ช่องทางการติดตาม
             </h2>
 
-            <!-- Instagram -->
+            <!-- Instagram Link Card -->
             <a href="https://instagram.com/ppppphhhhho0o0o0o0o0mmmmm" target="_blank" rel="noopener noreferrer" 
-               class="glass-card group w-full p-3 rounded-2xl flex items-center justify-between hover:scale-[1.01] active:scale-[0.98] transition-all duration-200 shadow-sm hover:border-pink-500/50">
-                <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-xl bg-pink-600/10 dark:bg-pink-600/20 text-pink-600 dark:text-pink-400 flex items-center justify-center text-lg group-hover:bg-gradient-to-tr group-hover:from-amber-500 group-hover:via-rose-500 group-hover:to-purple-600 group-hover:text-white transition-colors duration-200">
+               class="glass-card group w-full p-3.5 rounded-2xl flex items-center justify-between hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 shadow-sm hover:border-pink-500/50">
+                <div class="flex items-center gap-3.5">
+                    <div class="w-10 h-10 rounded-xl bg-pink-500/10 dark:bg-pink-500/20 text-pink-600 dark:text-pink-400 flex items-center justify-center text-xl group-hover:bg-gradient-to-tr group-hover:from-amber-500 group-hover:via-rose-500 group-hover:to-purple-600 group-hover:text-white transition-all duration-300 shadow-sm">
                         <i class="fa-brands fa-instagram"></i>
                     </div>
-                    <span class="font-medium text-sm text-slate-700 dark:text-slate-200">Instagram</span>
+                    <div class="flex flex-col">
+                        <span class="font-semibold text-sm text-slate-800 dark:text-slate-100">Instagram</span>
+                        <span class="text-[11px] text-slate-500 dark:text-slate-400">@ppppphhhhho0o0o0o0o0mmmmm</span>
+                    </div>
                 </div>
-                <i class="fa-solid fa-chevron-right text-[10px] text-slate-400 group-hover:translate-x-1 transition-transform"></i>
+                <div class="w-8 h-8 rounded-full flex items-center justify-center text-slate-400 group-hover:text-pink-500 group-hover:translate-x-1 transition-all">
+                    <i class="fa-solid fa-chevron-right text-xs"></i>
+                </div>
             </a>
 
-            <!-- TikTok -->
+            <!-- TikTok Link Card -->
             <a href="https://tiktok.com/@phooooomz" target="_blank" rel="noopener noreferrer" 
-               class="glass-card group w-full p-3 rounded-2xl flex items-center justify-between hover:scale-[1.01] active:scale-[0.98] transition-all duration-200 shadow-sm hover:border-slate-400">
-                <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-xl bg-slate-900/10 dark:bg-slate-100/10 text-slate-900 dark:text-slate-100 flex items-center justify-center text-lg group-hover:bg-black group-hover:text-white dark:group-hover:bg-white dark:group-hover:text-black transition-colors duration-200">
+               class="glass-card group w-full p-3.5 rounded-2xl flex items-center justify-between hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 shadow-sm hover:border-cyan-500/50">
+                <div class="flex items-center gap-3.5">
+                    <div class="w-10 h-10 rounded-xl bg-slate-900/10 dark:bg-slate-100/10 text-slate-900 dark:text-slate-100 flex items-center justify-center text-xl group-hover:bg-black group-hover:text-white dark:group-hover:bg-white dark:group-hover:text-black transition-all duration-300 shadow-sm">
                         <i class="fa-brands fa-tiktok"></i>
                     </div>
-                    <span class="font-medium text-sm text-slate-700 dark:text-slate-200">TikTok</span>
+                    <div class="flex flex-col">
+                        <span class="font-semibold text-sm text-slate-800 dark:text-slate-100">TikTok</span>
+                        <span class="text-[11px] text-slate-500 dark:text-slate-400">@phooooomz</span>
+                    </div>
                 </div>
-                <i class="fa-solid fa-chevron-right text-[10px] text-slate-400 group-hover:translate-x-1 transition-transform"></i>
+                <div class="w-8 h-8 rounded-full flex items-center justify-center text-slate-400 group-hover:text-cyan-500 group-hover:translate-x-1 transition-all">
+                    <i class="fa-solid fa-chevron-right text-xs"></i>
+                </div>
             </a>
 
-            <!-- Roblox -->
+            <!-- Roblox Link Card -->
             <a href="https://www.roblox.com/users/7235315044/profile" target="_blank" rel="noopener noreferrer" 
-               class="glass-card group w-full p-3 rounded-2xl flex items-center justify-between hover:scale-[1.01] active:scale-[0.98] transition-all duration-200 shadow-sm hover:border-red-500/50">
-                <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-xl bg-red-600/10 dark:bg-red-600/20 text-red-600 dark:text-red-400 flex items-center justify-center text-lg group-hover:bg-red-600 group-hover:text-white transition-colors duration-200">
+               class="glass-card group w-full p-3.5 rounded-2xl flex items-center justify-between hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 shadow-sm hover:border-red-500/50">
+                <div class="flex items-center gap-3.5">
+                    <div class="w-10 h-10 rounded-xl bg-red-600/10 dark:bg-red-600/20 text-red-600 dark:text-red-400 flex items-center justify-center text-xl group-hover:bg-red-600 group-hover:text-white transition-all duration-300 shadow-sm">
                         <i class="fa-solid fa-gamepad"></i>
                     </div>
-                    <span class="font-medium text-sm text-slate-700 dark:text-slate-200">Roblox Profile</span>
+                    <div class="flex flex-col">
+                        <span class="font-semibold text-sm text-slate-800 dark:text-slate-100">Roblox Profile</span>
+                        <span class="text-[11px] text-slate-500 dark:text-slate-400">ดูโปรไฟล์เกม Roblox</span>
+                    </div>
                 </div>
-                <i class="fa-solid fa-chevron-right text-[10px] text-slate-400 group-hover:translate-x-1 transition-transform"></i>
+                <div class="w-8 h-8 rounded-full flex items-center justify-center text-slate-400 group-hover:text-red-500 group-hover:translate-x-1 transition-all">
+                    <i class="fa-solid fa-chevron-right text-xs"></i>
+                </div>
             </a>
         </section>
 
     </main>
     
-    <!-- Footer -->
+    <!-- Footer Section -->
     <footer class="w-full max-w-md text-center py-4 z-10 fade-in-up" style="animation-delay: 0.5s;">
-        <p class="text-xs text-slate-500 dark:text-slate-400">
+        <p class="text-xs text-slate-500 dark:text-slate-400 font-medium tracking-wide">
             © <span id="year"></span> Phoom49small. All rights reserved.
         </p>
     </footer>
 
-    <!-- Toast Notification -->
-    <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-slate-900/90 dark:bg-white/90 text-white dark:text-slate-900 px-4 py-2.5 rounded-full text-xs sm:text-sm font-medium shadow-2xl backdrop-blur-md transition-all duration-300 opacity-0 pointer-events-none translate-y-4 flex items-center gap-2 z-50">
-        <i class="fa-solid fa-circle-check text-emerald-400 dark:text-emerald-600"></i>
-        <span>ข้อความแจ้งเตือน</span>
+    <!-- Interactive Toast Notification Popup -->
+    <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-slate-900/90 dark:bg-white/95 text-white dark:text-slate-900 px-5 py-3 rounded-full text-xs sm:text-sm font-semibold shadow-2xl backdrop-blur-md transition-all duration-300 opacity-0 pointer-events-none translate-y-4 flex items-center gap-2.5 z-50">
+        <i class="fa-solid fa-circle-check text-cyan-400 dark:text-cyan-600 text-base"></i>
+        <span id="toast-message">คัดลอกลิงก์โปรไฟล์เรียบร้อยแล้ว!</span>
     </div>
 
-    <!-- JavaScript Logic -->
-    <script>
-        // กำหนดปีปัจจุบัน
-        document.getElementById('year').textContent = new Date().getFullYear();
-
-        // แสดง Toast แจ้งเตือน
-        function showStatusToast(message) {
-            const toast = document.getElementById('toast');
-            const span = toast.querySelector('span');
-            span.textContent = message;
-
-            toast.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
-            toast.classList.add('opacity-100', 'translate-y-0');
-
-            setTimeout(() => {
-                toast.classList.remove('opacity-100', 'translate-y-0');
-                toast.classList.add('opacity-0', 'pointer-events-none', 'translate-y-4');
-            }, 3000);
-        }
-
-        // สลับธีม Dark / Light Mode
-        function toggleTheme() {
-            const html = document.documentElement;
-            const bodyBg = document.getElementById('body-bg');
-
-            if (html.classList.contains('dark')) {
-                html.classList.remove('dark');
-                bodyBg.classList.remove('bg-animated-dark');
-                bodyBg.classList.add('bg-animated-light');
-                localStorage.setItem('theme', 'light');
-            } else {
-                html.classList.add('dark');
-                bodyBg.classList.remove('bg-animated-light');
-                bodyBg.classList.add('bg-animated-dark');
-                localStorage.setItem('theme', 'dark');
-            }
-        }
-
-        // Initialize Theme จาก localStorage
-        (function initTheme() {
-            const savedTheme = localStorage.getItem('theme');
-            const bodyBg = document.getElementById('body-bg');
-            
-            if (savedTheme === 'light') {
-                document.documentElement.classList.remove('dark');
-                bodyBg.classList.remove('bg-animated-dark');
-                bodyBg.classList.add('bg-animated-light');
-            } else {
-                document.documentElement.classList.add('dark');
-                bodyBg.classList.remove('bg-animated-light');
-                bodyBg.classList.add('bg-animated-dark');
-            }
-        })();
-
-        // คัดลอกลิงก์โปรไฟล์
-        function copyProfileLink() {
-            const dummyUrl = window.location.href;
-            const tempInput = document.createElement('input');
-            tempInput.value = dummyUrl;
-            document.body.appendChild(tempInput);
-            tempInput.select();
-            document.execCommand('copy');
-            document.body.removeChild(tempInput);
-
-            showStatusToast("คัดลอกลิงก์โปรไฟล์เรียบร้อยแล้ว!");
-        }
-    </script>
+    <!-- External JavaScript File -->
+    <script src="script.js"></script>
 </body>
 </html>
