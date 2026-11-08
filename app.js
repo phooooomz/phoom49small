@@ -40,7 +40,7 @@
     const box = document.getElementById('product-list');
     if (!box || items === null) return;
     if (!items.length) { box.innerHTML = '<p class="text-xs text-dark-muted">ยังไม่มีของแจกตอนนี้ ไว้มาใหม่นะครับ</p>'; return; }
-    box.innerHTML = items.map((p, i) => `<div class="${CARD}">
+    box.innerHTML = items.map((p, i) => `<div class="${CARD} reveal" style="--i:${i}">
       ${safeUrl(p.image_url) ? `<img src="${esc(p.image_url)}" alt="${esc(p.name)}" loading="lazy" class="w-full h-36 object-cover rounded-xl">` : ''}
       <div class="flex justify-between items-start">${p.tag ? `<span class="${TAG}">${esc(p.tag)}</span>` : '<span></span>'}
         <span class="text-[10px] font-mono font-semibold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400">FREE</span></div>

@@ -97,7 +97,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // 2. Initialize Dark / Light Theme
-    initTheme();
+    document.documentElement.classList.add('dark');
+    document.documentElement.classList.remove('light');
 
     // 3. Initialize Language
     initLanguage();
@@ -107,55 +108,10 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /**
- * Toggle Theme Function
- */
-function toggleTheme() {
-    const html = document.documentElement;
-    if (html.classList.contains('dark')) {
-        html.classList.remove('dark');
-        html.classList.add('light');
-        localStorage.setItem('theme', 'light');
-    } else {
-        html.classList.remove('light');
-        html.classList.add('dark');
-        localStorage.setItem('theme', 'dark');
-    }
-    
-    if (typeof feather !== 'undefined') {
-        setTimeout(() => feather.replace(), 50);
-    }
-}
-
-/**
- * Restore Theme Preference
- */
-function initTheme() {
-    const savedTheme = localStorage.getItem('theme');
-    const html = document.documentElement;
-    
-    if (savedTheme === 'light') {
-        html.classList.remove('dark');
-        html.classList.add('light');
-    } else {
-        html.classList.add('dark');
-        html.classList.remove('light');
-    }
-}
-
-/**
- * Toggle Language Function (TH <-> EN)
- */
-function toggleLanguage() {
-    currentLang = currentLang === 'th' ? 'en' : 'th';
-    localStorage.setItem('lang', currentLang);
-    applyLanguage(currentLang);
-}
-
-/**
  * Initialize Language Preference
  */
 function initLanguage() {
-    const savedLang = localStorage.getItem('lang');
+    const savedLang = 'th';
     if (savedLang && (savedLang === 'th' || savedLang === 'en')) {
         currentLang = savedLang;
     }
