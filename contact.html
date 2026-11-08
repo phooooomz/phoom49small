@@ -60,7 +60,7 @@
                 <div class="w-8 h-8 rounded-full bg-dark-cardSec light:bg-light-cardSec flex items-center justify-center font-mono text-xs font-semibold text-dark-accent light:text-light-accent border border-dark-border light:border-light-border">
                     DV
                 </div>
-                <span class="font-medium text-sm text-dark-text light:text-light-text hidden sm:inline-block">อเล็กซ์ ริเวร่า</span>
+                <span class="font-medium text-sm text-dark-text light:text-light-text hidden sm:inline-block" data-i18n="name">อเล็กซ์ ริเวร่า</span>
             </a>
 
             <!-- Navigation Links (Font Awesome Icon Tab Bar) -->
@@ -79,10 +79,17 @@
                 </a>
             </nav>
 
-            <button onclick="toggleTheme()" class="p-2 rounded-lg text-dark-muted light:text-light-muted hover:text-dark-text light:hover:text-light-text hover:bg-dark-cardSec light:hover:bg-light-cardSec transition-clean" aria-label="Toggle Theme">
-                <i data-feather="sun" class="w-4 h-4 hidden dark:block"></i>
-                <i data-feather="moon" class="w-4 h-4 block dark:hidden"></i>
-            </button>
+            <!-- Actions: Language & Theme Switchers -->
+            <div class="flex items-center gap-2">
+                <button onclick="toggleLanguage()" class="px-2.5 py-1.5 rounded-lg text-xs font-mono font-medium text-dark-muted light:text-light-muted hover:text-dark-text light:hover:text-light-text hover:bg-dark-cardSec light:hover:bg-light-cardSec border border-dark-border light:border-light-border transition-clean">
+                    <span id="lang-indicator">TH</span>
+                </button>
+
+                <button onclick="toggleTheme()" class="p-2 rounded-lg text-dark-muted light:text-light-muted hover:text-dark-text light:hover:text-light-text hover:bg-dark-cardSec light:hover:bg-light-cardSec transition-clean" aria-label="Toggle Theme">
+                    <i data-feather="sun" class="w-4 h-4 hidden dark:block"></i>
+                    <i data-feather="moon" class="w-4 h-4 block dark:hidden"></i>
+                </button>
+            </div>
         </div>
     </header>
 
@@ -91,23 +98,23 @@
         
         <!-- CONTACT FORM CARD -->
         <section class="bg-dark-card light:bg-light-card border border-dark-border light:border-light-border rounded-2xl p-6 sm:p-8 shadow-sm">
-            <h1 class="text-xl font-bold text-dark-text light:text-light-text mb-1">ส่งข้อความถึงผม</h1>
-            <p class="text-xs text-dark-muted light:text-light-muted mb-6">หากมีข้อสงสัย ติดต่องาน หรือต้องการปรึกษาโปรเจกต์ สามารถส่งข้อมูลผ่านฟอร์มนี้ได้ทันทีครับ</p>
+            <h1 class="text-xl font-bold text-dark-text light:text-light-text mb-1" data-i18n="contact_title">ส่งข้อความถึงผม</h1>
+            <p class="text-xs text-dark-muted light:text-light-muted mb-6" data-i18n="contact_subtitle">หากมีข้อสงสัย ติดต่องาน หรือต้องการปรึกษาโปรเจกต์ สามารถส่งข้อมูลผ่านฟอร์มนี้ได้ทันทีครับ</p>
             
-            <form onsubmit="event.preventDefault(); alert('ส่งข้อความเรียบร้อยแล้ว!');" class="space-y-4">
+            <form id="contact-form" onsubmit="handleContactSubmit(event)" class="space-y-4">
                 <div>
-                    <label class="block text-xs font-medium text-dark-text light:text-light-text mb-1.5">ชื่อของคุณ</label>
+                    <label class="block text-xs font-medium text-dark-text light:text-light-text mb-1.5" data-i18n="form_name">ชื่อของคุณ</label>
                     <input type="text" required placeholder="สมชาย ใจดี" class="w-full px-3.5 py-2.5 rounded-xl bg-dark-cardSec light:bg-light-cardSec border border-dark-border light:border-light-border text-xs text-dark-text light:text-light-text focus:outline-none focus:border-dark-accent light:focus:border-light-accent transition-clean">
                 </div>
                 <div>
-                    <label class="block text-xs font-medium text-dark-text light:text-light-text mb-1.5">อีเมล</label>
+                    <label class="block text-xs font-medium text-dark-text light:text-light-text mb-1.5" data-i18n="form_email">อีเมล</label>
                     <input type="email" required placeholder="name@example.com" class="w-full px-3.5 py-2.5 rounded-xl bg-dark-cardSec light:bg-light-cardSec border border-dark-border light:border-light-border text-xs text-dark-text light:text-light-text focus:outline-none focus:border-dark-accent light:focus:border-light-accent transition-clean">
                 </div>
                 <div>
-                    <label class="block text-xs font-medium text-dark-text light:text-light-text mb-1.5">ข้อความ</label>
+                    <label class="block text-xs font-medium text-dark-text light:text-light-text mb-1.5" data-i18n="form_message">ข้อความ</label>
                     <textarea rows="5" required placeholder="รายละเอียดงานหรือเรื่องที่ต้องการสอบถาม..." class="w-full px-3.5 py-2.5 rounded-xl bg-dark-cardSec light:bg-light-cardSec border border-dark-border light:border-light-border text-xs text-dark-text light:text-light-text focus:outline-none focus:border-dark-accent light:focus:border-light-accent transition-clean resize-none"></textarea>
                 </div>
-                <button type="submit" class="w-full py-2.5 px-4 rounded-xl bg-dark-accent light:bg-light-accent text-white font-medium text-xs transition-clean hover:opacity-90">
+                <button type="submit" class="w-full py-2.5 px-4 rounded-xl bg-dark-accent light:bg-light-accent text-white font-medium text-xs transition-clean hover:opacity-90" data-i18n="form_submit">
                     ส่งข้อความ
                 </button>
             </form>
@@ -116,7 +123,7 @@
     </main>
 
     <!-- FOOTER -->
-    <footer class="border-t border-dark-border light:border-light-border py-6 text-center text-xs text-dark-muted light:text-light-muted font-mono">
+    <footer class="border-t border-dark-border light:border-light-border py-6 text-center text-xs text-dark-muted light:text-light-muted font-mono" data-i18n="footer">
         © 2026 อเล็กซ์ ริเวร่า. สงวนลิขสิทธิ์ทั้งหมด
     </footer>
 
