@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="th" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>ติดตาม | Developer Portfolio</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Google Fonts: Inter & Kanit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Kanit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Feather Icons -->
+    <script src="https://unpkg.com/feather-icons"></script>
+    <!-- Custom External Stylesheet -->
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="ui.css">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        dark: {
+                            bg: '#0D0F12',
+                            card: '#15181D',
+                            cardSec: '#1A1E24',
+                            text: '#F1F5F9',
+                            muted: '#9299A5',
+                            border: '#262B33',
+                            accent: '#60A5FA'
+                        },
+                        light: {
+                            bg: '#F7F8FA',
+                            card: '#FFFFFF',
+                            cardSec: '#F1F3F7',
+                            text: '#17191D',
+                            muted: '#737B87',
+                            border: '#E8EAEE',
+                            accent: '#2563EB'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'Kanit', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-dark-bg text-dark-text light:bg-light-bg light:text-light-text font-sans antialiased min-h-screen transition-clean flex flex-col justify-between" style="padding-bottom: calc(6rem + env(safe-area-inset-bottom));">
+
+    <!-- GLOBAL TAB BAR / NAVIGATION HEADER -->
+    <header class="sticky top-0 z-50 bg-dark-bg/90 light:bg-light-bg/90 backdrop-blur-md border-b border-dark-border light:border-light-border px-4 py-3">
+        <div class="max-w-5xl mx-auto flex items-center justify-between gap-4">
+            <a href="index.html" class="flex items-center gap-3 min-w-0">
+                <span class="site-logo"><img src="logo.png" alt="" width="36" height="36" onload="this.nextElementSibling.style.display='none'" onerror="this.remove()"><b>DV</b></span>
+                <span class="font-medium text-sm text-dark-text truncate max-w-[60vw]" data-i18n="name">อเล็กซ์ ริเวร่า</span>
+            </a>
+
+            <!-- Navigation Links (Font Awesome Icon Tab Bar) -->
+        </div>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <main class="max-w-2xl mx-auto px-4 sm:px-6 py-8 w-full">
+        
+        <!-- CONTACT FORM CARD -->
+        <section class="bg-dark-card light:bg-light-card border border-dark-border light:border-light-border rounded-2xl p-6 sm:p-8 shadow-sm">
+            <h1 class="text-xl font-bold text-dark-text light:text-light-text mb-1" data-i18n="contact_title">ส่งข้อความถึงผม</h1>
+            <p class="text-xs text-dark-muted light:text-light-muted mb-6" data-i18n="contact_subtitle">หากมีข้อสงสัย ติดต่องาน หรือต้องการปรึกษาโปรเจกต์ สามารถส่งข้อมูลผ่านฟอร์มนี้ได้ทันทีครับ</p>
+            
+            <div id="social-list" class="space-y-3"><div class="sk-card"><div class="sk sk-img"></div><div class="sk-col"><div class="sk sk-l1"></div><div class="sk sk-l2"></div><div class="sk sk-l3"></div><div class="sk sk-pill"></div></div></div><div class="sk-card"><div class="sk sk-img"></div><div class="sk-col"><div class="sk sk-l1"></div><div class="sk sk-l2"></div><div class="sk sk-l3"></div><div class="sk sk-pill"></div></div></div><div class="sk-card"><div class="sk sk-img"></div><div class="sk-col"><div class="sk sk-l1"></div><div class="sk sk-l2"></div><div class="sk sk-l3"></div><div class="sk sk-pill"></div></div></div></div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-dark-border light:border-light-border py-6 text-center text-xs text-dark-muted light:text-light-muted font-mono" data-i18n="footer">
+        © 2026 อเล็กซ์ ริเวร่า. สงวนลิขสิทธิ์ทั้งหมด
+    </footer>
+
+    <!-- BOTTOM TAB BAR -->
+    <nav class="fixed inset-x-0 z-50 px-4 pointer-events-none" style="bottom: calc(0.75rem + env(safe-area-inset-bottom));">
+        <div class="pointer-events-auto w-full max-w-[16rem] mx-auto flex items-stretch gap-1 p-1.5 rounded-2xl glass-bar">
+        <a href="index.html" class="tab-btn flex-1 flex items-center justify-center h-12 rounded-xl transition-clean" aria-label="หน้าแรก">
+            <i class="fa-solid fa-house text-xl"></i>
+        </a>
+        <a href="store.html" class="tab-btn flex-1 flex items-center justify-center h-12 rounded-xl transition-clean" aria-label="แจกฟรี">
+            <i class="fa-solid fa-gift text-xl"></i>
+        </a>
+        <a href="about.html" class="tab-btn flex-1 flex items-center justify-center h-12 rounded-xl transition-clean" aria-label="เกี่ยวกับ">
+            <i class="fa-solid fa-user text-xl"></i>
+        </a>
+        <a href="contact.html" class="tab-btn active flex-1 flex items-center justify-center h-12 rounded-xl transition-clean" aria-label="ติดตาม">
+            <i class="fa-solid fa-share-nodes text-xl"></i>
+        </a>
+        </div>
+    </nav>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.14.5/dist/sweetalert2.all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+    <script src="config.js"></script>
+    <script src="script.js"></script>
+    <script src="tabbar.js"></script>
+    <script src="app.js"></script>
+    <script src="socials.js"></script>
+    <script>
+    (function () {
+        const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+        const ok = u => /^(https?:\/\/|mailto:)/i.test(u || '');
+        const box = document.getElementById('social-list');
+        if (!box) return;
+        const render = list => { box.innerHTML = list.filter(x => ok(x.url)).map((x, i) => `
+            <a href="${esc(x.url)}" target="_blank" rel="noopener noreferrer" style="--i:${i}"
+               class="reveal flex items-center gap-4 p-4 rounded-2xl bg-dark-cardSec light:bg-light-cardSec border border-dark-border light:border-light-border hover:-translate-y-0.5 transition-clean">
+                <span class="w-10 h-10 rounded-xl flex items-center justify-center text-lg bg-dark-card light:bg-light-card border border-dark-border light:border-light-border" style="color:${esc(x.color || '#60A5FA')}"><i class="${esc(x.icon)}"></i></span>
+                <span class="flex-1 min-w-0"><span class="block text-sm font-medium text-dark-text light:text-light-text">${esc(x.name)}</span>
+                <span class="block text-xs text-dark-muted light:text-light-muted truncate">${esc(x.handle)}</span></span>
+                <i class="fa-solid fa-arrow-up-right-from-square text-xs text-dark-muted"></i>
+            </a>`).join('') || '<p class="text-xs text-dark-muted">ยังไม่มีช่องทางติดตาม</p>'; };
+        if (window.db) {
+            window.db.from('socials').select('*').eq('is_active', true).order('sort_order').order('created_at')
+                .then(({ data, error }) => render(error ? (window.SOCIALS || []) : data));
+        } else { render(window.SOCIALS || []); }
+    })();
+    </script>
+</body>
+</html>

@@ -3,10 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Developer Portfolio | SPA</title>
-
+    <title>หน้าแรก | Developer Portfolio</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Google Fonts: Inter & Kanit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Kanit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Feather Icons -->
+    <script src="https://unpkg.com/feather-icons"></script>
+    <!-- Custom External Stylesheet -->
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="ui.css">
+    
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -21,6 +32,15 @@
                             muted: '#9299A5',
                             border: '#262B33',
                             accent: '#60A5FA'
+                        },
+                        light: {
+                            bg: '#F7F8FA',
+                            card: '#FFFFFF',
+                            cardSec: '#F1F3F7',
+                            text: '#17191D',
+                            muted: '#737B87',
+                            border: '#E8EAEE',
+                            accent: '#2563EB'
                         }
                     },
                     fontFamily: {
@@ -31,236 +51,130 @@
             }
         }
     </script>
-
-    <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <!-- Google Fonts: Inter, Kanit & JetBrains Mono -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Kanit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="styles.css">
-
-    <!-- Feather Icons CDN -->
-    <script src="https://unpkg.com/feather-icons"></script>
-    <!-- SweetAlert2 & Supabase CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.14.5/dist/sweetalert2.all.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 </head>
-<body class="bg-dark-bg text-dark-text font-sans antialiased min-h-screen flex flex-col justify-between" style="padding-bottom: calc(6.5rem + env(safe-area-inset-bottom));">
+<body class="bg-dark-bg text-dark-text light:bg-light-bg light:text-light-text font-sans antialiased min-h-screen transition-clean flex flex-col justify-between" style="padding-bottom: calc(6rem + env(safe-area-inset-bottom));">
 
-    <!-- HEADER BAR -->
-    <header class="sticky top-0 z-50 bg-dark-bg/90 backdrop-blur-md border-b border-dark-border px-4 py-3">
+    <!-- GLOBAL TAB BAR / NAVIGATION HEADER -->
+    <header class="sticky top-0 z-50 bg-dark-bg/90 light:bg-light-bg/90 backdrop-blur-md border-b border-dark-border light:border-light-border px-4 py-3">
         <div class="max-w-5xl mx-auto flex items-center justify-between gap-4">
-            <!-- Brand Logo -->
-            <a href="javascript:void(0)" onclick="switchTab('home')" class="flex items-center gap-3 min-w-0">
-                <span class="w-9 h-9 rounded-xl bg-dark-cardSec border border-dark-border flex items-center justify-center font-bold text-sm text-dark-accent">DV</span>
-                <span class="font-medium text-sm text-dark-text truncate max-w-[50vw]" data-i18n="name">อเล็กซ์ ริเวร่า</span>
+            <!-- Brand Logo / Profile -->
+            <a href="index.html" class="flex items-center gap-3 min-w-0">
+                <span class="site-logo"><img src="logo.png" alt="" width="36" height="36" onload="this.nextElementSibling.style.display='none'" onerror="this.remove()"><b>DV</b></span>
+                <span class="font-medium text-sm text-dark-text truncate max-w-[60vw]" data-i18n="name">อเล็กซ์ ริเวร่า</span>
             </a>
 
-            <!-- Language Switcher Button (Top Right) -->
-            <button id="lang-toggle-btn" onclick="toggleLanguage()" class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-dark-cardSec border border-dark-border hover:border-dark-accent transition-clean text-xs font-mono text-dark-text">
-                <i class="fa-solid fa-globe text-dark-accent"></i>
-                <span id="lang-label" class="font-bold">TH</span>
-            </button>
+            <!-- Navigation Links (Font Awesome Icon Tab Bar) -->
         </div>
     </header>
 
-    <!-- MAIN SPA CONTENT -->
-    <main class="max-w-5xl mx-auto px-4 sm:px-6 py-6 w-full flex-1">
+    <!-- MAIN CONTAINER -->
+    <main class="max-w-5xl mx-auto px-4 sm:px-6 py-8 w-full space-y-6">
         
-        <!-- SECTION 1: HOME (หน้าแรก) -->
-        <section id="tab-home" class="app-section space-y-6">
-            <!-- Hero Card -->
-            <div class="bg-dark-card border border-dark-border rounded-2xl p-6 sm:p-8 shadow-sm relative overflow-hidden">
-                <div class="flex flex-col md:flex-row items-start gap-6 md:gap-8">
-                    <div class="relative flex-shrink-0">
-                        <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl bg-dark-cardSec border border-dark-border flex items-center justify-center overflow-hidden shadow-inner">
-                            <i data-feather="user" class="w-12 h-12 text-dark-muted"></i>
-                        </div>
-                        <span class="absolute -bottom-1 -right-1 w-4 h-4 bg-emerald-500 border-2 border-dark-card rounded-full" id="status-avatar" title="พร้อมรับงาน"></span>
-                    </div>
-
-                    <div class="space-y-4 max-w-2xl flex-1">
-                        <div id="status-badge" class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-medium">
-                            <span id="status-dot" class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                            <span id="status-text">Available for hire</span>
-                        </div>
-                        
-                        <div>
-                            <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-dark-text" data-i18n="name">
-                                อเล็กซ์ ริเวร่า
-                            </h1>
-                            <p class="text-xs font-mono text-dark-accent mt-1" data-i18n="role">
-                                Full-Stack Software Engineer & UI Developer
-                            </p>
-                        </div>
-
-                        <p class="text-xs sm:text-sm text-dark-muted leading-relaxed" data-i18n="bio">
-                            ยินดีต้อนรับครับ! ผมเป็นนักพัฒนาซอฟต์แวร์ที่เชี่ยวชาญการสร้างสรรค์เว็บแอปพลิเคชันด้วยดีไซน์ Ultra Clean & Minimalist เน้นประสิทธิภาพความเร็ว และประสบการณ์ใช้งานที่เรียบง่ายสบายตา
-                        </p>
-
-                        <div class="pt-2 flex flex-wrap gap-3">
-                            <button onclick="switchTab('contact')" class="px-4 py-2 rounded-xl bg-dark-accent text-white text-xs font-medium hover:opacity-90 transition-clean inline-flex items-center gap-2">
-                                <span data-i18n="btn_contact">ติดตามผม</span>
-                                <i data-feather="arrow-right" class="w-3.5 h-3.5"></i>
-                            </button>
-                            <button onclick="switchTab('about')" class="px-4 py-2 rounded-xl bg-dark-cardSec border border-dark-border text-dark-text text-xs font-medium hover:bg-dark-border/40 transition-clean" data-i18n="btn_about">
-                                ดูประวัติเพิ่มเติม
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Bento Highlights -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div class="bg-dark-card border border-dark-border rounded-2xl p-5 shadow-sm">
-                    <div class="w-8 h-8 rounded-lg bg-dark-cardSec flex items-center justify-center text-dark-accent mb-3">
-                        <i data-feather="code" class="w-4 h-4"></i>
-                    </div>
-                    <h3 class="text-sm font-semibold text-dark-text mb-1" data-i18n="feat_frontend_title">Frontend Engineering</h3>
-                    <p class="text-xs text-dark-muted leading-relaxed" data-i18n="feat_frontend_desc">พัฒนา UI ด้วย React, Next.js และ Tailwind CSS ที่เน้นความเร็วและ Accessibility</p>
-                </div>
+        <!-- HERO BANNER WITH PROFILE PICTURE & MINI BIO -->
+        <section class="bg-dark-card light:bg-light-card border border-dark-border light:border-light-border rounded-2xl p-6 sm:p-10 shadow-sm relative overflow-hidden">
+            <div class="flex flex-col md:flex-row items-start gap-6 md:gap-8">
                 
-                <div class="bg-dark-card border border-dark-border rounded-2xl p-5 shadow-sm">
-                    <div class="w-8 h-8 rounded-lg bg-dark-cardSec flex items-center justify-center text-dark-accent mb-3">
-                        <i data-feather="server" class="w-4 h-4"></i>
+                <!-- Profile Avatar Card -->
+                <div class="relative flex-shrink-0">
+                    <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl bg-dark-cardSec light:bg-light-cardSec border border-dark-border light:border-light-border flex items-center justify-center overflow-hidden shadow-inner">
+                        <i data-feather="user" class="w-12 h-12 text-dark-muted light:text-light-muted"></i>
                     </div>
-                    <h3 class="text-sm font-semibold text-dark-text mb-1" data-i18n="feat_backend_title">Backend Architecture</h3>
-                    <p class="text-xs text-dark-muted leading-relaxed" data-i18n="feat_backend_desc">วางระบบเบื้องหลัง REST API ด้วย Node.js, Go และฐานข้อมูลที่มีความเสถียรสูง</p>
+                    <span class="absolute -bottom-1 -right-1 w-4 h-4 bg-emerald-500 border-2 border-dark-card light:border-light-card rounded-full" id="status-avatar" title="พร้อมรับงาน"></span>
                 </div>
 
-                <div class="bg-dark-card border border-dark-border rounded-2xl p-5 shadow-sm">
-                    <div class="w-8 h-8 rounded-lg bg-dark-cardSec flex items-center justify-center text-dark-accent mb-3">
-                        <i data-feather="layout" class="w-4 h-4"></i>
+                <!-- Text Info & Mini Bio -->
+                <div class="space-y-4 max-w-2xl flex-1">
+                    <div id="status-badge" class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 light:text-emerald-600 text-xs font-medium">
+                        <span id="status-dot" class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                        <span id="status-text">Available for hire</span>
                     </div>
-                    <h3 class="text-sm font-semibold text-dark-text mb-1" data-i18n="feat_ux_title">Clean & Minimal UX/UI</h3>
-                    <p class="text-xs text-dark-muted leading-relaxed" data-i18n="feat_ux_desc">ออกแบบอินเทอร์เฟซที่เรียบง่าย ปราศจากสิ่งรบกวน เน้นสัดส่วนที่สมดุล สบายตา</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION 2: STORE (แจกฟรี) -->
-        <section id="tab-store" class="app-section space-y-4">
-            <h1 class="text-xl font-bold text-dark-text" data-i18n="store_title">ของแจกฟรี</h1>
-            <p class="text-xs text-dark-muted" data-i18n="store_subtitle">เทมเพลตและไฟล์คุณภาพ กดรับได้ฟรีเลย</p>
-
-            <div id="product-list" class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
-                <!-- Custom Thinking Sweep Animation -->
-                <div class="col-span-full py-12 text-center">
-                    <span class="thinking-text text-lg">Thinking…</span>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION 3: ABOUT (เกี่ยวกับ) -->
-        <section id="tab-about" class="app-section">
-            <div class="bg-dark-card border border-dark-border rounded-2xl p-6 shadow-sm space-y-6">
-                <div class="flex flex-col sm:flex-row items-center sm:items-start gap-5 text-center sm:text-left">
-                    <div class="w-20 h-20 rounded-2xl bg-dark-cardSec border border-dark-border flex items-center justify-center text-dark-muted flex-shrink-0">
-                        <i data-feather="user" class="w-10 h-10"></i>
-                    </div>
+                    
                     <div>
-                        <h1 class="text-xl font-bold text-dark-text" data-i18n="about_title">เกี่ยวกับ อเล็กซ์ ริเวร่า</h1>
-                        <p class="text-xs font-mono text-dark-accent mt-0.5" data-i18n="role">Full-Stack Software Engineer</p>
-                        <p class="text-xs text-dark-muted mt-3 leading-relaxed" data-i18n="about_desc">
-                            ผมมีประสบการณ์ทำระบบเว็บแอปพลิเคชันมากกว่า 6 ปี เน้นสร้างสรรค์ซอฟต์แวร์ที่มีประสิทธิภาพสูง อ่านและดูแลรักษาโค้ดได้ง่าย ตลอดจนใส่ใจในรายละเอียดของการใช้งานของผู้ใช้ (UX/UI)
+                        <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-dark-text light:text-light-text" data-i18n="name">
+                            อเล็กซ์ ริเวร่า
+                        </h1>
+                        <p class="text-xs font-mono text-dark-accent light:text-light-accent mt-1" data-i18n="role">
+                            Full-Stack Software Engineer & UI Developer
                         </p>
                     </div>
-                </div>
 
-                <div class="pt-6 border-t border-dark-border space-y-4">
-                    <h2 class="text-sm font-semibold text-dark-text" data-i18n="exp_title">ประสบการณ์ทำงาน</h2>
-                    <div class="space-y-4">
-                        <div class="border-l-2 border-dark-border pl-4 relative">
-                            <div class="text-xs font-semibold text-dark-text" data-i18n="exp1_role">Senior Full-Stack Developer — TechCorp Labs</div>
-                            <div class="text-[11px] font-mono text-dark-accent mb-1" data-i18n="exp1_date">2023 — ปัจจุบัน</div>
-                            <p class="text-xs text-dark-muted" data-i18n="exp1_desc">ดูแลสถาปัตยกรรมระบบเว็บแอปพลิเคชันระดับองค์กร และปรับปรุงประสิทธิภาพของ Database ให้ทำงานได้รวดเร็วขึ้น</p>
-                        </div>
-                        <div class="border-l-2 border-dark-border pl-4 relative">
-                            <div class="text-xs font-semibold text-dark-text" data-i18n="exp2_role">Frontend Software Engineer — Nexus Studio</div>
-                            <div class="text-[11px] font-mono text-dark-muted mb-1">2021 — 2023</div>
-                            <p class="text-xs text-dark-muted" data-i18n="exp2_desc">ออกแบบและสร้าง User Interface ด้วย React และ Next.js เน้นความสมบูรณ์ของ Responsive Design</p>
-                        </div>
+                    <!-- Mini Bio -->
+                    <p class="text-xs sm:text-sm text-dark-muted light:text-light-muted leading-relaxed" data-i18n="bio">
+                        ยินดีต้อนรับครับ! ผมเป็นนักพัฒนาซอฟต์แวร์ที่เชี่ยวชาญการสร้างสรรค์เว็บแอปพลิเคชันด้วยดีไซน์ Ultra Clean & Minimalist เน้นประสิทธิภาพความเร็ว และประสบการณ์ใช้งานที่เรียบง่ายสบายตา
+                    </p>
+
+                    <div class="pt-2 flex flex-wrap gap-3">
+                        <a href="contact.html" class="px-4 py-2 rounded-xl bg-dark-accent light:bg-light-accent text-white text-xs font-medium hover:opacity-90 transition-clean inline-flex items-center gap-2">
+                            <span data-i18n="btn_contact">ติดต่องาน</span>
+                            <i data-feather="arrow-right" class="w-3.5 h-3.5"></i>
+                        </a>
+                        <a href="about.html" class="px-4 py-2 rounded-xl bg-dark-cardSec light:bg-light-cardSec border border-dark-border light:border-light-border text-dark-text light:text-light-text text-xs font-medium hover:bg-dark-border/40 light:hover:bg-light-border/40 transition-clean" data-i18n="btn_about">
+                            ดูประวัติเพิ่มเติม
+                        </a>
                     </div>
                 </div>
 
-                <div class="pt-6 border-t border-dark-border">
-                    <h2 class="text-sm font-semibold text-dark-text mb-4" data-i18n="skills_title">ทักษะและเทคโนโลยี</h2>
-                    <div class="grid grid-cols-3 sm:grid-cols-6 gap-3">
-                        <div class="flex flex-col items-center justify-center p-3 rounded-xl bg-dark-cardSec border border-dark-border text-dark-text hover:border-dark-accent transition-clean group" title="JavaScript">
-                            <i class="fa-brands fa-js text-2xl text-yellow-400 mb-1 group-hover:scale-110 transition-transform"></i>
-                            <span class="text-[11px] font-mono mt-1">JS/TS</span>
-                        </div>
-                        <div class="flex flex-col items-center justify-center p-3 rounded-xl bg-dark-cardSec border border-dark-border text-dark-text hover:border-dark-accent transition-clean group" title="React">
-                            <i class="fa-brands fa-react text-2xl text-cyan-400 mb-1 group-hover:scale-110 transition-transform"></i>
-                            <span class="text-[11px] font-mono mt-1">React</span>
-                        </div>
-                        <div class="flex flex-col items-center justify-center p-3 rounded-xl bg-dark-cardSec border border-dark-border text-dark-text hover:border-dark-accent transition-clean group" title="Node.js">
-                            <i class="fa-brands fa-node-js text-2xl text-emerald-500 mb-1 group-hover:scale-110 transition-transform"></i>
-                            <span class="text-[11px] font-mono mt-1">Node.js</span>
-                        </div>
-                        <div class="flex flex-col items-center justify-center p-3 rounded-xl bg-dark-cardSec border border-dark-border text-dark-text hover:border-dark-accent transition-clean group" title="Python">
-                            <i class="fa-brands fa-python text-2xl text-blue-400 mb-1 group-hover:scale-110 transition-transform"></i>
-                            <span class="text-[11px] font-mono mt-1">Python</span>
-                        </div>
-                        <div class="flex flex-col items-center justify-center p-3 rounded-xl bg-dark-cardSec border border-dark-border text-dark-text hover:border-dark-accent transition-clean group" title="Database">
-                            <i class="fa-solid fa-database text-2xl text-indigo-400 mb-1 group-hover:scale-110 transition-transform"></i>
-                            <span class="text-[11px] font-mono mt-1">Database</span>
-                        </div>
-                        <div class="flex flex-col items-center justify-center p-3 rounded-xl bg-dark-cardSec border border-dark-border text-dark-text hover:border-dark-accent transition-clean group" title="Git">
-                            <i class="fa-brands fa-github text-2xl text-dark-text mb-1 group-hover:scale-110 transition-transform"></i>
-                            <span class="text-[11px] font-mono mt-1">Git</span>
-                        </div>
-                    </div>
-                </div>
             </div>
         </section>
 
-        <!-- SECTION 4: CONTACT (ติดตาม) -->
-        <section id="tab-contact" class="app-section space-y-4 max-w-2xl mx-auto">
-            <div class="bg-dark-card border border-dark-border rounded-2xl p-6 sm:p-8 shadow-sm">
-                <h1 class="text-xl font-bold text-dark-text mb-1" data-i18n="contact_title">ติดตามผมได้ที่</h1>
-                <p class="text-xs text-dark-muted mb-6" data-i18n="contact_subtitle">เลือกช่องทางที่สะดวก ติดตามข่าวสารและของแจกใหม่ๆ ได้เลยครับ</p>
-                
-                <div id="social-list" class="space-y-3">
-                    <!-- Custom Thinking Sweep Animation -->
-                    <div class="py-12 text-center">
-                        <span class="thinking-text text-lg">Thinking…</span>
-                    </div>
+        <!-- BENTO GRID HIGHLIGHTS -->
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="bg-dark-card light:bg-light-card border border-dark-border light:border-light-border rounded-2xl p-5 shadow-sm">
+                <div class="w-8 h-8 rounded-lg bg-dark-cardSec light:bg-light-cardSec flex items-center justify-center text-dark-accent light:text-light-accent mb-3">
+                    <i data-feather="code" class="w-4 h-4"></i>
                 </div>
+                <h3 class="text-sm font-semibold text-dark-text light:text-light-text mb-1" data-i18n="feat_frontend_title">Frontend Engineering</h3>
+                <p class="text-xs text-dark-muted light:text-light-muted leading-relaxed" data-i18n="feat_frontend_desc">พัฒนา UI ด้วย React, Next.js และ Tailwind CSS ที่เน้นความเร็วและ Accessibility</p>
+            </div>
+            
+            <div class="bg-dark-card light:bg-light-card border border-dark-border light:border-light-border rounded-2xl p-5 shadow-sm">
+                <div class="w-8 h-8 rounded-lg bg-dark-cardSec light:bg-light-cardSec flex items-center justify-center text-dark-accent light:text-light-accent mb-3">
+                    <i data-feather="server" class="w-4 h-4"></i>
+                </div>
+                <h3 class="text-sm font-semibold text-dark-text light:text-light-text mb-1" data-i18n="feat_backend_title">Backend Architecture</h3>
+                <p class="text-xs text-dark-muted light:text-light-muted leading-relaxed" data-i18n="feat_backend_desc">วางระบบเบื้องหลัง REST API ด้วย Node.js, Go และฐานข้อมูลที่มีความเสถียรสูง</p>
+            </div>
+
+            <div class="bg-dark-card light:bg-light-card border border-dark-border light:border-light-border rounded-2xl p-5 shadow-sm">
+                <div class="w-8 h-8 rounded-lg bg-dark-cardSec light:bg-light-cardSec flex items-center justify-center text-dark-accent light:text-light-accent mb-3">
+                    <i data-feather="layout" class="w-4 h-4"></i>
+                </div>
+                <h3 class="text-sm font-semibold text-dark-text light:text-light-text mb-1" data-i18n="feat_ux_title">Clean & Minimal UX/UI</h3>
+                <p class="text-xs text-dark-muted light:text-light-muted leading-relaxed" data-i18n="feat_ux_desc">ออกแบบอินเทอร์เฟซที่เรียบง่าย ปราศจากสิ่งรบกวน เน้นสัดส่วนที่สมดุล สบายตา</p>
             </div>
         </section>
 
     </main>
 
     <!-- FOOTER -->
-    <footer class="border-t border-dark-border py-6 text-center text-xs text-dark-muted font-mono" data-i18n="footer">
+    <footer class="border-t border-dark-border light:border-light-border py-6 text-center text-xs text-dark-muted light:text-light-muted font-mono" data-i18n="footer">
         © 2026 อเล็กซ์ ริเวร่า. สงวนลิขสิทธิ์ทั้งหมด
     </footer>
 
-    <!-- BOTTOM GLASS NAVIGATION BAR -->
+    <!-- BOTTOM TAB BAR -->
     <nav class="fixed inset-x-0 z-50 px-4 pointer-events-none" style="bottom: calc(0.75rem + env(safe-area-inset-bottom));">
         <div class="pointer-events-auto w-full max-w-[16rem] mx-auto flex items-stretch gap-1 p-1.5 rounded-2xl glass-bar">
-            <button onclick="switchTab('home')" class="tab-btn active flex-1 flex items-center justify-center h-12 rounded-xl transition-clean" aria-label="หน้าแรก" data-tab="home">
-                <i class="fa-solid fa-house text-xl"></i>
-            </button>
-            <button onclick="switchTab('store')" class="tab-btn flex-1 flex items-center justify-center h-12 rounded-xl transition-clean" aria-label="แจกฟรี" data-tab="store">
-                <i class="fa-solid fa-gift text-xl"></i>
-            </button>
-            <button onclick="switchTab('about')" class="tab-btn flex-1 flex items-center justify-center h-12 rounded-xl transition-clean" aria-label="เกี่ยวกับ" data-tab="about">
-                <i class="fa-solid fa-user text-xl"></i>
-            </button>
-            <button onclick="switchTab('contact')" class="tab-btn flex-1 flex items-center justify-center h-12 rounded-xl transition-clean" aria-label="ติดตาม" data-tab="contact">
-                <i class="fa-solid fa-share-nodes text-xl"></i>
-            </button>
+        <a href="index.html" class="tab-btn active flex-1 flex items-center justify-center h-12 rounded-xl transition-clean" aria-label="หน้าแรก">
+            <i class="fa-solid fa-house text-xl"></i>
+        </a>
+        <a href="store.html" class="tab-btn flex-1 flex items-center justify-center h-12 rounded-xl transition-clean" aria-label="แจกฟรี">
+            <i class="fa-solid fa-gift text-xl"></i>
+        </a>
+        <a href="about.html" class="tab-btn flex-1 flex items-center justify-center h-12 rounded-xl transition-clean" aria-label="เกี่ยวกับ">
+            <i class="fa-solid fa-user text-xl"></i>
+        </a>
+        <a href="contact.html" class="tab-btn flex-1 flex items-center justify-center h-12 rounded-xl transition-clean" aria-label="ติดตาม">
+            <i class="fa-solid fa-share-nodes text-xl"></i>
+        </a>
         </div>
     </nav>
 
-    <!-- External JavaScript Files -->
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.14.5/dist/sweetalert2.all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
     <script src="config.js"></script>
     <script src="script.js"></script>
+    <script src="tabbar.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>

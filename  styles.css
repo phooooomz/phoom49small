@@ -3,10 +3,15 @@
 -webkit-tap-highlight-color: transparent;
 box-sizing: border-box;
 }
+/* Custom Text Selection */
 ::selection {
 background-color: rgba(96, 165, 250, 0.25);
 color: inherit;
 }
+.light ::selection {
+background-color: rgba(37, 99, 235, 0.18);
+}
+/* Custom Minimal Scrollbar */
 ::-webkit-scrollbar {
 width: 6px;
 height: 6px;
@@ -18,71 +23,52 @@ background: transparent;
 background: #262B33;
 border-radius: 9999px;
 }
+.light ::-webkit-scrollbar-thumb {
+background: #E8EAEE;
+}
+/* Ultra Clean Smooth Transitions (Max 150ms) */
 .transition-clean {
-transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+transition-property: color, background-color, border-color, opacity, transform;
+transition-duration: 150ms;
+transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
-/* Glassmorphism Bottom Navigation Bar */
-.glass-bar {
-background: rgba(21, 24, 29, 0.85);
-backdrop-filter: blur(16px);
--webkit-backdrop-filter: blur(16px);
-border: 1px solid rgba(255, 255, 255, 0.1);
-box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
-}
-/* Navigation Tab Buttons */
+/* Header & Icon Tab Bar Navigation */
 .tab-btn {
 color: #9299A5;
 background-color: transparent;
+display: inline-flex;
+align-items: center;
+justify-content: center;
+position: relative;
+}
+.light .tab-btn {
+color: #737B87;
 }
 .tab-btn:hover {
 color: #F1F5F9;
-background-color: rgba(255, 255, 255, 0.04);
+background-color: rgba(255, 255, 255, 0.03);
 }
+.light .tab-btn:hover {
+color: #17191D;
+background-color: rgba(0, 0, 0, 0.03);
+}
+/* Active State Icon & Highlight */
 .tab-btn.active {
-background-color: #1A1E24 !important;
-color: #60A5FA !important;
-border: 1px solid #262B33 !important;
-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+background-color: #1A1E24;
+color: #60A5FA;
+border: 1px solid #262B33;
+box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
-/* SPA Section Display Transitions */
-.app-section {
-display: none !important;
-opacity: 0;
-transform: translateY(6px);
-transition: opacity 200ms ease, transform 200ms ease;
+.light .tab-btn.active {
+background-color: #F1F3F7;
+color: #2563EB;
+border: 1px solid #E8EAEE;
+box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
-.app-section.active-section {
-display: block !important;
-opacity: 1;
-transform: translateY(0);
+/* Form Input & Focus States */
+input:focus, textarea:focus {
+box-shadow: 0 0 0 1px rgba(96, 165, 250, 0.4);
 }
-/* Thinking Sweep Animation (Custom Loading Text Fill Clip Sweep) */
-.thinking-text {
-font-weight: 700;
-font-family: 'Inter', 'Kanit', sans-serif;
-color: #57557A;
-background-image: linear-gradient(
-90deg,
-#57557A 0%,
-#57557A 40%,
-#8F84FF 47%,
-#FFFFFF 50%,
-#38C6FF 53%,
-#57557A 60%,
-#57557A 100%
-);
-background-size: 200% 100%;
--webkit-background-clip: text;
-background-clip: text;
--webkit-text-fill-color: transparent;
-animation: thinkingSweep 1.6s linear infinite;
-display: inline-block;
-}
-@keyframes thinkingSweep {
-0% {
-background-position: 100% 0;
-}
-100% {
-background-position: -100% 0;
-}
+.light input:focus, .light textarea:focus {
+box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.4);
 }
