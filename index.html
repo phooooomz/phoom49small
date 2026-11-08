@@ -58,7 +58,7 @@
     <header class="sticky top-0 z-50 bg-dark-bg/90 light:bg-light-bg/90 backdrop-blur-md border-b border-dark-border light:border-light-border px-4 py-3">
         <div class="max-w-5xl mx-auto flex items-center justify-between gap-4">
             <!-- Brand Logo / Profile -->
-            <a href="index.html" class="flex items-center gap-3 min-w-0">
+            <a href="#/home" class="flex items-center gap-3 min-w-0">
                 <span class="site-logo"><img src="logo.png" alt="" width="36" height="36" onload="this.nextElementSibling.style.display='none'" onerror="this.remove()"><b>DV</b></span>
                 <span class="font-medium text-sm text-dark-text truncate max-w-[60vw]" data-i18n="name">อเล็กซ์ ริเวร่า</span>
             </a>
@@ -68,7 +68,8 @@
     </header>
 
     <!-- MAIN CONTAINER -->
-    <main class="max-w-5xl mx-auto px-4 sm:px-6 py-8 w-full space-y-6">
+    <div id="app-view">
+<main class="max-w-5xl mx-auto px-4 sm:px-6 py-8 w-full space-y-6">
         
         <!-- HERO BANNER WITH PROFILE PICTURE & MINI BIO -->
         <section class="bg-dark-card light:bg-light-card border border-dark-border light:border-light-border rounded-2xl p-6 sm:p-10 shadow-sm relative overflow-hidden">
@@ -104,11 +105,11 @@
                     </p>
 
                     <div class="pt-2 flex flex-wrap gap-3">
-                        <a href="contact.html" class="px-4 py-2 rounded-xl bg-dark-accent light:bg-light-accent text-white text-xs font-medium hover:opacity-90 transition-clean inline-flex items-center gap-2">
+                        <a href="#/contact" class="px-4 py-2 rounded-xl bg-dark-accent light:bg-light-accent text-white text-xs font-medium hover:opacity-90 transition-clean inline-flex items-center gap-2">
                             <span data-i18n="btn_contact">ติดต่องาน</span>
                             <i data-feather="arrow-right" class="w-3.5 h-3.5"></i>
                         </a>
-                        <a href="about.html" class="px-4 py-2 rounded-xl bg-dark-cardSec light:bg-light-cardSec border border-dark-border light:border-light-border text-dark-text light:text-light-text text-xs font-medium hover:bg-dark-border/40 light:hover:bg-light-border/40 transition-clean" data-i18n="btn_about">
+                        <a href="#/about" class="px-4 py-2 rounded-xl bg-dark-cardSec light:bg-light-cardSec border border-dark-border light:border-light-border text-dark-text light:text-light-text text-xs font-medium hover:bg-dark-border/40 light:hover:bg-light-border/40 transition-clean" data-i18n="btn_about">
                             ดูประวัติเพิ่มเติม
                         </a>
                     </div>
@@ -145,6 +146,7 @@
         </section>
 
     </main>
+</div>
 
     <!-- FOOTER -->
     <footer class="border-t border-dark-border light:border-light-border py-6 text-center text-xs text-dark-muted light:text-light-muted font-mono" data-i18n="footer">
@@ -154,16 +156,16 @@
     <!-- BOTTOM TAB BAR -->
     <nav class="fixed inset-x-0 z-50 px-4 pointer-events-none" style="bottom: calc(0.75rem + env(safe-area-inset-bottom));">
         <div class="pointer-events-auto w-full max-w-[16rem] mx-auto flex items-stretch gap-1 p-1.5 rounded-2xl glass-bar">
-        <a href="index.html" class="tab-btn active flex-1 flex items-center justify-center h-12 rounded-xl transition-clean" aria-label="หน้าแรก">
+        <a href="#/home" class="tab-btn active flex-1 flex items-center justify-center h-12 rounded-xl transition-clean" aria-label="หน้าแรก">
             <i class="fa-solid fa-house text-xl"></i>
         </a>
-        <a href="store.html" class="tab-btn flex-1 flex items-center justify-center h-12 rounded-xl transition-clean" aria-label="แจกฟรี">
+        <a href="#/store" class="tab-btn flex-1 flex items-center justify-center h-12 rounded-xl transition-clean" aria-label="แจกฟรี">
             <i class="fa-solid fa-gift text-xl"></i>
         </a>
-        <a href="about.html" class="tab-btn flex-1 flex items-center justify-center h-12 rounded-xl transition-clean" aria-label="เกี่ยวกับ">
+        <a href="#/about" class="tab-btn flex-1 flex items-center justify-center h-12 rounded-xl transition-clean" aria-label="เกี่ยวกับ">
             <i class="fa-solid fa-user text-xl"></i>
         </a>
-        <a href="contact.html" class="tab-btn flex-1 flex items-center justify-center h-12 rounded-xl transition-clean" aria-label="ติดตาม">
+        <a href="#/contact" class="tab-btn flex-1 flex items-center justify-center h-12 rounded-xl transition-clean" aria-label="ติดตาม">
             <i class="fa-solid fa-share-nodes text-xl"></i>
         </a>
         </div>
@@ -174,7 +176,9 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
     <script src="config.js"></script>
     <script src="script.js"></script>
-    <script src="tabbar.js"></script>
+    <script src="socials.js"></script>
     <script src="app.js"></script>
+    <script src="tabbar.js"></script>
+    <script src="router.js"></script>
 </body>
 </html>

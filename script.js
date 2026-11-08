@@ -1,8 +1,4 @@
-/**
- * Developer Portfolio - Script with Theme & Multi-language (TH/EN) System
- */
-
-// Multi-language dictionary
+/** Portfolio language and shared UI initialization. */
 const translations = {
     th: {
         name: "อเล็กซ์ ริเวร่า",
@@ -90,77 +86,54 @@ const translations = {
 
 let currentLang = 'th';
 
-document.addEventListener('DOMContentLoaded', () => {
-    // 1. Initialize Feather Icons
-    if (typeof feather !== 'undefined') {
-        feather.replace();
-    }
-
-    // 2. Initialize Dark / Light Theme
-    document.documentElement.classList.add('dark');
-    document.documentElement.classList.remove('light');
-
-    // 3. Initialize Language
-    initLanguage();
-
-    // 4. Highlight Active Navigation Tab
-    setActiveTabByUrl();
-});
-
-/**
- * Initialize Language Preference
- */
 function initLanguage() {
-    const savedLang = 'th';
-    if (savedLang && (savedLang === 'th' || savedLang === 'en')) {
-        currentLang = savedLang;
-    }
-    applyLanguage(currentLang);
+  try {
+    const saved = localStorage.getItem('site-language');
+    currentLang = saved === 'en' ? 'en' : 'th';
+  } catch (_) { currentLang = 'th'; }
+  applyLanguage(currentLang);
 }
 
-/**
- * Apply Language to UI Text Elements
- */
 function applyLanguage(lang) {
-    const langIndicator = document.getElementById('lang-indicator');
-    if (langIndicator) {
-        langIndicator.textContent = lang.toUpperCase();
-    }
-
-    document.querySelectorAll('[data-i18n]').forEach(element => {
-        const key = element.getAttribute('data-i18n');
-        if (translations[lang] && translations[lang][key]) {
-            element.textContent = translations[lang][key];
-        }
-    });
-
-    document.documentElement.setAttribute('lang', lang);
+  currentLang = translations[lang] ? lang : 'th';
+  window.currentLang = currentLang;
+  document.querySelectorAll('[data-i18n]').forEach(element => {
+    const key = element.getAttribute('data-i18n');
+    const value = translations[currentLang]?.[key];
+    if (typeof value === 'string') element.textContent = value;
+  });
+  const indicator = document.getElementById('lang-indicator');
+  if (indicator) indicator.textContent = currentLang.toUpperCase();
+  document.documentElement.setAttribute('lang', currentLang);
+  try { localStorage.setItem('site-language', currentLang); } catch (_) {}
 }
 
-/**
- * Handle Contact Form Submission
- */
-function handleContactSubmit(event) {
-    event.preventDefault();
-    const msg = translations[currentLang]?.alert_contact || 'Message sent!';
-    alert(msg);
-    event.target.reset();
-}
-
-/**
- * Set Active Tab Highlight by URL
- */
 function setActiveTabByUrl() {
-    const clean = p => (p || 'index').replace(/\.html$/, '') || 'index';
-    const currentPage = clean(window.location.pathname.split('/').pop());
-    const navLinks = document.querySelectorAll('nav .tab-btn');
-
-    navLinks.forEach(link => {
-        const href = link.getAttribute('href');
-        if (clean(href) === currentPage) {
-            link.classList.add('active');
-        } else {
-            link.classList.remove('active');
-        }
-    });
+  const hashRoute = location.hash.replace(/^#\//, '');
+  const pathRoute = location.pathname.split('/').pop().replace(/\.html$/, '') || 'home';
+  const route = (hashRoute || pathRoute).split('?')[0];
+  document.querySelectorAll('.tab-btn').forEach(link => {
+    const href = link.getAttribute('href') || '';
+    const target = href.startsWith('#/') ? href.replace(/^#\//, '') : href.split('/').pop().replace(/\.html$/, '');
+    link.classList.toggle('active', target === route);
+    link.setAttribute('aria-current', target === route ? 'page' : 'false');
+  });
 }
+
+function refreshSharedUI() {
+  if (typeof feather !== 'undefined') feather.replace();
+  setActiveTabByUrl();
+  applyLanguage(currentLang);
+}
+
+window.translations = translations;
+window.currentLang = currentLang;
+window.applyLanguage = applyLanguage;
+window.refreshSharedUI = refreshSharedUI;
+document.addEventListener('DOMContentLoaded', () => {
+  document.documentElement.classList.add('dark');
+  document.documentElement.classList.remove('light');
+  initLanguage();
+  refreshSharedUI();
+});
+document.addEventListener('pjax:complete', refreshSharedUI);

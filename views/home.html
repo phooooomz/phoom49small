@@ -1,0 +1,77 @@
+<main class="max-w-5xl mx-auto px-4 sm:px-6 py-8 w-full space-y-6">
+        
+        <!-- HERO BANNER WITH PROFILE PICTURE & MINI BIO -->
+        <section class="bg-dark-card light:bg-light-card border border-dark-border light:border-light-border rounded-2xl p-6 sm:p-10 shadow-sm relative overflow-hidden">
+            <div class="flex flex-col md:flex-row items-start gap-6 md:gap-8">
+                
+                <!-- Profile Avatar Card -->
+                <div class="relative flex-shrink-0">
+                    <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl bg-dark-cardSec light:bg-light-cardSec border border-dark-border light:border-light-border flex items-center justify-center overflow-hidden shadow-inner">
+                        <i data-feather="user" class="w-12 h-12 text-dark-muted light:text-light-muted"></i>
+                    </div>
+                    <span class="absolute -bottom-1 -right-1 w-4 h-4 bg-emerald-500 border-2 border-dark-card light:border-light-card rounded-full" id="status-avatar" title="พร้อมรับงาน"></span>
+                </div>
+
+                <!-- Text Info & Mini Bio -->
+                <div class="space-y-4 max-w-2xl flex-1">
+                    <div id="status-badge" class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 light:text-emerald-600 text-xs font-medium">
+                        <span id="status-dot" class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                        <span id="status-text">Available for hire</span>
+                    </div>
+                    
+                    <div>
+                        <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-dark-text light:text-light-text" data-i18n="name">
+                            อเล็กซ์ ริเวร่า
+                        </h1>
+                        <p class="text-xs font-mono text-dark-accent light:text-light-accent mt-1" data-i18n="role">
+                            Full-Stack Software Engineer & UI Developer
+                        </p>
+                    </div>
+
+                    <!-- Mini Bio -->
+                    <p class="text-xs sm:text-sm text-dark-muted light:text-light-muted leading-relaxed" data-i18n="bio">
+                        ยินดีต้อนรับครับ! ผมเป็นนักพัฒนาซอฟต์แวร์ที่เชี่ยวชาญการสร้างสรรค์เว็บแอปพลิเคชันด้วยดีไซน์ Ultra Clean & Minimalist เน้นประสิทธิภาพความเร็ว และประสบการณ์ใช้งานที่เรียบง่ายสบายตา
+                    </p>
+
+                    <div class="pt-2 flex flex-wrap gap-3">
+                        <a href="#/contact" class="px-4 py-2 rounded-xl bg-dark-accent light:bg-light-accent text-white text-xs font-medium hover:opacity-90 transition-clean inline-flex items-center gap-2">
+                            <span data-i18n="btn_contact">ติดต่องาน</span>
+                            <i data-feather="arrow-right" class="w-3.5 h-3.5"></i>
+                        </a>
+                        <a href="#/about" class="px-4 py-2 rounded-xl bg-dark-cardSec light:bg-light-cardSec border border-dark-border light:border-light-border text-dark-text light:text-light-text text-xs font-medium hover:bg-dark-border/40 light:hover:bg-light-border/40 transition-clean" data-i18n="btn_about">
+                            ดูประวัติเพิ่มเติม
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- BENTO GRID HIGHLIGHTS -->
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="bg-dark-card light:bg-light-card border border-dark-border light:border-light-border rounded-2xl p-5 shadow-sm">
+                <div class="w-8 h-8 rounded-lg bg-dark-cardSec light:bg-light-cardSec flex items-center justify-center text-dark-accent light:text-light-accent mb-3">
+                    <i data-feather="code" class="w-4 h-4"></i>
+                </div>
+                <h3 class="text-sm font-semibold text-dark-text light:text-light-text mb-1" data-i18n="feat_frontend_title">Frontend Engineering</h3>
+                <p class="text-xs text-dark-muted light:text-light-muted leading-relaxed" data-i18n="feat_frontend_desc">พัฒนา UI ด้วย React, Next.js และ Tailwind CSS ที่เน้นความเร็วและ Accessibility</p>
+            </div>
+            
+            <div class="bg-dark-card light:bg-light-card border border-dark-border light:border-light-border rounded-2xl p-5 shadow-sm">
+                <div class="w-8 h-8 rounded-lg bg-dark-cardSec light:bg-light-cardSec flex items-center justify-center text-dark-accent light:text-light-accent mb-3">
+                    <i data-feather="server" class="w-4 h-4"></i>
+                </div>
+                <h3 class="text-sm font-semibold text-dark-text light:text-light-text mb-1" data-i18n="feat_backend_title">Backend Architecture</h3>
+                <p class="text-xs text-dark-muted light:text-light-muted leading-relaxed" data-i18n="feat_backend_desc">วางระบบเบื้องหลัง REST API ด้วย Node.js, Go และฐานข้อมูลที่มีความเสถียรสูง</p>
+            </div>
+
+            <div class="bg-dark-card light:bg-light-card border border-dark-border light:border-light-border rounded-2xl p-5 shadow-sm">
+                <div class="w-8 h-8 rounded-lg bg-dark-cardSec light:bg-light-cardSec flex items-center justify-center text-dark-accent light:text-light-accent mb-3">
+                    <i data-feather="layout" class="w-4 h-4"></i>
+                </div>
+                <h3 class="text-sm font-semibold text-dark-text light:text-light-text mb-1" data-i18n="feat_ux_title">Clean & Minimal UX/UI</h3>
+                <p class="text-xs text-dark-muted light:text-light-muted leading-relaxed" data-i18n="feat_ux_desc">ออกแบบอินเทอร์เฟซที่เรียบง่าย ปราศจากสิ่งรบกวน เน้นสัดส่วนที่สมดุล สบายตา</p>
+            </div>
+        </section>
+
+    </main>
