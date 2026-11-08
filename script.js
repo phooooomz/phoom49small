@@ -6,6 +6,7 @@
 const translations = {
     th: {
         name: "อเล็กซ์ ริเวร่า",
+        tab_home: "หน้าแรก", tab_store: "ร้านค้า", tab_about: "เกี่ยวกับ", tab_contact: "ติดต่อ",
         status: "Available for hire",
         role: "Full-Stack Software Engineer & UI Developer",
         bio: "ยินดีต้อนรับครับ! ผมเป็นนักพัฒนาซอฟต์แวร์ที่เชี่ยวชาญการสร้างสรรค์เว็บแอปพลิเคชันด้วยดีไซน์ Ultra Clean & Minimalist เน้นประสิทธิภาพความเร็ว และประสบการณ์ใช้งานที่เรียบง่ายสบายตา",
@@ -46,6 +47,7 @@ const translations = {
     },
     en: {
         name: "Alex Rivera",
+        tab_home: "Home", tab_store: "Store", tab_about: "About", tab_contact: "Contact",
         status: "Available for hire",
         role: "Full-Stack Software Engineer & UI Developer",
         bio: "Welcome! I am a software engineer specializing in building web applications with Ultra Clean & Minimalist design, focusing on performance, speed, and seamless user experience.",
@@ -193,12 +195,13 @@ function handleContactSubmit(event) {
  * Set Active Tab Highlight by URL
  */
 function setActiveTabByUrl() {
-    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    const clean = p => (p || 'index').replace(/\.html$/, '') || 'index';
+    const currentPage = clean(window.location.pathname.split('/').pop());
     const navLinks = document.querySelectorAll('nav .tab-btn');
 
     navLinks.forEach(link => {
         const href = link.getAttribute('href');
-        if (href === currentPage || (currentPage === '' && href === 'index.html')) {
+        if (clean(href) === currentPage) {
             link.classList.add('active');
         } else {
             link.classList.remove('active');

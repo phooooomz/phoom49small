@@ -2,7 +2,7 @@
 <html lang="th" class="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>ร้านค้า | Developer Portfolio</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -51,7 +51,7 @@
         }
     </script>
 </head>
-<body class="bg-dark-bg text-dark-text light:bg-light-bg light:text-light-text font-sans antialiased min-h-screen transition-clean flex flex-col justify-between">
+<body class="bg-dark-bg text-dark-text light:bg-light-bg light:text-light-text font-sans antialiased min-h-screen transition-clean flex flex-col justify-between" style="padding-bottom: calc(4.75rem + env(safe-area-inset-bottom));">
 
     <!-- GLOBAL TAB BAR / NAVIGATION HEADER -->
     <header class="sticky top-0 z-50 bg-dark-bg/90 light:bg-light-bg/90 backdrop-blur-md border-b border-dark-border light:border-light-border px-4 py-3">
@@ -64,20 +64,6 @@
             </a>
 
             <!-- Navigation Links (Font Awesome Icon Tab Bar) -->
-            <nav class="flex items-center gap-1 bg-dark-card light:bg-light-card border border-dark-border light:border-light-border p-1 rounded-xl">
-                <a href="index.html" class="tab-btn px-4 py-2 rounded-lg text-sm transition-clean" title="หน้าแรก">
-                    <i class="fa-solid fa-house"></i>
-                </a>
-                <a href="store.html" class="tab-btn active px-4 py-2 rounded-lg text-sm transition-clean" title="ร้านค้า">
-                    <i class="fa-solid fa-store"></i>
-                </a>
-                <a href="about.html" class="tab-btn px-4 py-2 rounded-lg text-sm transition-clean" title="เกี่ยวกับ">
-                    <i class="fa-solid fa-user"></i>
-                </a>
-                <a href="contact.html" class="tab-btn px-4 py-2 rounded-lg text-sm transition-clean" title="ติดต่อ">
-                    <i class="fa-solid fa-envelope"></i>
-                </a>
-            </nav>
 
             <!-- Actions: Language & Theme Switchers -->
             <div class="flex items-center gap-2">
@@ -135,6 +121,29 @@
     <footer class="border-t border-dark-border light:border-light-border py-6 text-center text-xs text-dark-muted light:text-light-muted font-mono" data-i18n="footer">
         © 2026 อเล็กซ์ ริเวร่า. สงวนลิขสิทธิ์ทั้งหมด
     </footer>
+
+    <!-- BOTTOM TAB BAR -->
+    <nav class="fixed bottom-0 inset-x-0 z-50 bg-dark-bg/90 light:bg-light-bg/90 backdrop-blur-md border-t border-dark-border light:border-light-border" style="padding-bottom: env(safe-area-inset-bottom);">
+        <div class="max-w-md mx-auto flex items-stretch gap-1 px-2 py-1.5">
+        <a href="index.html" class="tab-btn flex-1 flex flex-col items-center gap-0.5 py-2 rounded-xl transition-clean" aria-label="หน้าแรก">
+            <i class="fa-solid fa-house text-lg"></i>
+            <span class="text-[10px]" data-i18n="tab_home">หน้าแรก</span>
+        </a>
+        <a href="store.html" class="tab-btn active flex-1 flex flex-col items-center gap-0.5 py-2 rounded-xl transition-clean" aria-label="ร้านค้า">
+            <i class="fa-solid fa-store text-lg"></i>
+            <span class="text-[10px]" data-i18n="tab_store">ร้านค้า</span>
+        </a>
+        <a href="about.html" class="tab-btn flex-1 flex flex-col items-center gap-0.5 py-2 rounded-xl transition-clean" aria-label="เกี่ยวกับ">
+            <i class="fa-solid fa-user text-lg"></i>
+            <span class="text-[10px]" data-i18n="tab_about">เกี่ยวกับ</span>
+        </a>
+        <a href="contact.html" class="tab-btn flex-1 flex flex-col items-center gap-0.5 py-2 rounded-xl transition-clean" aria-label="ติดต่อ">
+            <i class="fa-solid fa-envelope text-lg"></i>
+            <span class="text-[10px]" data-i18n="tab_contact">ติดต่อ</span>
+        </a>
+        </div>
+    </nav>
+
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
     <script src="config.js"></script>
