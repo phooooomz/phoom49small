@@ -2,162 +2,221 @@
 <html lang="th">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow">
 <title>Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Kanit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.14.5/dist/sweetalert2.all.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script src="config.js"></script>
 <style>
-  .inp{width:100%;padding:.6rem .75rem;border-radius:.75rem;background:#1A1E24;border:1px solid #262B33;color:#F1F5F9;font-size:.875rem}
-  .inp:focus{outline:none;border-color:#60A5FA}
+  :root{--bg:#0D0F12;--card:#15181D;--sec:#1A1E24;--bd:#262B33;--tx:#F1F5F9;--mu:#9299A5;--ac:#60A5FA}
+  body{background:var(--bg);color:var(--tx);font-family:Inter,Kanit,sans-serif;padding-bottom:calc(6rem + env(safe-area-inset-bottom))}
+  .card{background:var(--card);border:1px solid var(--bd);border-radius:1rem;padding:1.1rem}
+  .inp{width:100%;padding:.6rem .8rem;border-radius:.75rem;background:var(--sec);border:1px solid var(--bd);color:var(--tx);font-size:.8rem}
+  .inp:focus{outline:none;border-color:var(--ac)}
+  .btn{padding:.5rem .9rem;border-radius:.75rem;font-size:.75rem;font-weight:500;background:var(--sec);border:1px solid var(--bd)}
+  .btn-ac{background:var(--ac);border-color:var(--ac);color:#fff}
+  .mu{color:var(--mu)} .mono{font-family:'JetBrains Mono',monospace}
+  .tabbar{position:fixed;left:0;right:0;bottom:calc(.75rem + env(safe-area-inset-bottom));display:flex;justify-content:center;padding:0 1rem;pointer-events:none}
+  .tabbar>div{pointer-events:auto;display:flex;gap:.25rem;padding:.375rem;border-radius:1rem;background:rgba(21,24,29,.45);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.14)}
+  .tabbar button{position:relative;padding:.5rem 1.1rem;border-radius:.75rem;font-size:.7rem;color:var(--mu);display:flex;flex-direction:column;align-items:center;gap:2px}
+  .tabbar button.on{background:rgba(96,165,250,.16);color:var(--ac)}
+  .dot{position:absolute;top:2px;right:8px;background:#ef4444;color:#fff;border-radius:99px;font-size:9px;padding:0 5px}
+  section.tab{animation:in .3s ease both} @keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 </style>
 </head>
-<body class="bg-[#0D0F12] text-slate-100 min-h-screen p-4">
-<div class="max-w-xl mx-auto space-y-4">
+<body>
+<div class="max-w-xl mx-auto p-4 space-y-4">
 
-  <!-- LOGIN -->
-  <section id="login" class="bg-[#15181D] border border-[#262B33] rounded-2xl p-5 space-y-3">
-    <h1 class="font-semibold">เข้าสู่ระบบแอดมิน</h1>
-    <form id="login-form" class="space-y-3">
-      <input id="email" type="email" placeholder="อีเมล" required class="inp" autocomplete="username">
-      <input id="password" type="password" placeholder="รหัสผ่าน" required class="inp" autocomplete="current-password">
-      <p id="login-err" class="text-red-400 text-xs"></p>
-      <button class="w-full py-2.5 rounded-xl bg-blue-500 font-medium text-sm">เข้าสู่ระบบ</button>
-    </form>
+<section id="login" class="card space-y-3 mt-10">
+  <h1 class="font-semibold text-lg">เข้าสู่ระบบแอดมิน</h1>
+  <form id="login-form" class="space-y-3">
+    <input id="email" type="email" placeholder="อีเมล" required class="inp" autocomplete="username">
+    <input id="password" type="password" placeholder="รหัสผ่าน" required class="inp" autocomplete="current-password">
+    <button class="btn btn-ac w-full py-2.5">เข้าสู่ระบบ</button>
+  </form>
+</section>
+
+<div id="panel" hidden class="space-y-4">
+  <div class="flex justify-between items-center pt-2">
+    <h1 class="font-semibold text-lg">จัดการเว็บไซต์</h1>
+    <button id="logout" class="text-xs mu underline">ออกจากระบบ</button>
+  </div>
+
+  <!-- แดชบอร์ด -->
+  <section id="t-home" class="tab space-y-4">
+    <div class="card flex items-center justify-between">
+      <div><p class="text-sm font-medium">สถานะของคุณ</p><p class="text-xs mu">แตะเพื่อสลับ Online / Offline</p></div>
+      <button id="status-btn" class="px-6 py-3 rounded-xl font-semibold bg-slate-600">...</button>
+    </div>
+    <div class="grid grid-cols-2 gap-3">
+      <div class="card"><p class="text-xs mu">ของแจกที่แสดงอยู่</p><p id="n-items" class="text-2xl font-semibold mono">-</p></div>
+      <div class="card"><p class="text-xs mu">ช่องทางติดตาม</p><p id="n-socials" class="text-2xl font-semibold mono">-</p></div>
+    </div>
   </section>
 
-  <!-- PANEL -->
-  <div id="panel" hidden class="space-y-4">
-    <div class="flex justify-between items-center">
-      <h1 class="font-semibold">จัดการเว็บไซต์</h1>
-      <button id="logout" class="text-xs text-slate-400 underline">ออกจากระบบ</button>
-    </div>
-
-    <section class="bg-[#15181D] border border-[#262B33] rounded-2xl p-5 flex items-center justify-between">
-      <div><p class="text-sm font-medium">สถานะ</p><p class="text-xs text-slate-400">กดเพื่อสลับ Online / Offline</p></div>
-      <button id="status-btn" class="px-6 py-3 rounded-xl font-semibold bg-slate-600">...</button>
-    </section>
-
-    <section class="bg-[#15181D] border border-[#262B33] rounded-2xl p-5 space-y-3">
-      <h2 id="form-title" class="text-sm font-medium">เพิ่มสินค้า</h2>
+  <!-- ของแจก -->
+  <section id="t-items" class="tab space-y-4" hidden>
+    <div class="card space-y-3">
+      <h2 id="form-title" class="text-sm font-medium">เพิ่มของแจก</h2>
       <form id="pform" class="space-y-3">
-        <input id="name" placeholder="ชื่อสินค้า" required class="inp">
-        <div class="grid grid-cols-2 gap-3">
-          <input id="price" type="number" min="0" step="any" placeholder="ราคา (บาท)" required class="inp">
-          <input id="tag" placeholder="ป้าย เช่น Template" class="inp">
-        </div>
-        <textarea id="desc" rows="2" placeholder="รายละเอียดสั้นๆ" class="inp"></textarea>
-        <input id="buy" type="url" placeholder="ลิงก์สั่งซื้อ (LINE / Shopee / ...)" class="inp">
+        <input id="name" placeholder="ชื่อ" required class="inp">
+        <input id="tag" placeholder="ป้าย เช่น Template" class="inp">
+        <textarea id="desc" rows="2" placeholder="คำอธิบายสั้นๆ ที่แสดงบนการ์ด" class="inp"></textarea>
+        <input id="link" type="url" placeholder="ลิงก์ดาวน์โหลด (Drive / Mega / ฯลฯ)" class="inp">
+        <textarea id="details" rows="3" placeholder="รายละเอียดที่แสดงตอนกดรับ เช่น รหัส วิธีใช้" class="inp"></textarea>
         <input id="image_url" type="url" placeholder="ลิงก์รูป (หรืออัปโหลดด้านล่าง)" class="inp">
-        <input id="file" type="file" accept="image/*" class="text-xs text-slate-400">
-        <div class="flex gap-2">
-          <button id="save" class="flex-1 py-2.5 rounded-xl bg-blue-500 font-medium text-sm">บันทึก</button>
-          <button type="button" id="cancel" hidden class="px-4 rounded-xl bg-slate-700 text-sm">ยกเลิก</button>
-        </div>
+        <input id="file" type="file" accept="image/*" class="text-xs mu">
+        <div class="flex gap-2"><button id="save" class="btn btn-ac flex-1 py-2.5">บันทึก</button><button type="button" id="cancel" hidden class="btn">ยกเลิก</button></div>
       </form>
-    </section>
+    </div>
+    <div id="list" class="space-y-2"></div>
+  </section>
 
-    <section class="space-y-2">
-      <h2 class="text-sm font-medium">สินค้าทั้งหมด</h2>
-      <div id="list" class="space-y-2"></div>
-    </section>
-  </div>
+  <!-- ข้อความ -->
+  <section id="t-socials" class="tab space-y-4" hidden>
+    <div class="card space-y-3">
+      <h2 id="s-title" class="text-sm font-medium">เพิ่มช่องทาง</h2>
+      <form id="sform" class="space-y-3">
+        <select id="preset" class="inp"></select>
+        <input id="s-name" placeholder="ชื่อที่แสดง" required class="inp">
+        <input id="s-handle" placeholder="ข้อความใต้ชื่อ เช่น @yourname" class="inp">
+        <input id="s-url" placeholder="ลิงก์ (https://... หรืออีเมล)" required class="inp">
+        <div class="flex gap-2"><button class="btn btn-ac flex-1 py-2.5">บันทึก</button><button type="button" id="s-cancel" hidden class="btn">ยกเลิก</button></div>
+      </form>
+    </div>
+    <div id="slist" class="space-y-2"></div>
+  </section>
 </div>
+</div>
+
+<div class="tabbar" id="tabbar" hidden><div>
+  <button data-t="home" class="on">📊<span>แดชบอร์ด</span></button>
+  <button data-t="items">🎁<span>ของแจก</span></button>
+  <button data-t="socials">🔗<span>ช่องทาง</span></button>
+</div></div>
 
 <script>
 const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 const $ = id => document.getElementById(id);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-let products = [], editId = null, status = 'offline';
+const SW = { background:'#15181D', color:'#F1F5F9', confirmButtonColor:'#60A5FA', cancelButtonColor:'#262B33' };
+const toast = (icon,title) => Swal.fire({ ...SW, toast:true, position:'top', icon, title, showConfirmButton:false, timer:1800 });
+let items = [], socials = [], editId = null, editSid = null, status = 'offline';
 
-function view(on){ $('login').hidden = on; $('panel').hidden = !on; }
-async function boot(){
-  const { data } = await db.auth.getSession();
-  view(!!data.session);
-  if (data.session) load();
-}
+function view(on){ $('login').hidden = on; $('panel').hidden = !on; $('tabbar').hidden = !on; }
+async function boot(){ const { data } = await db.auth.getSession(); view(!!data.session); if (data.session) load(); }
 $('login-form').onsubmit = async e => {
-  e.preventDefault(); $('login-err').textContent = '';
-  const { error } = await db.auth.signInWithPassword({ email: $('email').value, password: $('password').value });
-  if (error) { $('login-err').textContent = 'อีเมลหรือรหัสผ่านไม่ถูกต้อง'; return; }
+  e.preventDefault();
+  const { error } = await db.auth.signInWithPassword({ email:$('email').value, password:$('password').value });
+  if (error) return Swal.fire({ ...SW, icon:'error', title:'เข้าสู่ระบบไม่สำเร็จ', text:'อีเมลหรือรหัสผ่านไม่ถูกต้อง' });
   view(true); load();
 };
 $('logout').onclick = async () => { await db.auth.signOut(); view(false); };
-const load = () => Promise.all([loadStatus(), loadProducts()]);
+document.querySelectorAll('#tabbar button').forEach(b => b.onclick = () => {
+  document.querySelectorAll('#tabbar button').forEach(x => x.classList.toggle('on', x === b));
+  ['home','items','socials'].forEach(t => $('t-'+t).hidden = t !== b.dataset.t);
+});
+const load = () => Promise.all([loadStatus(), loadItems(), loadSocials()]);
 
-/* ---- สถานะ ---- */
-async function loadStatus(){
-  const { data } = await db.from('settings').select('status').eq('id', 1).single();
-  status = data?.status || 'offline'; paintStatus();
-}
-function paintStatus(){
-  const on = status === 'online', b = $('status-btn');
-  b.textContent = on ? 'ONLINE' : 'OFFLINE';
-  b.className = 'px-6 py-3 rounded-xl font-semibold ' + (on ? 'bg-emerald-500 text-black' : 'bg-slate-600');
-}
+/* สถานะ */
+async function loadStatus(){ const { data } = await db.from('settings').select('status').eq('id',1).single(); status = data?.status || 'offline'; paintStatus(); }
+function paintStatus(){ const on = status==='online', b = $('status-btn'); b.textContent = on?'ONLINE':'OFFLINE'; b.className = 'px-6 py-3 rounded-xl font-semibold '+(on?'bg-emerald-500 text-black':'bg-slate-600'); }
 $('status-btn').onclick = async () => {
-  const next = status === 'online' ? 'offline' : 'online';
-  const { error } = await db.from('settings').update({ status: next, updated_at: new Date().toISOString() }).eq('id', 1);
-  if (error) return alert('บันทึกไม่สำเร็จ: ' + error.message);
-  status = next; paintStatus();
+  const next = status==='online'?'offline':'online';
+  const { error } = await db.from('settings').update({ status:next, updated_at:new Date().toISOString() }).eq('id',1);
+  if (error) return toast('error','บันทึกไม่สำเร็จ'); status = next; paintStatus(); toast('success', next.toUpperCase());
 };
 
-/* ---- สินค้า ---- */
-async function loadProducts(){
-  const { data, error } = await db.from('products').select('*').order('sort_order').order('created_at', { ascending: false });
-  if (error) return alert(error.message);
-  products = data;
-  $('list').innerHTML = products.map(p => `
-    <div class="bg-[#15181D] border border-[#262B33] rounded-xl p-3 flex items-center gap-3 ${p.is_active ? '' : 'opacity-50'}">
-      <div class="flex-1 min-w-0">
-        <p class="text-sm font-medium truncate">${esc(p.name)}</p>
-        <p class="text-xs text-slate-400">฿${Number(p.price).toLocaleString()} · ${p.is_active ? 'แสดงอยู่' : 'ซ่อนอยู่'}</p>
-      </div>
-      <button data-act="toggle" data-id="${p.id}" class="text-xs px-2 py-1 rounded-lg bg-slate-700">${p.is_active ? 'ซ่อน' : 'แสดง'}</button>
-      <button data-act="edit" data-id="${p.id}" class="text-xs px-2 py-1 rounded-lg bg-slate-700">แก้ไข</button>
-      <button data-act="del" data-id="${p.id}" class="text-xs px-2 py-1 rounded-lg bg-red-900/60">ลบ</button>
-    </div>`).join('') || '<p class="text-xs text-slate-400">ยังไม่มีสินค้า</p>';
+/* ของแจก */
+async function loadItems(){
+  const { data, error } = await db.from('freebies').select('*').order('sort_order').order('created_at',{ascending:false});
+  if (error) return toast('error', error.message); items = data;
+  $('n-items').textContent = items.filter(p => p.is_active).length;
+  $('list').innerHTML = items.map(p => `<div class="card !p-3 flex items-center gap-3 ${p.is_active?'':'opacity-50'}">
+    <div class="flex-1 min-w-0"><p class="text-sm font-medium truncate">${esc(p.name)}</p><p class="text-xs mu">${p.is_active?'แสดงอยู่':'ซ่อนอยู่'}${p.tag?' · '+esc(p.tag):''}</p></div>
+    <button class="btn" data-a="toggle" data-id="${p.id}">${p.is_active?'ซ่อน':'แสดง'}</button>
+    <button class="btn" data-a="edit" data-id="${p.id}">แก้ไข</button>
+    <button class="btn" data-a="del" data-id="${p.id}">ลบ</button></div>`).join('') || '<p class="text-xs mu">ยังไม่มีของแจก</p>';
 }
 $('list').onclick = async e => {
   const b = e.target.closest('button'); if (!b) return;
-  const id = Number(b.dataset.id), p = products.find(x => x.id === id);
-  if (b.dataset.act === 'toggle') { await db.from('products').update({ is_active: !p.is_active }).eq('id', id); loadProducts(); }
-  if (b.dataset.act === 'del' && confirm('ลบ "' + p.name + '" ?')) { await db.from('products').delete().eq('id', id); loadProducts(); }
-  if (b.dataset.act === 'edit') {
-    editId = id;
-    $('name').value = p.name; $('price').value = p.price; $('tag').value = p.tag || '';
-    $('desc').value = p.description || ''; $('buy').value = p.buy_link || ''; $('image_url').value = p.image_url || '';
-    $('form-title').textContent = 'แก้ไขสินค้า'; $('cancel').hidden = false;
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  const id = Number(b.dataset.id), p = items.find(x => x.id === id);
+  if (b.dataset.a === 'toggle') { await db.from('freebies').update({ is_active:!p.is_active }).eq('id',id); loadItems(); }
+  if (b.dataset.a === 'del') { const r = await Swal.fire({ ...SW, icon:'warning', title:'ลบ "'+p.name+'" ?', showCancelButton:true, confirmButtonText:'ลบ', cancelButtonText:'ยกเลิก' }); if (r.isConfirmed) { await db.from('freebies').delete().eq('id',id); loadItems(); } }
+  if (b.dataset.a === 'edit') {
+    editId = id; $('name').value = p.name; $('tag').value = p.tag||''; $('desc').value = p.description||'';
+    $('link').value = p.link_url||''; $('details').value = p.details||''; $('image_url').value = p.image_url||'';
+    $('form-title').textContent = 'แก้ไขของแจก'; $('cancel').hidden = false; window.scrollTo({ top:0, behavior:'smooth' });
   }
 };
-function resetForm(){
-  editId = null; $('pform').reset();
-  $('form-title').textContent = 'เพิ่มสินค้า'; $('cancel').hidden = true;
-}
+function resetForm(){ editId = null; $('pform').reset(); $('form-title').textContent = 'เพิ่มของแจก'; $('cancel').hidden = true; }
 $('cancel').onclick = resetForm;
 $('pform').onsubmit = async e => {
   e.preventDefault(); const btn = $('save'); btn.disabled = true;
   try {
-    let image_url = $('image_url').value.trim();
-    const f = $('file').files[0];
+    let image_url = $('image_url').value.trim(); const f = $('file').files[0];
     if (f) {
-      const path = Date.now() + '-' + f.name.replace(/[^\w.-]/g, '_');
-      const { error: ue } = await db.storage.from('product-images').upload(path, f);
-      if (ue) throw ue;
+      const path = Date.now()+'-'+f.name.replace(/[^\w.-]/g,'_');
+      const { error:ue } = await db.storage.from('product-images').upload(path, f); if (ue) throw ue;
       image_url = db.storage.from('product-images').getPublicUrl(path).data.publicUrl;
     }
-    const row = {
-      name: $('name').value.trim(), price: Number($('price').value),
-      tag: $('tag').value.trim() || null, description: $('desc').value.trim() || null,
-      buy_link: $('buy').value.trim() || null, image_url: image_url || null
-    };
-    const { error } = await (editId ? db.from('products').update(row).eq('id', editId) : db.from('products').insert(row));
-    if (error) throw error;
-    resetForm(); loadProducts();
-  } catch (err) { alert('บันทึกไม่สำเร็จ: ' + err.message); }
+    const row = { name:$('name').value.trim(), tag:$('tag').value.trim()||null, description:$('desc').value.trim()||null,
+      link_url:$('link').value.trim()||null, details:$('details').value.trim()||null, image_url:image_url||null };
+    const { error } = await (editId ? db.from('freebies').update(row).eq('id',editId) : db.from('freebies').insert(row));
+    if (error) throw error; resetForm(); loadItems(); toast('success','บันทึกแล้ว');
+  } catch (err) { Swal.fire({ ...SW, icon:'error', title:'บันทึกไม่สำเร็จ', text:err.message }); }
   finally { btn.disabled = false; }
+};
+
+/* ช่องทางติดตาม */
+const PRESETS = {
+  instagram:['Instagram','fa-brands fa-instagram','#E4405F'], facebook:['Facebook','fa-brands fa-facebook','#1877F2'],
+  line:['LINE','fa-brands fa-line','#06C755'], tiktok:['TikTok','fa-brands fa-tiktok','#F1F5F9'],
+  youtube:['YouTube','fa-brands fa-youtube','#FF0000'], x:['X','fa-brands fa-x-twitter','#F1F5F9'],
+  github:['GitHub','fa-brands fa-github','#F1F5F9'], discord:['Discord','fa-brands fa-discord','#5865F2'],
+  email:['Email','fa-solid fa-envelope','#60A5FA'], website:['Website','fa-solid fa-globe','#60A5FA']
+};
+$('preset').innerHTML = Object.entries(PRESETS).map(([k,v]) => `<option value="${k}">${v[0]}</option>`).join('');
+$('preset').onchange = () => { const n = $('s-name').value; if (!n || Object.values(PRESETS).some(v => v[0] === n)) $('s-name').value = PRESETS[$('preset').value][0]; };
+$('s-name').value = PRESETS.instagram[0];
+async function loadSocials(){
+  const { data, error } = await db.from('socials').select('*').order('sort_order').order('created_at');
+  if (error) return toast('error', error.message); socials = data;
+  $('n-socials').textContent = socials.filter(x => x.is_active).length;
+  $('slist').innerHTML = socials.map(x => `<div class="card !p-3 flex items-center gap-3 ${x.is_active?'':'opacity-50'}">
+    <i class="${esc(x.icon)} text-lg w-6 text-center" style="color:${esc(x.color||'#60A5FA')}"></i>
+    <div class="flex-1 min-w-0"><p class="text-sm font-medium truncate">${esc(x.name)}</p><p class="text-xs mu truncate">${esc(x.handle||x.url)}</p></div>
+    <button class="btn" data-a="toggle" data-id="${x.id}">${x.is_active?'ซ่อน':'แสดง'}</button>
+    <button class="btn" data-a="edit" data-id="${x.id}">แก้ไข</button>
+    <button class="btn" data-a="del" data-id="${x.id}">ลบ</button></div>`).join('') || '<p class="text-xs mu">ยังไม่มีช่องทาง</p>';
+}
+$('slist').onclick = async e => {
+  const b = e.target.closest('button'); if (!b) return;
+  const id = Number(b.dataset.id), x = socials.find(v => v.id === id);
+  if (b.dataset.a === 'toggle') { await db.from('socials').update({ is_active:!x.is_active }).eq('id',id); loadSocials(); }
+  if (b.dataset.a === 'del') { const r = await Swal.fire({ ...SW, icon:'warning', title:'ลบ "'+x.name+'" ?', showCancelButton:true, confirmButtonText:'ลบ', cancelButtonText:'ยกเลิก' }); if (r.isConfirmed) { await db.from('socials').delete().eq('id',id); loadSocials(); } }
+  if (b.dataset.a === 'edit') {
+    editSid = id; $('preset').value = Object.keys(PRESETS).find(k => PRESETS[k][1] === x.icon) || 'website';
+    $('s-name').value = x.name; $('s-handle').value = x.handle||''; $('s-url').value = x.url;
+    $('s-title').textContent = 'แก้ไขช่องทาง'; $('s-cancel').hidden = false; window.scrollTo({ top:0, behavior:'smooth' });
+  }
+};
+function resetS(){ editSid = null; $('sform').reset(); $('s-name').value = PRESETS.instagram[0]; $('s-title').textContent = 'เพิ่มช่องทาง'; $('s-cancel').hidden = true; }
+$('s-cancel').onclick = resetS;
+$('sform').onsubmit = async e => {
+  e.preventDefault(); let url = $('s-url').value.trim();
+  if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(url)) url = 'mailto:' + url;
+  if (!/^(https?:\/\/|mailto:)/i.test(url)) return Swal.fire({ ...SW, icon:'warning', title:'ลิงก์ไม่ถูกต้อง', text:'ต้องขึ้นต้นด้วย https:// หรือเป็นอีเมล' });
+  const p = PRESETS[$('preset').value];
+  const row = { name:$('s-name').value.trim(), handle:$('s-handle').value.trim()||null, url, icon:p[1], color:p[2] };
+  const { error } = await (editSid ? db.from('socials').update(row).eq('id',editSid) : db.from('socials').insert(row));
+  if (error) return Swal.fire({ ...SW, icon:'error', title:'บันทึกไม่สำเร็จ', text:error.message });
+  resetS(); loadSocials(); toast('success','บันทึกแล้ว');
 };
 boot();
 </script>
