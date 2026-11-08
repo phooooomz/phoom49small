@@ -104,31 +104,10 @@
 
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.14.5/dist/sweetalert2.all.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="config.js"></script>
     <script src="script.js"></script>
-    <script src="tabbar.js"></script>
-    <script src="app.js"></script>
+    <script src="data.js"></script>
     <script src="socials.js"></script>
-    <script>
-    (function () {
-        const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-        const ok = u => /^(https?:\/\/|mailto:)/i.test(u || '');
-        const box = document.getElementById('social-list');
-        if (!box) return;
-        const render = list => { box.innerHTML = list.filter(x => ok(x.url)).map((x, i) => `
-            <a href="${esc(x.url)}" target="_blank" rel="noopener noreferrer" style="--i:${i}"
-               class="reveal flex items-center gap-4 p-4 rounded-2xl bg-dark-cardSec light:bg-light-cardSec border border-dark-border light:border-light-border hover:-translate-y-0.5 transition-clean">
-                <span class="w-10 h-10 rounded-xl flex items-center justify-center text-lg bg-dark-card light:bg-light-card border border-dark-border light:border-light-border" style="color:${esc(x.color || '#60A5FA')}"><i class="${esc(x.icon)}"></i></span>
-                <span class="flex-1 min-w-0"><span class="block text-sm font-medium text-dark-text light:text-light-text">${esc(x.name)}</span>
-                <span class="block text-xs text-dark-muted light:text-light-muted truncate">${esc(x.handle)}</span></span>
-                <i class="fa-solid fa-arrow-up-right-from-square text-xs text-dark-muted"></i>
-            </a>`).join('') || '<p class="text-xs text-dark-muted">ยังไม่มีช่องทางติดตาม</p>'; };
-        if (window.db) {
-            window.db.from('socials').select('*').eq('is_active', true).order('sort_order').order('created_at')
-                .then(({ data, error }) => render(error ? (window.SOCIALS || []) : data));
-        } else { render(window.SOCIALS || []); }
-    })();
-    </script>
 </body>
 </html>

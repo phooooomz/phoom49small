@@ -8,90 +8,104 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Kanit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <script src="https://cdn.tailwindcss.com"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.14.5/dist/sweetalert2.all.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- ใช้ supabase-js v2 ล่าสุด (รองรับ key แบบ sb_publishable_...) -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
 <style>
-  :root{--bg:#0D0F12;--card:#15181D;--sec:#1A1E24;--bd:#262B33;--tx:#F1F5F9;--mu:#9299A5;--ac:#60A5FA}
-  body{background:var(--bg);color:var(--tx);font-family:Inter,Kanit,sans-serif;padding-bottom:calc(6rem + env(safe-area-inset-bottom))}
-  .card{background:var(--card);border:1px solid var(--bd);border-radius:1rem;padding:1.1rem}
-  .inp{width:100%;padding:.6rem .8rem;border-radius:.75rem;background:var(--sec);border:1px solid var(--bd);color:var(--tx);font-size:.8rem}
-  .inp:focus{outline:none;border-color:var(--ac)}
-  .btn{padding:.5rem .9rem;border-radius:.75rem;font-size:.75rem;font-weight:500;background:var(--sec);border:1px solid var(--bd)}
-  .btn-ac{background:var(--ac);border-color:var(--ac);color:#fff}
-  .mu{color:var(--mu)} .mono{font-family:'JetBrains Mono',monospace}
-  .tabbar{position:fixed;left:0;right:0;bottom:calc(.75rem + env(safe-area-inset-bottom));display:flex;justify-content:center;padding:0 1rem;pointer-events:none}
-  .tabbar>div{pointer-events:auto;display:flex;gap:.25rem;padding:.375rem;border-radius:1rem;background:rgba(21,24,29,.45);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.14)}
-  .tabbar button{position:relative;padding:.5rem 1.1rem;border-radius:.75rem;font-size:.7rem;color:var(--mu);display:flex;flex-direction:column;align-items:center;gap:2px}
-  .tabbar button.on{background:rgba(96,165,250,.16);color:var(--ac)}
-  .dot{position:absolute;top:2px;right:8px;background:#ef4444;color:#fff;border-radius:99px;font-size:9px;padding:0 5px}
-  section.tab{animation:in .3s ease both} @keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+:root{--bg:#0D0F12;--card:#15181D;--sec:#1A1E24;--bd:#262B33;--tx:#F1F5F9;--mu:#9299A5;--ac:#60A5FA}
+body{background:var(--bg);color:var(--tx);font-family:Inter,Kanit,sans-serif;padding-bottom:calc(6rem + env(safe-area-inset-bottom))}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:1rem;padding:1.1rem}
+.inp{width:100%;padding:.6rem .8rem;border-radius:.75rem;background:var(--sec);border:1px solid var(--bd);color:var(--tx);font-size:.8rem}
+.inp:focus{outline:none;border-color:var(--ac)}
+.btn{padding:.5rem .9rem;border-radius:.75rem;font-size:.75rem;font-weight:500;background:var(--sec);border:1px solid var(--bd)}
+.btn:disabled{opacity:.5}
+.btn-ac{background:var(--ac);border-color:var(--ac);color:#fff}
+.mu{color:var(--mu)} .mono{font-family:'JetBrains Mono',monospace}
+.tabbar{position:fixed;left:0;right:0;bottom:calc(.75rem + env(safe-area-inset-bottom));display:flex;justify-content:center;padding:0 1rem;pointer-events:none}
+.tabbar[hidden]{display:none}
+.tabbar>div{pointer-events:auto;display:flex;gap:.25rem;padding:.375rem;border-radius:1rem;background:rgba(21,24,29,.65);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.14)}
+.tabbar button{padding:.5rem 1.1rem;border-radius:.75rem;font-size:.7rem;color:var(--mu);display:flex;flex-direction:column;align-items:center;gap:2px}
+.tabbar button.on{background:rgba(96,165,250,.16);color:var(--ac)}
+section.tab{animation:in .3s ease both} @keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+[hidden]{display:none!important}
 </style>
 </head>
 <body>
 <div class="max-w-xl mx-auto p-4 space-y-4">
 
-<section id="login" class="card space-y-3 mt-10">
-  <h1 class="font-semibold text-lg">เข้าสู่ระบบแอดมิน</h1>
-  <form id="login-form" class="space-y-3">
-    <input id="email" type="email" placeholder="อีเมล" required class="inp" autocomplete="username">
-    <input id="password" type="password" placeholder="รหัสผ่าน" required class="inp" autocomplete="current-password">
-    <button class="btn btn-ac w-full py-2.5">เข้าสู่ระบบ</button>
-  </form>
-</section>
+  <!-- ล็อกอิน -->
+  <section id="login" class="card space-y-3 mt-10" hidden>
+    <h1 class="font-semibold text-lg">เข้าสู่ระบบแอดมิน</h1>
+    <form id="login-form" class="space-y-3">
+      <input id="email" type="email" placeholder="อีเมล" required class="inp" autocomplete="username">
+      <input id="password" type="password" placeholder="รหัสผ่าน" required class="inp" autocomplete="current-password">
+      <button id="login-btn" class="btn btn-ac w-full py-2.5">เข้าสู่ระบบ</button>
+    </form>
+  </section>
 
-<div id="panel" hidden class="space-y-4">
-  <div class="flex justify-between items-center pt-2">
-    <h1 class="font-semibold text-lg">จัดการเว็บไซต์</h1>
-    <button id="logout" class="text-xs mu underline">ออกจากระบบ</button>
+  <!-- ข้อความเมื่อตั้งค่าไม่ครบ -->
+  <section id="fatal" class="card mt-10 text-sm" hidden></section>
+
+  <div id="panel" hidden class="space-y-4">
+    <div class="flex justify-between items-center pt-2">
+      <h1 class="font-semibold text-lg">จัดการเว็บไซต์</h1>
+      <button id="logout" class="text-xs mu underline">ออกจากระบบ</button>
+    </div>
+
+    <!-- แดชบอร์ด -->
+    <section id="t-home" class="tab space-y-4">
+      <div class="card flex items-center justify-between">
+        <div><p class="text-sm font-medium">สถานะของคุณ</p><p class="text-xs mu">แตะเพื่อสลับ Online / Offline</p></div>
+        <button id="status-btn" class="px-6 py-3 rounded-xl font-semibold bg-slate-600">...</button>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div class="card"><p class="text-xs mu">ของแจกที่แสดงอยู่</p><p id="n-items" class="text-2xl font-semibold mono">-</p></div>
+        <div class="card"><p class="text-xs mu">ช่องทางติดตาม</p><p id="n-socials" class="text-2xl font-semibold mono">-</p></div>
+      </div>
+    </section>
+
+    <!-- ของแจก -->
+    <section id="t-items" class="tab space-y-4" hidden>
+      <div class="card space-y-3">
+        <h2 id="form-title" class="text-sm font-medium">เพิ่มของแจก</h2>
+        <form id="pform" class="space-y-3">
+          <input id="name" placeholder="ชื่อ" required class="inp">
+          <input id="tag" placeholder="ป้าย เช่น Template" class="inp">
+          <textarea id="desc" rows="2" placeholder="คำอธิบายสั้นๆ ที่แสดงบนการ์ด" class="inp"></textarea>
+          <input id="link" type="url" placeholder="ลิงก์ดาวน์โหลด (Drive / Mega / ฯลฯ)" class="inp">
+          <textarea id="details" rows="3" placeholder="รายละเอียดที่แสดงตอนกดรับ เช่น รหัส วิธีใช้" class="inp"></textarea>
+          <input id="image_url" type="url" placeholder="ลิงก์รูป (หรืออัปโหลดด้านล่าง)" class="inp">
+          <input id="file" type="file" accept="image/*" class="text-xs mu">
+          <div class="flex gap-2">
+            <button id="save" class="btn btn-ac flex-1 py-2.5">บันทึก</button>
+            <button type="button" id="cancel" hidden class="btn">ยกเลิก</button>
+          </div>
+        </form>
+      </div>
+      <div id="list" class="space-y-2"></div>
+    </section>
+
+    <!-- ช่องทางติดตาม -->
+    <section id="t-socials" class="tab space-y-4" hidden>
+      <div class="card space-y-3">
+        <h2 id="s-title" class="text-sm font-medium">เพิ่มช่องทาง</h2>
+        <form id="sform" class="space-y-3">
+          <select id="preset" class="inp"></select>
+          <input id="s-name" placeholder="ชื่อที่แสดง" required class="inp">
+          <input id="s-handle" placeholder="ข้อความใต้ชื่อ เช่น @yourname" class="inp">
+          <input id="s-url" placeholder="ลิงก์ (https://... หรืออีเมล)" required class="inp">
+          <div class="flex gap-2">
+            <button id="s-save" class="btn btn-ac flex-1 py-2.5">บันทึก</button>
+            <button type="button" id="s-cancel" hidden class="btn">ยกเลิก</button>
+          </div>
+        </form>
+      </div>
+      <div id="slist" class="space-y-2"></div>
+    </section>
   </div>
-
-  <!-- แดชบอร์ด -->
-  <section id="t-home" class="tab space-y-4">
-    <div class="card flex items-center justify-between">
-      <div><p class="text-sm font-medium">สถานะของคุณ</p><p class="text-xs mu">แตะเพื่อสลับ Online / Offline</p></div>
-      <button id="status-btn" class="px-6 py-3 rounded-xl font-semibold bg-slate-600">...</button>
-    </div>
-    <div class="grid grid-cols-2 gap-3">
-      <div class="card"><p class="text-xs mu">ของแจกที่แสดงอยู่</p><p id="n-items" class="text-2xl font-semibold mono">-</p></div>
-      <div class="card"><p class="text-xs mu">ช่องทางติดตาม</p><p id="n-socials" class="text-2xl font-semibold mono">-</p></div>
-    </div>
-  </section>
-
-  <!-- ของแจก -->
-  <section id="t-items" class="tab space-y-4" hidden>
-    <div class="card space-y-3">
-      <h2 id="form-title" class="text-sm font-medium">เพิ่มของแจก</h2>
-      <form id="pform" class="space-y-3">
-        <input id="name" placeholder="ชื่อ" required class="inp">
-        <input id="tag" placeholder="ป้าย เช่น Template" class="inp">
-        <textarea id="desc" rows="2" placeholder="คำอธิบายสั้นๆ ที่แสดงบนการ์ด" class="inp"></textarea>
-        <input id="link" type="url" placeholder="ลิงก์ดาวน์โหลด (Drive / Mega / ฯลฯ)" class="inp">
-        <textarea id="details" rows="3" placeholder="รายละเอียดที่แสดงตอนกดรับ เช่น รหัส วิธีใช้" class="inp"></textarea>
-        <input id="image_url" type="url" placeholder="ลิงก์รูป (หรืออัปโหลดด้านล่าง)" class="inp">
-        <input id="file" type="file" accept="image/*" class="text-xs mu">
-        <div class="flex gap-2"><button id="save" class="btn btn-ac flex-1 py-2.5">บันทึก</button><button type="button" id="cancel" hidden class="btn">ยกเลิก</button></div>
-      </form>
-    </div>
-    <div id="list" class="space-y-2"></div>
-  </section>
-
-  <!-- ข้อความ -->
-  <section id="t-socials" class="tab space-y-4" hidden>
-    <div class="card space-y-3">
-      <h2 id="s-title" class="text-sm font-medium">เพิ่มช่องทาง</h2>
-      <form id="sform" class="space-y-3">
-        <select id="preset" class="inp"></select>
-        <input id="s-name" placeholder="ชื่อที่แสดง" required class="inp">
-        <input id="s-handle" placeholder="ข้อความใต้ชื่อ เช่น @yourname" class="inp">
-        <input id="s-url" placeholder="ลิงก์ (https://... หรืออีเมล)" required class="inp">
-        <div class="flex gap-2"><button class="btn btn-ac flex-1 py-2.5">บันทึก</button><button type="button" id="s-cancel" hidden class="btn">ยกเลิก</button></div>
-      </form>
-    </div>
-    <div id="slist" class="space-y-2"></div>
-  </section>
-</div>
 </div>
 
 <div class="tabbar" id="tabbar" hidden><div>
@@ -101,79 +115,188 @@
 </div></div>
 
 <script>
-const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 const $ = id => document.getElementById(id);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const SW = { background:'#15181D', color:'#F1F5F9', confirmButtonColor:'#60A5FA', cancelButtonColor:'#262B33' };
-const toast = (icon,title) => Swal.fire({ ...SW, toast:true, position:'top', icon, title, showConfirmButton:false, timer:1800 });
+
+/* ---------- helpers (มี fallback ถ้า SweetAlert โหลดไม่ขึ้น) ---------- */
+const hasSwal = () => typeof Swal !== 'undefined';
+const toast = (icon, title) => hasSwal()
+  ? Swal.fire({ ...SW, toast:true, position:'top', icon, title, showConfirmButton:false, timer:2000 })
+  : console.log(icon, title);
+const alertErr = (title, text) => hasSwal()
+  ? Swal.fire({ ...SW, icon:'error', title, text })
+  : alert(title + '\n' + (text || ''));
+const confirmDel = async name => hasSwal()
+  ? (await Swal.fire({ ...SW, icon:'warning', title:'ลบ "' + name + '" ?', showCancelButton:true, confirmButtonText:'ลบ', cancelButtonText:'ยกเลิก' })).isConfirmed
+  : confirm('ลบ "' + name + '" ?');
+
+// แปลข้อความ error ที่พบบ่อยให้อ่านง่าย พร้อมบอกวิธีแก้
+function explain(err){
+  const m = String(err?.message || err || '');
+  if (/Invalid login credentials/i.test(m)) return 'อีเมลหรือรหัสผ่านไม่ถูกต้อง (หรือยังไม่ได้สร้างผู้ใช้ใน Supabase → Authentication → Users)';
+  if (/Email not confirmed/i.test(m)) return 'อีเมลนี้ยังไม่ได้ยืนยัน (กด Confirm user ใน Supabase → Authentication → Users)';
+  if (/Failed to fetch|NetworkError|Load failed/i.test(m)) return 'เชื่อมต่อ Supabase ไม่ได้ — โปรเจกต์อาจถูก Pause (ไปกด Restore ใน Dashboard) หรือ URL ใน config.js ผิด';
+  if (/row-level security|permission denied|42501/i.test(m)) return 'ถูกบล็อกโดย RLS — ต้องเพิ่ม policy ให้ role authenticated แก้ตารางนี้ได้';
+  if (/Invalid API key|apikey/i.test(m)) return 'API key ใน config.js ไม่ถูกต้อง';
+  if (/relation .* does not exist|schema cache/i.test(m)) return 'ไม่พบตารางในฐานข้อมูล: ' + m;
+  return m;
+}
+
+/* ---------- ตรวจการตั้งค่า ---------- */
+function fatal(html){ $('fatal').innerHTML = html; $('fatal').hidden = false; $('login').hidden = true; }
+
+let db;
+try {
+  if (!window.supabase?.createClient) throw new Error('โหลด supabase-js ไม่สำเร็จ (เช็กอินเทอร์เน็ต หรือ CDN ถูกบล็อก)');
+  if (!window.SUPABASE_URL || !window.SUPABASE_ANON_KEY) throw new Error('config.js ไม่มี SUPABASE_URL / SUPABASE_ANON_KEY');
+  db = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
+} catch (e) {
+  fatal('<p class="font-medium mb-1">เริ่มระบบไม่ได้</p><p class="mu">' + esc(e.message) + '</p>');
+}
+
 let items = [], socials = [], editId = null, editSid = null, status = 'offline';
+const sameId = (a, b) => String(a) === String(b);
 
 function view(on){ $('login').hidden = on; $('panel').hidden = !on; $('tabbar').hidden = !on; }
-async function boot(){ const { data } = await db.auth.getSession(); view(!!data.session); if (data.session) load(); }
+
+/* ---------- เริ่มต้น / ล็อกอิน ---------- */
+async function boot(){
+  if (!db) return;
+  try {
+    const { data, error } = await db.auth.getSession();
+    if (error) throw error;
+    view(!!data.session);
+    if (data.session) load();
+  } catch (e) {
+    view(false);
+    alertErr('เชื่อมต่อระบบไม่ได้', explain(e));
+  }
+}
+
+db?.auth.onAuthStateChange((event, session) => {
+  if (event === 'SIGNED_OUT') view(false);
+});
+
 $('login-form').onsubmit = async e => {
   e.preventDefault();
-  const { error } = await db.auth.signInWithPassword({ email:$('email').value, password:$('password').value });
-  if (error) return Swal.fire({ ...SW, icon:'error', title:'เข้าสู่ระบบไม่สำเร็จ', text:'อีเมลหรือรหัสผ่านไม่ถูกต้อง' });
-  view(true); load();
+  if (!db) return;
+  const btn = $('login-btn'); btn.disabled = true; btn.textContent = 'กำลังเข้าสู่ระบบ...';
+  try {
+    const { error } = await db.auth.signInWithPassword({ email:$('email').value.trim(), password:$('password').value });
+    if (error) throw error;
+    $('password').value = '';
+    view(true); load();
+  } catch (err) {
+    alertErr('เข้าสู่ระบบไม่สำเร็จ', explain(err));
+  } finally {
+    btn.disabled = false; btn.textContent = 'เข้าสู่ระบบ';
+  }
 };
+
 $('logout').onclick = async () => { await db.auth.signOut(); view(false); };
+
 document.querySelectorAll('#tabbar button').forEach(b => b.onclick = () => {
   document.querySelectorAll('#tabbar button').forEach(x => x.classList.toggle('on', x === b));
   ['home','items','socials'].forEach(t => $('t-'+t).hidden = t !== b.dataset.t);
 });
+
 const load = () => Promise.all([loadStatus(), loadItems(), loadSocials()]);
 
-/* สถานะ */
-async function loadStatus(){ const { data } = await db.from('settings').select('status').eq('id',1).single(); status = data?.status || 'offline'; paintStatus(); }
-function paintStatus(){ const on = status==='online', b = $('status-btn'); b.textContent = on?'ONLINE':'OFFLINE'; b.className = 'px-6 py-3 rounded-xl font-semibold '+(on?'bg-emerald-500 text-black':'bg-slate-600'); }
+/* ---------- สถานะ Online/Offline ---------- */
+async function loadStatus(){
+  const { data, error } = await db.from('settings').select('status').eq('id',1).maybeSingle();
+  if (error) toast('error', explain(error));
+  status = data?.status || 'offline';
+  paintStatus();
+}
+function paintStatus(){
+  const on = status === 'online', b = $('status-btn');
+  b.textContent = on ? 'ONLINE' : 'OFFLINE';
+  b.className = 'px-6 py-3 rounded-xl font-semibold ' + (on ? 'bg-emerald-500 text-black' : 'bg-slate-600');
+}
 $('status-btn').onclick = async () => {
-  const next = status==='online'?'offline':'online';
-  const { error } = await db.from('settings').update({ status:next, updated_at:new Date().toISOString() }).eq('id',1);
-  if (error) return toast('error','บันทึกไม่สำเร็จ'); status = next; paintStatus(); toast('success', next.toUpperCase());
+  const next = status === 'online' ? 'offline' : 'online';
+  // upsert: ถ้ายังไม่มีแถว id=1 จะสร้างให้เอง
+  const { error } = await db.from('settings').upsert({ id:1, status:next, updated_at:new Date().toISOString() });
+  if (error) return toast('error', explain(error));
+  status = next; paintStatus(); toast('success', next.toUpperCase());
 };
 
-/* ของแจก */
+/* ---------- ของแจก ---------- */
 async function loadItems(){
-  const { data, error } = await db.from('freebies').select('*').order('sort_order').order('created_at',{ascending:false});
-  if (error) return toast('error', error.message); items = data;
+  const { data, error } = await db.from('freebies').select('*').order('sort_order', { ascending:true, nullsFirst:false }).order('created_at', { ascending:false });
+  if (error) { toast('error', explain(error)); return; }
+  items = data || [];
   $('n-items').textContent = items.filter(p => p.is_active).length;
-  $('list').innerHTML = items.map(p => `<div class="card !p-3 flex items-center gap-3 ${p.is_active?'':'opacity-50'}">
-    <div class="flex-1 min-w-0"><p class="text-sm font-medium truncate">${esc(p.name)}</p><p class="text-xs mu">${p.is_active?'แสดงอยู่':'ซ่อนอยู่'}${p.tag?' · '+esc(p.tag):''}</p></div>
-    <button class="btn" data-a="toggle" data-id="${p.id}">${p.is_active?'ซ่อน':'แสดง'}</button>
-    <button class="btn" data-a="edit" data-id="${p.id}">แก้ไข</button>
-    <button class="btn" data-a="del" data-id="${p.id}">ลบ</button></div>`).join('') || '<p class="text-xs mu">ยังไม่มีของแจก</p>';
+  $('list').innerHTML = items.map(p => `<div class="card !p-3 flex items-center gap-3 ${p.is_active ? '' : 'opacity-50'}">
+    <div class="flex-1 min-w-0"><p class="text-sm font-medium truncate">${esc(p.name)}</p><p class="text-xs mu">${p.is_active ? 'แสดงอยู่' : 'ซ่อนอยู่'}${p.tag ? ' · ' + esc(p.tag) : ''}</p></div>
+    <button class="btn" data-a="toggle" data-id="${esc(p.id)}">${p.is_active ? 'ซ่อน' : 'แสดง'}</button>
+    <button class="btn" data-a="edit" data-id="${esc(p.id)}">แก้ไข</button>
+    <button class="btn" data-a="del" data-id="${esc(p.id)}">ลบ</button></div>`).join('') || '<p class="text-xs mu">ยังไม่มีของแจก</p>';
 }
+
 $('list').onclick = async e => {
   const b = e.target.closest('button'); if (!b) return;
-  const id = Number(b.dataset.id), p = items.find(x => x.id === id);
-  if (b.dataset.a === 'toggle') { await db.from('freebies').update({ is_active:!p.is_active }).eq('id',id); loadItems(); }
-  if (b.dataset.a === 'del') { const r = await Swal.fire({ ...SW, icon:'warning', title:'ลบ "'+p.name+'" ?', showCancelButton:true, confirmButtonText:'ลบ', cancelButtonText:'ยกเลิก' }); if (r.isConfirmed) { await db.from('freebies').delete().eq('id',id); loadItems(); } }
+  const id = b.dataset.id, p = items.find(x => sameId(x.id, id)); if (!p) return;
+
+  if (b.dataset.a === 'toggle') {
+    const { error } = await db.from('freebies').update({ is_active:!p.is_active }).eq('id', p.id);
+    if (error) return toast('error', explain(error));
+    loadItems();
+  }
+  if (b.dataset.a === 'del') {
+    if (!(await confirmDel(p.name))) return;
+    const { error } = await db.from('freebies').delete().eq('id', p.id);
+    if (error) return toast('error', explain(error));
+    if (sameId(editId, p.id)) resetForm();
+    loadItems(); toast('success', 'ลบแล้ว');
+  }
   if (b.dataset.a === 'edit') {
-    editId = id; $('name').value = p.name; $('tag').value = p.tag||''; $('desc').value = p.description||'';
-    $('link').value = p.link_url||''; $('details').value = p.details||''; $('image_url').value = p.image_url||'';
-    $('form-title').textContent = 'แก้ไขของแจก'; $('cancel').hidden = false; window.scrollTo({ top:0, behavior:'smooth' });
+    editId = p.id;
+    $('name').value = p.name; $('tag').value = p.tag || ''; $('desc').value = p.description || '';
+    $('link').value = p.link_url || ''; $('details').value = p.details || ''; $('image_url').value = p.image_url || '';
+    $('file').value = '';
+    $('form-title').textContent = 'แก้ไขของแจก'; $('cancel').hidden = false;
+    window.scrollTo({ top:0, behavior:'smooth' });
   }
 };
+
 function resetForm(){ editId = null; $('pform').reset(); $('form-title').textContent = 'เพิ่มของแจก'; $('cancel').hidden = true; }
 $('cancel').onclick = resetForm;
+
 $('pform').onsubmit = async e => {
-  e.preventDefault(); const btn = $('save'); btn.disabled = true;
+  e.preventDefault();
+  const btn = $('save'); btn.disabled = true; btn.textContent = 'กำลังบันทึก...';
   try {
-    let image_url = $('image_url').value.trim(); const f = $('file').files[0];
+    let image_url = $('image_url').value.trim();
+    const f = $('file').files[0];
     if (f) {
-      const path = Date.now()+'-'+f.name.replace(/[^\w.-]/g,'_');
-      const { error:ue } = await db.storage.from('product-images').upload(path, f); if (ue) throw ue;
+      if (f.size > 5 * 1024 * 1024) throw new Error('รูปใหญ่เกิน 5MB');
+      const path = Date.now() + '-' + f.name.replace(/[^\w.-]/g, '_');
+      const { error:ue } = await db.storage.from('product-images').upload(path, f, { contentType:f.type, upsert:false });
+      if (ue) throw ue;
       image_url = db.storage.from('product-images').getPublicUrl(path).data.publicUrl;
     }
-    const row = { name:$('name').value.trim(), tag:$('tag').value.trim()||null, description:$('desc').value.trim()||null,
-      link_url:$('link').value.trim()||null, details:$('details').value.trim()||null, image_url:image_url||null };
-    const { error } = await (editId ? db.from('freebies').update(row).eq('id',editId) : db.from('freebies').insert(row));
-    if (error) throw error; resetForm(); loadItems(); toast('success','บันทึกแล้ว');
-  } catch (err) { Swal.fire({ ...SW, icon:'error', title:'บันทึกไม่สำเร็จ', text:err.message }); }
-  finally { btn.disabled = false; }
+    const row = {
+      name: $('name').value.trim(),
+      tag: $('tag').value.trim() || null,
+      description: $('desc').value.trim() || null,
+      link_url: $('link').value.trim() || null,
+      details: $('details').value.trim() || null,
+      image_url: image_url || null
+    };
+    const { error } = await (editId !== null ? db.from('freebies').update(row).eq('id', editId) : db.from('freebies').insert(row));
+    if (error) throw error;
+    resetForm(); loadItems(); toast('success', 'บันทึกแล้ว');
+  } catch (err) {
+    alertErr('บันทึกไม่สำเร็จ', explain(err));
+  } finally {
+    btn.disabled = false; btn.textContent = 'บันทึก';
+  }
 };
 
-/* ช่องทางติดตาม */
+/* ---------- ช่องทางติดตาม ---------- */
 const PRESETS = {
   instagram:['Instagram','fa-brands fa-instagram','#E4405F'], facebook:['Facebook','fa-brands fa-facebook','#1877F2'],
   line:['LINE','fa-brands fa-line','#06C755'], tiktok:['TikTok','fa-brands fa-tiktok','#F1F5F9'],
@@ -182,42 +305,73 @@ const PRESETS = {
   email:['Email','fa-solid fa-envelope','#60A5FA'], website:['Website','fa-solid fa-globe','#60A5FA']
 };
 $('preset').innerHTML = Object.entries(PRESETS).map(([k,v]) => `<option value="${k}">${v[0]}</option>`).join('');
-$('preset').onchange = () => { const n = $('s-name').value; if (!n || Object.values(PRESETS).some(v => v[0] === n)) $('s-name').value = PRESETS[$('preset').value][0]; };
+$('preset').onchange = () => {
+  const n = $('s-name').value;
+  if (!n || Object.values(PRESETS).some(v => v[0] === n)) $('s-name').value = PRESETS[$('preset').value][0];
+};
 $('s-name').value = PRESETS.instagram[0];
+
 async function loadSocials(){
-  const { data, error } = await db.from('socials').select('*').order('sort_order').order('created_at');
-  if (error) return toast('error', error.message); socials = data;
+  const { data, error } = await db.from('socials').select('*').order('sort_order', { ascending:true, nullsFirst:false }).order('created_at');
+  if (error) { toast('error', explain(error)); return; }
+  socials = data || [];
   $('n-socials').textContent = socials.filter(x => x.is_active).length;
-  $('slist').innerHTML = socials.map(x => `<div class="card !p-3 flex items-center gap-3 ${x.is_active?'':'opacity-50'}">
-    <i class="${esc(x.icon)} text-lg w-6 text-center" style="color:${esc(x.color||'#60A5FA')}"></i>
-    <div class="flex-1 min-w-0"><p class="text-sm font-medium truncate">${esc(x.name)}</p><p class="text-xs mu truncate">${esc(x.handle||x.url)}</p></div>
-    <button class="btn" data-a="toggle" data-id="${x.id}">${x.is_active?'ซ่อน':'แสดง'}</button>
-    <button class="btn" data-a="edit" data-id="${x.id}">แก้ไข</button>
-    <button class="btn" data-a="del" data-id="${x.id}">ลบ</button></div>`).join('') || '<p class="text-xs mu">ยังไม่มีช่องทาง</p>';
+  $('slist').innerHTML = socials.map(x => `<div class="card !p-3 flex items-center gap-3 ${x.is_active ? '' : 'opacity-50'}">
+    <i class="${esc(x.icon)} text-lg w-6 text-center" style="color:${esc(x.color || '#60A5FA')}"></i>
+    <div class="flex-1 min-w-0"><p class="text-sm font-medium truncate">${esc(x.name)}</p><p class="text-xs mu truncate">${esc(x.handle || x.url)}</p></div>
+    <button class="btn" data-a="toggle" data-id="${esc(x.id)}">${x.is_active ? 'ซ่อน' : 'แสดง'}</button>
+    <button class="btn" data-a="edit" data-id="${esc(x.id)}">แก้ไข</button>
+    <button class="btn" data-a="del" data-id="${esc(x.id)}">ลบ</button></div>`).join('') || '<p class="text-xs mu">ยังไม่มีช่องทาง</p>';
 }
+
 $('slist').onclick = async e => {
   const b = e.target.closest('button'); if (!b) return;
-  const id = Number(b.dataset.id), x = socials.find(v => v.id === id);
-  if (b.dataset.a === 'toggle') { await db.from('socials').update({ is_active:!x.is_active }).eq('id',id); loadSocials(); }
-  if (b.dataset.a === 'del') { const r = await Swal.fire({ ...SW, icon:'warning', title:'ลบ "'+x.name+'" ?', showCancelButton:true, confirmButtonText:'ลบ', cancelButtonText:'ยกเลิก' }); if (r.isConfirmed) { await db.from('socials').delete().eq('id',id); loadSocials(); } }
+  const id = b.dataset.id, x = socials.find(v => sameId(v.id, id)); if (!x) return;
+
+  if (b.dataset.a === 'toggle') {
+    const { error } = await db.from('socials').update({ is_active:!x.is_active }).eq('id', x.id);
+    if (error) return toast('error', explain(error));
+    loadSocials();
+  }
+  if (b.dataset.a === 'del') {
+    if (!(await confirmDel(x.name))) return;
+    const { error } = await db.from('socials').delete().eq('id', x.id);
+    if (error) return toast('error', explain(error));
+    if (sameId(editSid, x.id)) resetS();
+    loadSocials(); toast('success', 'ลบแล้ว');
+  }
   if (b.dataset.a === 'edit') {
-    editSid = id; $('preset').value = Object.keys(PRESETS).find(k => PRESETS[k][1] === x.icon) || 'website';
-    $('s-name').value = x.name; $('s-handle').value = x.handle||''; $('s-url').value = x.url;
-    $('s-title').textContent = 'แก้ไขช่องทาง'; $('s-cancel').hidden = false; window.scrollTo({ top:0, behavior:'smooth' });
+    editSid = x.id;
+    $('preset').value = Object.keys(PRESETS).find(k => PRESETS[k][1] === x.icon) || 'website';
+    $('s-name').value = x.name; $('s-handle').value = x.handle || ''; $('s-url').value = x.url;
+    $('s-title').textContent = 'แก้ไขช่องทาง'; $('s-cancel').hidden = false;
+    window.scrollTo({ top:0, behavior:'smooth' });
   }
 };
-function resetS(){ editSid = null; $('sform').reset(); $('s-name').value = PRESETS.instagram[0]; $('s-title').textContent = 'เพิ่มช่องทาง'; $('s-cancel').hidden = true; }
+
+function resetS(){
+  editSid = null; $('sform').reset(); $('s-name').value = PRESETS.instagram[0];
+  $('s-title').textContent = 'เพิ่มช่องทาง'; $('s-cancel').hidden = true;
+}
 $('s-cancel').onclick = resetS;
+
 $('sform').onsubmit = async e => {
-  e.preventDefault(); let url = $('s-url').value.trim();
+  e.preventDefault();
+  let url = $('s-url').value.trim();
   if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(url)) url = 'mailto:' + url;
-  if (!/^(https?:\/\/|mailto:)/i.test(url)) return Swal.fire({ ...SW, icon:'warning', title:'ลิงก์ไม่ถูกต้อง', text:'ต้องขึ้นต้นด้วย https:// หรือเป็นอีเมล' });
+  if (!/^(https?:\/\/|mailto:)/i.test(url)) return alertErr('ลิงก์ไม่ถูกต้อง', 'ต้องขึ้นต้นด้วย https:// หรือเป็นอีเมล');
   const p = PRESETS[$('preset').value];
-  const row = { name:$('s-name').value.trim(), handle:$('s-handle').value.trim()||null, url, icon:p[1], color:p[2] };
-  const { error } = await (editSid ? db.from('socials').update(row).eq('id',editSid) : db.from('socials').insert(row));
-  if (error) return Swal.fire({ ...SW, icon:'error', title:'บันทึกไม่สำเร็จ', text:error.message });
-  resetS(); loadSocials(); toast('success','บันทึกแล้ว');
+  const row = { name:$('s-name').value.trim(), handle:$('s-handle').value.trim() || null, url, icon:p[1], color:p[2] };
+  const btn = $('s-save'); btn.disabled = true;
+  try {
+    const { error } = await (editSid !== null ? db.from('socials').update(row).eq('id', editSid) : db.from('socials').insert(row));
+    if (error) throw error;
+    resetS(); loadSocials(); toast('success', 'บันทึกแล้ว');
+  } catch (err) {
+    alertErr('บันทึกไม่สำเร็จ', explain(err));
+  } finally { btn.disabled = false; }
 };
+
 boot();
 </script>
 </body>
