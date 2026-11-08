@@ -1,0 +1,63 @@
+/* CSS Reset & Selection */
+{
+-webkit-tap-highlight-color: transparent;
+}
+::selection {
+background-color: rgba(96, 165, 250, 0.2);
+color: inherit;
+}
+.light ::selection {
+background-color: rgba(37, 99, 235, 0.15);
+}
+/* Custom subtle scrollbar */
+::-webkit-scrollbar {
+width: 6px;
+height: 6px;
+}
+::-webkit-scrollbar-track {
+background: transparent;
+}
+::-webkit-scrollbar-thumb {
+background: #262B33;
+border-radius: 9999px;
+}
+.light ::-webkit-scrollbar-thumb {
+background: #E8EAEE;
+}
+/* Smooth subtle transitions */
+.transition-clean {
+transition-property: color, background-color, border-color, opacity, transform;
+transition-duration: 150ms;
+transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+/* Tab Bar Button Styling */
+.tab-btn {
+color: #9299A5;
+background-color: transparent;
+}
+.light .tab-btn {
+color: #737B87;
+}
+.tab-btn:hover {
+color: #F1F5F9;
+}
+.light .tab-btn:hover {
+color: #17191D;
+}
+.tab-btn.active {
+background-color: #1A1E24;
+color: #F1F5F9;
+border: 1px solid #262B33;
+}
+.light .tab-btn.active {
+background-color: #F1F3F7;
+color: #17191D;
+border: 1px solid #E8EAEE;
+}
+/* Smooth Tab Content Hide & Show */
+.tab-content {
+transition: opacity 150ms ease-in-out;
+}
+.tab-content.hidden-tab {
+display: none !important;
+}

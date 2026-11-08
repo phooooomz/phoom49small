@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="th" class="dark">
 <head>
@@ -6,12 +7,14 @@
     <title>Developer Portfolio & Bio Link | Ultra Clean Minimal</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Inter & Kanit -->
+    <!-- Google Fonts: Inter & Kanit & JetBrains Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Kanit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <!-- Feather Icons -->
     <script src="https://unpkg.com/feather-icons"></script>
+    <!-- Custom External Stylesheet -->
+    <link rel="stylesheet" href="styles.css">
     
     <script>
         tailwind.config = {
@@ -48,39 +51,6 @@
             }
         }
     </script>
-    <style>
-        /* CSS Reset & Clean Selection */
-        * {
-            -webkit-tap-highlight-color: transparent;
-        }
-        ::selection {
-            background-color: rgba(96, 165, 250, 0.2);
-            color: inherit;
-        }
-        .light ::selection {
-            background-color: rgba(37, 99, 235, 0.15);
-        }
-        /* Custom subtle scrollbar */
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #262B33;
-            border-radius: 9999px;
-        }
-        .light ::::-webkit-scrollbar-thumb {
-            background: #E8EAEE;
-        }
-        /* Smooth subtle transitions */
-        .transition-clean {
-            transition-property: color, background-color, border-color, opacity;
-            transition-duration: 150ms;
-            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-        }
-    </style>
 </head>
 <body class="bg-dark-bg text-dark-text light:bg-light-bg light:text-light-text font-sans antialiased min-h-screen selection:bg-opacity-30 transition-clean">
 
@@ -98,7 +68,7 @@
                 <i data-feather="sun" class="w-4 h-4 hidden dark:block"></i>
                 <i data-feather="moon" class="w-4 h-4 block dark:hidden"></i>
             </button>
-            <a href="#contact" class="px-3 py-1.5 text-xs font-medium rounded-lg bg-dark-cardSec light:bg-light-cardSec text-dark-text light:text-light-text border border-dark-border light:border-light-border">
+            <a href="#contact-section" class="px-3 py-1.5 text-xs font-medium rounded-lg bg-dark-cardSec light:bg-light-cardSec text-dark-text light:text-light-text border border-dark-border light:border-light-border">
                 Contact
             </a>
         </div>
@@ -165,14 +135,14 @@
 
                     <!-- Action Buttons / Links -->
                     <div class="space-y-2">
-                        <a href="#contact" class="flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-xl bg-dark-text text-dark-bg light:bg-light-text light:text-light-bg font-medium text-xs transition-clean hover:opacity-90">
+                        <button onclick="switchTab('contact')" class="flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-xl bg-dark-text text-dark-bg light:bg-light-text light:text-light-bg font-medium text-xs transition-clean hover:opacity-90">
                             <i data-feather="mail" class="w-3.5 h-3.5"></i>
                             <span>Get in Touch</span>
-                        </a>
-                        <a href="#" onclick="copyEmail(event)" class="flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-xl bg-dark-cardSec light:bg-light-cardSec border border-dark-border light:border-light-border text-dark-text light:text-light-text font-medium text-xs transition-clean hover:bg-dark-border/40 light:hover:bg-light-border/40">
+                        </button>
+                        <button onclick="copyEmail(event)" class="flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-xl bg-dark-cardSec light:bg-light-cardSec border border-dark-border light:border-light-border text-dark-text light:text-light-text font-medium text-xs transition-clean hover:bg-dark-border/40 light:hover:bg-light-border/40">
                             <i data-feather="copy" class="w-3.5 h-3.5 text-dark-muted light:text-light-muted"></i>
                             <span id="copy-text">alex.rivera@dev.io</span>
-                        </a>
+                        </button>
                     </div>
 
                     <!-- Social Icons Bar -->
@@ -204,8 +174,24 @@
             <!-- MAIN CONTENT: Bento Grid Portfolio (8 Columns Desktop) -->
             <main class="lg:col-span-8 space-y-6">
                 
-                <!-- BENTO GRID SECTION -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- TAB BAR NAVIGATION -->
+                <div class="bg-dark-card light:bg-light-card border border-dark-border light:border-light-border rounded-2xl p-1.5 shadow-sm flex items-center justify-between gap-1 overflow-x-auto">
+                    <button onclick="switchTab('all')" data-tab="all" class="tab-btn active flex-1 min-w-[70px] py-2 px-3 rounded-xl text-xs font-medium text-center transition-clean">
+                        Overview
+                    </button>
+                    <button onclick="switchTab('projects')" data-tab="projects" class="tab-btn flex-1 min-w-[70px] py-2 px-3 rounded-xl text-xs font-medium text-center transition-clean">
+                        Projects
+                    </button>
+                    <button onclick="switchTab('experience')" data-tab="experience" class="tab-btn flex-1 min-w-[70px] py-2 px-3 rounded-xl text-xs font-medium text-center transition-clean">
+                        Timeline
+                    </button>
+                    <button onclick="switchTab('contact')" data-tab="contact" class="tab-btn flex-1 min-w-[70px] py-2 px-3 rounded-xl text-xs font-medium text-center transition-clean">
+                        Contact
+                    </button>
+                </div>
+                
+                <!-- BENTO GRID SECTION (OVERVIEW & PROJECTS) -->
+                <div id="projects-section" class="tab-content grid grid-cols-1 md:grid-cols-2 gap-4">
 
                     <!-- CARD 1: Featured Project (Wide 2-col) -->
                     <div class="md:col-span-2 bg-dark-card light:bg-light-card border border-dark-border light:border-light-border rounded-2xl p-6 shadow-sm transition-clean">
@@ -236,7 +222,7 @@
                     </div>
 
                     <!-- CARD 2: Tech Stack Grid -->
-                    <div class="bg-dark-card light:bg-light-card border border-dark-border light:border-light-border rounded-2xl p-6 shadow-sm">
+                    <div id="tech-stack-card" class="bg-dark-card light:bg-light-card border border-dark-border light:border-light-border rounded-2xl p-6 shadow-sm">
                         <h3 class="text-xs font-mono uppercase tracking-wider text-dark-muted light:text-light-muted mb-4">
                             Technical Stack
                         </h3>
@@ -260,8 +246,8 @@
                         </div>
                     </div>
 
-                    <!-- CARD 3: Current Focus / Activity -->
-                    <div class="bg-dark-card light:bg-light-card border border-dark-border light:border-light-border rounded-2xl p-6 shadow-sm flex flex-col justify-between">
+                                  <!-- CARD 3: Current Focus / Activity -->
+                    <div id="focus-card" class="bg-dark-card light:bg-light-card border border-dark-border light:border-light-border rounded-2xl p-6 shadow-sm flex flex-col justify-between">
                         <div>
                             <div class="flex items-center gap-2 text-xs font-mono text-dark-muted light:text-light-muted mb-3">
                                 <span class="relative flex h-2 w-2">
@@ -283,7 +269,7 @@
                         </div>
                     </div>
 
-   <!-- CARD 4: Secondary Project A -->
+                    <!-- CARD 4: Secondary Project A -->
                     <div class="bg-dark-card light:bg-light-card border border-dark-border light:border-light-border rounded-2xl p-5 shadow-sm transition-clean">
                         <div class="flex justify-between items-start mb-3">
                             <h3 class="text-sm font-medium text-dark-text light:text-light-text">
@@ -324,7 +310,7 @@
                 </div>
 
                 <!-- EXPERIENCE & TIMELINE SECTION -->
-                <div class="bg-dark-card light:bg-light-card border border-dark-border light:border-light-border rounded-2xl p-6 shadow-sm">
+                <div id="experience-section" class="tab-content bg-dark-card light:bg-light-card border border-dark-border light:border-light-border rounded-2xl p-6 shadow-sm">
                     <h2 class="text-xs font-mono uppercase tracking-wider text-dark-muted light:text-light-muted mb-6">
                         Experience Timeline
                     </h2>
@@ -376,8 +362,8 @@
                     </div>
                 </div>
 
-                <!-- CONTACT FORM / QUICK MESSAGE SECTION -->
-                <div id="contact" class="bg-dark-card light:bg-light-card border border-dark-border light:border-light-border rounded-2xl p-6 shadow-sm">
+                <!-- CONTACT FORM SECTION -->
+                <div id="contact-section" class="tab-content bg-dark-card light:bg-light-card border border-dark-border light:border-light-border rounded-2xl p-6 shadow-sm">
                     <div class="flex items-center justify-between mb-4">
                         <h2 class="text-xs font-mono uppercase tracking-wider text-dark-muted light:text-light-muted">
                             Send a Direct Message
@@ -425,76 +411,7 @@
         </div>
     </div>
 
-    <!-- JavaScript Interactions -->
-    <script>
-        // Initialize Feather Icons
-        document.addEventListener('DOMContentLoaded', () => {
-            feather.replace();
-        });
-
-        // Theme Toggle Functionality
-        function toggleTheme() {
-            const html = document.documentElement;
-            if (html.classList.contains('dark')) {
-                html.classList.remove('dark');
-                html.classList.add('light');
-                localStorage.setItem('theme', 'light');
-            } else {
-                html.classList.remove('light');
-                html.classList.add('dark');
-                localStorage.setItem('theme', 'dark');
-            }
-            // Re-render icons if needed
-            setTimeout(() => feather.replace(), 50);
-        }
-
-        // Initialize Theme Preference
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme === 'light') {
-            document.documentElement.classList.remove('dark');
-            document.documentElement.classList.add('light');
-        } else {
-            document.documentElement.classList.add('dark');
-            document.documentElement.classList.remove('light');
-        }
-
-        // Copy Email to Clipboard
-        function copyEmail(e) {
-            e.preventDefault();
-            const email = "alex.rivera@dev.io";
-            const copyTextSpan = document.getElementById('copy-text');
-            
-            // Standard fallback copy technique
-            const el = document.createElement('textarea');
-            el.value = email;
-            document.body.appendChild(el);
-            el.select();
-            document.execCommand('copy');
-            document.body.removeChild(el);
-
-            const originalText = copyTextSpan.innerText;
-            copyTextSpan.innerText = "Copied to Clipboard!";
-            copyTextSpan.classList.add('text-dark-accent', 'light:text-light-accent');
-
-            setTimeout(() => {
-                copyTextSpan.innerText = originalText;
-                copyTextSpan.classList.remove('text-dark-accent', 'light:text-light-accent');
-            }, 2000);
-        }
-
-        // Handle Contact Form Submission
-        function handleFormSubmit(e) {
-            e.preventDefault();
-            const status = document.getElementById('form-status');
-            const form = document.getElementById('contact-form');
-            
-            status.classList.remove('hidden');
-            form.reset();
-
-            setTimeout(() => {
-                status.classList.add('hidden');
-            }, 4000);
-        }
-    </script>
+    <!-- External JavaScript File -->
+    <script src="script.js"></script>
 </body>
 </html>
