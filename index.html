@@ -108,14 +108,14 @@
                     <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl bg-dark-cardSec light:bg-light-cardSec border border-dark-border light:border-light-border flex items-center justify-center overflow-hidden shadow-inner">
                         <i data-feather="user" class="w-12 h-12 text-dark-muted light:text-light-muted"></i>
                     </div>
-                    <span class="absolute -bottom-1 -right-1 w-4 h-4 bg-emerald-500 border-2 border-dark-card light:border-light-card rounded-full" title="พร้อมรับงาน"></span>
+                    <span class="absolute -bottom-1 -right-1 w-4 h-4 bg-emerald-500 border-2 border-dark-card light:border-light-card rounded-full" id="status-avatar" title="พร้อมรับงาน"></span>
                 </div>
 
                 <!-- Text Info & Mini Bio -->
                 <div class="space-y-4 max-w-2xl flex-1">
-                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 light:text-emerald-600 text-xs font-medium">
-                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                        <span data-i18n="status">Available for hire</span>
+                    <div id="status-badge" class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 light:text-emerald-600 text-xs font-medium">
+                        <span id="status-dot" class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                        <span id="status-text">Available for hire</span>
                     </div>
                     
                     <div>
@@ -180,6 +180,9 @@
         © 2026 อเล็กซ์ ริเวร่า. สงวนลิขสิทธิ์ทั้งหมด
     </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+    <script src="config.js"></script>
     <script src="script.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>

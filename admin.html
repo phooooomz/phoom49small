@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Admin</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="config.js"></script>
+<style>
+  .inp{width:100%;padding:.6rem .75rem;border-radius:.75rem;background:#1A1E24;border:1px solid #262B33;color:#F1F5F9;font-size:.875rem}
+  .inp:focus{outline:none;border-color:#60A5FA}
+</style>
+</head>
+<body class="bg-[#0D0F12] text-slate-100 min-h-screen p-4">
+<div class="max-w-xl mx-auto space-y-4">
+
+  <!-- LOGIN -->
+  <section id="login" class="bg-[#15181D] border border-[#262B33] rounded-2xl p-5 space-y-3">
+    <h1 class="font-semibold">เข้าสู่ระบบแอดมิน</h1>
+    <form id="login-form" class="space-y-3">
+      <input id="email" type="email" placeholder="อีเมล" required class="inp" autocomplete="username">
+      <input id="password" type="password" placeholder="รหัสผ่าน" required class="inp" autocomplete="current-password">
+      <p id="login-err" class="text-red-400 text-xs"></p>
+      <button class="w-full py-2.5 rounded-xl bg-blue-500 font-medium text-sm">เข้าสู่ระบบ</button>
+    </form>
+  </section>
+
+  <!-- PANEL -->
+  <div id="panel" hidden class="space-y-4">
+    <div class="flex justify-between items-center">
+      <h1 class="font-semibold">จัดการเว็บไซต์</h1>
+      <button id="logout" class="text-xs text-slate-400 underline">ออกจากระบบ</button>
+    </div>
+
+    <section class="bg-[#15181D] border border-[#262B33] rounded-2xl p-5 flex items-center justify-between">
+      <div><p class="text-sm font-medium">สถานะ</p><p class="text-xs text-slate-400">กดเพื่อสลับ Online / Offline</p></div>
+      <button id="status-btn" class="px-6 py-3 rounded-xl font-semibold bg-slate-600">...</button>
+    </section>
+
+    <section class="bg-[#15181D] border border-[#262B33] rounded-2xl p-5 space-y-3">
+      <h2 id="form-title" class="text-sm font-medium">เพิ่มสินค้า</h2>
+      <form id="pform" class="space-y-3">
+        <input id="name" placeholder="ชื่อสินค้า" required class="inp">
+        <div class="grid grid-cols-2 gap-3">
+          <input id="price" type="number" min="0" step="any" placeholder="ราคา (บาท)" required class="inp">
+          <input id="tag" placeholder="ป้าย เช่น Template" class="inp">
+        </div>
+        <textarea id="desc" rows="2" placeholder="รายละเอียดสั้นๆ" class="inp"></textarea>
+        <input id="buy" type="url" placeholder="ลิงก์สั่งซื้อ (LINE / Shopee / ...)" class="inp">
+        <input id="image_url" type="url" placeholder="ลิงก์รูป (หรืออัปโหลดด้านล่าง)" class="inp">
+        <input id="file" type="file" accept="image/*" class="text-xs text-slate-400">
+        <div class="flex gap-2">
+          <button id="save" class="flex-1 py-2.5 rounded-xl bg-blue-500 font-medium text-sm">บันทึก</button>
+          <button type="button" id="cancel" hidden class="px-4 rounded-xl bg-slate-700 text-sm">ยกเลิก</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="space-y-2">
+      <h2 class="text-sm font-medium">สินค้าทั้งหมด</h2>
+      <div id="list" class="space-y-2"></div>
+    </section>
+  </div>
+</div>
+
+<script>
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let products = [], editId = null, status = 'offline';
+
+function view(on){ $('login').hidden = on; $('panel').hidden = !on; }
+async function boot(){
+  const { data } = await db.auth.getSession();
+  view(!!data.session);
+  if (data.session) load();
+}
+$('login-form').onsubmit = async e => {
+  e.preventDefault(); $('login-err').textContent = '';
+  const { error } = await db.auth.signInWithPassword({ email: $('email').value, password: $('password').value });
+  if (error) { $('login-err').textContent = 'อีเมลหรือรหัสผ่านไม่ถูกต้อง'; return; }
+  view(true); load();
+};
+$('logout').onclick = async () => { await db.auth.signOut(); view(false); };
+const load = () => Promise.all([loadStatus(), loadProducts()]);
+
+/* ---- สถานะ ---- */
+async function loadStatus(){
+  const { data } = await db.from('settings').select('status').eq('id', 1).single();
+  status = data?.status || 'offline'; paintStatus();
+}
+function paintStatus(){
+  const on = status === 'online', b = $('status-btn');
+  b.textContent = on ? 'ONLINE' : 'OFFLINE';
+  b.className = 'px-6 py-3 rounded-xl font-semibold ' + (on ? 'bg-emerald-500 text-black' : 'bg-slate-600');
+}
+$('status-btn').onclick = async () => {
+  const next = status === 'online' ? 'offline' : 'online';
+  const { error } = await db.from('settings').update({ status: next, updated_at: new Date().toISOString() }).eq('id', 1);
+  if (error) return alert('บันทึกไม่สำเร็จ: ' + error.message);
+  status = next; paintStatus();
+};
+
+/* ---- สินค้า ---- */
+async function loadProducts(){
+  const { data, error } = await db.from('products').select('*').order('sort_order').order('created_at', { ascending: false });
+  if (error) return alert(error.message);
+  products = data;
+  $('list').innerHTML = products.map(p => `
+    <div class="bg-[#15181D] border border-[#262B33] rounded-xl p-3 flex items-center gap-3 ${p.is_active ? '' : 'opacity-50'}">
+      <div class="flex-1 min-w-0">
+        <p class="text-sm font-medium truncate">${esc(p.name)}</p>
+        <p class="text-xs text-slate-400">฿${Number(p.price).toLocaleString()} · ${p.is_active ? 'แสดงอยู่' : 'ซ่อนอยู่'}</p>
+      </div>
+      <button data-act="toggle" data-id="${p.id}" class="text-xs px-2 py-1 rounded-lg bg-slate-700">${p.is_active ? 'ซ่อน' : 'แสดง'}</button>
+      <button data-act="edit" data-id="${p.id}" class="text-xs px-2 py-1 rounded-lg bg-slate-700">แก้ไข</button>
+      <button data-act="del" data-id="${p.id}" class="text-xs px-2 py-1 rounded-lg bg-red-900/60">ลบ</button>
+    </div>`).join('') || '<p class="text-xs text-slate-400">ยังไม่มีสินค้า</p>';
+}
+$('list').onclick = async e => {
+  const b = e.target.closest('button'); if (!b) return;
+  const id = Number(b.dataset.id), p = products.find(x => x.id === id);
+  if (b.dataset.act === 'toggle') { await db.from('products').update({ is_active: !p.is_active }).eq('id', id); loadProducts(); }
+  if (b.dataset.act === 'del' && confirm('ลบ "' + p.name + '" ?')) { await db.from('products').delete().eq('id', id); loadProducts(); }
+  if (b.dataset.act === 'edit') {
+    editId = id;
+    $('name').value = p.name; $('price').value = p.price; $('tag').value = p.tag || '';
+    $('desc').value = p.description || ''; $('buy').value = p.buy_link || ''; $('image_url').value = p.image_url || '';
+    $('form-title').textContent = 'แก้ไขสินค้า'; $('cancel').hidden = false;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+};
+function resetForm(){
+  editId = null; $('pform').reset();
+  $('form-title').textContent = 'เพิ่มสินค้า'; $('cancel').hidden = true;
+}
+$('cancel').onclick = resetForm;
+$('pform').onsubmit = async e => {
+  e.preventDefault(); const btn = $('save'); btn.disabled = true;
+  try {
+    let image_url = $('image_url').value.trim();
+    const f = $('file').files[0];
+    if (f) {
+      const path = Date.now() + '-' + f.name.replace(/[^\w.-]/g, '_');
+      const { error: ue } = await db.storage.from('product-images').upload(path, f);
+      if (ue) throw ue;
+      image_url = db.storage.from('product-images').getPublicUrl(path).data.publicUrl;
+    }
+    const row = {
+      name: $('name').value.trim(), price: Number($('price').value),
+      tag: $('tag').value.trim() || null, description: $('desc').value.trim() || null,
+      buy_link: $('buy').value.trim() || null, image_url: image_url || null
+    };
+    const { error } = await (editId ? db.from('products').update(row).eq('id', editId) : db.from('products').insert(row));
+    if (error) throw error;
+    resetForm(); loadProducts();
+  } catch (err) { alert('บันทึกไม่สำเร็จ: ' + err.message); }
+  finally { btn.disabled = false; }
+};
+boot();
+</script>
+</body>
+</html>
