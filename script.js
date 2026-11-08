@@ -132,7 +132,11 @@ function switchTab(tabId) {
     if (target) target.classList.add('active-section');
 
     document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.tab === tabId);
+        if (btn.getAttribute('data-tab') === tabId) {
+            btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
+        }
     });
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
