@@ -50,6 +50,17 @@
             }
         }
     </script>
+    <style id="tabbar-style">
+        /* Floating glass tab bar (อยู่ในหน้านี้เลย ไม่พึ่งไฟล์ CSS ภายนอก) */
+        .glass-bar{background:linear-gradient(135deg,rgba(255,255,255,.14),rgba(255,255,255,.04));-webkit-backdrop-filter:blur(22px) saturate(1.8);backdrop-filter:blur(22px) saturate(1.8);border:1px solid rgba(255,255,255,.18);box-shadow:0 10px 40px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.25),inset 0 -1px 0 rgba(255,255,255,.05)}
+        .light .glass-bar{background:linear-gradient(135deg,rgba(255,255,255,.75),rgba(255,255,255,.4));border-color:rgba(255,255,255,.8);box-shadow:0 10px 30px rgba(0,0,0,.12),inset 0 1px 0 #fff}
+        .glass-bar .tab-btn{color:#9299A5;border:1px solid transparent;background:transparent}
+        .glass-bar .tab-btn.active{background:rgba(96,165,250,.22);border-color:rgba(96,165,250,.4);color:#93c5fd;box-shadow:0 0 18px rgba(96,165,250,.25)}
+        .glass-bar .tab-btn:active{transform:scale(.94)}
+        /* แสงสีพื้นหลัง ให้เห็นเอฟเฟกต์กระจกเบลอ */
+        body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(420px 320px at 15% 85%,rgba(96,165,250,.22),transparent 70%),radial-gradient(380px 300px at 90% 70%,rgba(168,85,247,.18),transparent 70%),radial-gradient(340px 260px at 60% 10%,rgba(16,185,129,.10),transparent 70%)}
+        @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.glass-bar{background:rgba(21,24,29,.92)}}
+    </style>
 </head>
 <body class="bg-dark-bg text-dark-text light:bg-light-bg light:text-light-text font-sans antialiased min-h-screen transition-clean flex flex-col justify-between" style="padding-bottom: calc(6rem + env(safe-area-inset-bottom));">
 
@@ -168,20 +179,20 @@
 
     <!-- BOTTOM TAB BAR -->
     <nav class="fixed inset-x-0 z-50 px-4 pointer-events-none" style="bottom: calc(0.75rem + env(safe-area-inset-bottom));">
-        <div class="pointer-events-auto max-w-sm mx-auto flex items-stretch gap-1 p-1.5 rounded-2xl glass-bar">
-        <a href="index.html" class="tab-btn active flex-1 flex flex-col items-center gap-0.5 py-2 rounded-xl transition-clean" aria-label="หน้าแรก">
+        <div class="pointer-events-auto w-full max-w-xs mx-auto flex items-stretch gap-1 p-1.5 rounded-full glass-bar">
+        <a href="index.html" class="tab-btn active flex-1 flex flex-col items-center gap-0.5 py-2 rounded-full transition-clean" aria-label="หน้าแรก">
             <i class="fa-solid fa-house text-lg"></i>
             <span class="text-[10px]" data-i18n="tab_home">หน้าแรก</span>
         </a>
-        <a href="store.html" class="tab-btn flex-1 flex flex-col items-center gap-0.5 py-2 rounded-xl transition-clean" aria-label="แจกฟรี">
+        <a href="store.html" class="tab-btn flex-1 flex flex-col items-center gap-0.5 py-2 rounded-full transition-clean" aria-label="แจกฟรี">
             <i class="fa-solid fa-gift text-lg"></i>
             <span class="text-[10px]" data-i18n="tab_store">แจกฟรี</span>
         </a>
-        <a href="about.html" class="tab-btn flex-1 flex flex-col items-center gap-0.5 py-2 rounded-xl transition-clean" aria-label="เกี่ยวกับ">
+        <a href="about.html" class="tab-btn flex-1 flex flex-col items-center gap-0.5 py-2 rounded-full transition-clean" aria-label="เกี่ยวกับ">
             <i class="fa-solid fa-user text-lg"></i>
             <span class="text-[10px]" data-i18n="tab_about">เกี่ยวกับ</span>
         </a>
-        <a href="contact.html" class="tab-btn flex-1 flex flex-col items-center gap-0.5 py-2 rounded-xl transition-clean" aria-label="ติดตาม">
+        <a href="contact.html" class="tab-btn flex-1 flex flex-col items-center gap-0.5 py-2 rounded-full transition-clean" aria-label="ติดตาม">
             <i class="fa-solid fa-share-nodes text-lg"></i>
             <span class="text-[10px]" data-i18n="tab_contact">ติดตาม</span>
         </a>
