@@ -91,28 +91,51 @@
     <!-- MAIN CONTAINER -->
     <main class="max-w-5xl mx-auto px-4 sm:px-6 py-8 w-full space-y-6">
         
-        <!-- HERO BANNER -->
+        <!-- HERO BANNER WITH PROFILE PICTURE & MINI BIO -->
         <section class="bg-dark-card light:bg-light-card border border-dark-border light:border-light-border rounded-2xl p-6 sm:p-10 shadow-sm relative overflow-hidden">
-            <div class="max-w-2xl space-y-4">
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 light:text-emerald-600 text-xs font-medium">
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                    Available for hire
+            <div class="flex flex-col md:flex-row items-start gap-6 md:gap-8">
+                
+                <!-- Profile Avatar Card -->
+                <div class="relative flex-shrink-0">
+                    <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl bg-dark-cardSec light:bg-light-cardSec border border-dark-border light:border-light-border flex items-center justify-center overflow-hidden shadow-inner">
+                        <!-- สามารถเปลี่ยนเป็น <img> รูปโปรไฟล์จริงได้ที่นี่ -->
+                        <i data-feather="user" class="w-12 h-12 text-dark-muted light:text-light-muted"></i>
+                    </div>
+                    <span class="absolute -bottom-1 -right-1 w-4 h-4 bg-emerald-500 border-2 border-dark-card light:border-light-card rounded-full" title="พร้อมรับงาน"></span>
                 </div>
-                <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-dark-text light:text-light-text">
-                    สร้างสรรค์เว็บแอปพลิเคชันด้วยดีไซน์ Ultra Clean & Minimalist
-                </h1>
-                <p class="text-xs sm:text-sm text-dark-muted light:text-light-muted leading-relaxed">
-                    สวัสดีครับ ผม อเล็กซ์ ริเวร่า วิศวกรซอฟต์แวร์ฟูลสแต็ก ผู้หลงใหลการเขียนโค้ดที่สะอาด วางโครงสร้างระบบที่มีประสิทธิภาพ และการออกแบบอินเทอร์เฟซที่เรียบหรูและตอบโจทย์การใช้งานจริง
-                </p>
-                <div class="pt-2 flex flex-wrap gap-3">
-                    <a href="contact.html" class="px-4 py-2 rounded-xl bg-dark-accent light:bg-light-accent text-white text-xs font-medium hover:opacity-90 transition-clean inline-flex items-center gap-2">
-                        <span>ติดต่องาน</span>
-                        <i data-feather="arrow-right" class="w-3.5 h-3.5"></i>
-                    </a>
-                    <a href="about.html" class="px-4 py-2 rounded-xl bg-dark-cardSec light:bg-light-cardSec border border-dark-border light:border-light-border text-dark-text light:text-light-text text-xs font-medium hover:bg-dark-border/40 light:hover:bg-light-border/40 transition-clean">
-                        ดูประวัติเพิ่มเติม
-                    </a>
+
+                <!-- Text Info & Mini Bio -->
+                <div class="space-y-4 max-w-2xl flex-1">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 light:text-emerald-600 text-xs font-medium">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                        Available for hire
+                    </div>
+                    
+                    <div>
+                        <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-dark-text light:text-light-text">
+                            อเล็กซ์ ริเวร่า
+                        </h1>
+                        <p class="text-xs font-mono text-dark-accent light:text-light-accent mt-1">
+                            Full-Stack Software Engineer & UI Developer
+                        </p>
+                    </div>
+
+                    <!-- คำบรรยายเล็กๆ น้อยๆ (Mini Bio) -->
+                    <p class="text-xs sm:text-sm text-dark-muted light:text-light-muted leading-relaxed">
+                        ยินดีต้อนรับครับ! ผมเป็นนักพัฒนาซอฟต์แวร์ที่เชี่ยวชาญการสร้างสรรค์เว็บแอปพลิเคชันด้วยดีไซน์ Ultra Clean & Minimalist เน้นประสิทธิภาพความเร็ว และประสบการณ์ใช้งานที่เรียบง่ายสบายตา
+                    </p>
+
+                    <div class="pt-2 flex flex-wrap gap-3">
+                        <a href="contact.html" class="px-4 py-2 rounded-xl bg-dark-accent light:bg-light-accent text-white text-xs font-medium hover:opacity-90 transition-clean inline-flex items-center gap-2">
+                            <span>ติดต่องาน</span>
+                            <i data-feather="arrow-right" class="w-3.5 h-3.5"></i>
+                        </a>
+                        <a href="about.html" class="px-4 py-2 rounded-xl bg-dark-cardSec light:bg-light-cardSec border border-dark-border light:border-light-border text-dark-text light:text-light-text text-xs font-medium hover:bg-dark-border/40 light:hover:bg-light-border/40 transition-clean">
+                            ดูประวัติเพิ่มเติม
+                        </a>
+                    </div>
                 </div>
+
             </div>
         </section>
 
