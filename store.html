@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="th" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ร้านค้า | Developer Portfolio</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Google Fonts: Inter & Kanit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Kanit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Feather Icons -->
+    <script src="https://unpkg.com/feather-icons"></script>
+    <!-- Custom External Stylesheet -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        dark: {
+                            bg: '#0D0F12',
+                            card: '#15181D',
+                            cardSec: '#1A1E24',
+                            text: '#F1F5F9',
+                            muted: '#9299A5',
+                            border: '#262B33',
+                            accent: '#60A5FA'
+                        },
+                        light: {
+                            bg: '#F7F8FA',
+                            card: '#FFFFFF',
+                            cardSec: '#F1F3F7',
+                            text: '#17191D',
+                            muted: '#737B87',
+                            border: '#E8EAEE',
+                            accent: '#2563EB'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'Kanit', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-dark-bg text-dark-text light:bg-light-bg light:text-light-text font-sans antialiased min-h-screen transition-clean flex flex-col justify-between">
+
+    <!-- GLOBAL TAB BAR / NAVIGATION HEADER -->
+    <header class="sticky top-0 z-50 bg-dark-bg/90 light:bg-light-bg/90 backdrop-blur-md border-b border-dark-border light:border-light-border px-4 py-3">
+        <div class="max-w-5xl mx-auto flex items-center justify-between gap-4">
+            <a href="index.html" class="flex items-center space-x-3">
+                <div class="w-8 h-8 rounded-full bg-dark-cardSec light:bg-light-cardSec flex items-center justify-center font-mono text-xs font-semibold text-dark-accent light:text-light-accent border border-dark-border light:border-light-border">
+                    DV
+                </div>
+                <span class="font-medium text-sm text-dark-text light:text-light-text hidden sm:inline-block">อเล็กซ์ ริเวร่า</span>
+            </a>
+
+            <!-- Navigation Links (Font Awesome Icon Tab Bar) -->
+            <nav class="flex items-center gap-1 bg-dark-card light:bg-light-card border border-dark-border light:border-light-border p-1 rounded-xl">
+                <a href="index.html" class="tab-btn px-4 py-2 rounded-lg text-sm transition-clean" title="หน้าแรก">
+                    <i class="fa-solid fa-house"></i>
+                </a>
+                <a href="store.html" class="tab-btn active px-4 py-2 rounded-lg text-sm transition-clean" title="ร้านค้า">
+                    <i class="fa-solid fa-store"></i>
+                </a>
+                <a href="about.html" class="tab-btn px-4 py-2 rounded-lg text-sm transition-clean" title="เกี่ยวกับ">
+                    <i class="fa-solid fa-user"></i>
+                </a>
+                <a href="contact.html" class="tab-btn px-4 py-2 rounded-lg text-sm transition-clean" title="ติดต่อ">
+                    <i class="fa-solid fa-envelope"></i>
+                </a>
+            </nav>
+
+            <button onclick="toggleTheme()" class="p-2 rounded-lg text-dark-muted light:text-light-muted hover:text-dark-text light:hover:text-light-text hover:bg-dark-cardSec light:hover:bg-light-cardSec transition-clean" aria-label="Toggle Theme">
+                <i data-feather="sun" class="w-4 h-4 hidden dark:block"></i>
+                <i data-feather="moon" class="w-4 h-4 block dark:hidden"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <main class="max-w-5xl mx-auto px-4 sm:px-6 py-8 w-full space-y-6">
+        
+        <section class="space-y-4">
+            <h1 class="text-xl font-bold text-dark-text light:text-light-text">สินค้าและบริการดิจิทัล</h1>
+            <p class="text-xs text-dark-muted light:text-light-muted">เทมเพลตและบริการพัฒนาซอฟต์แวร์คุณภาพระดับมืออาชีพ</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+                <!-- Product 1 -->
+                <div class="bg-dark-card light:bg-light-card border border-dark-border light:border-light-border rounded-2xl p-5 shadow-sm space-y-3">
+                    <div class="flex justify-between items-start">
+                        <span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono bg-dark-cardSec light:bg-light-cardSec border border-dark-border light:border-light-border text-dark-accent light:text-light-accent">Template</span>
+                        <span class="text-xs font-mono font-semibold text-dark-text light:text-light-text">฿1,290</span>
+                    </div>
+                    <h3 class="text-sm font-semibold text-dark-text light:text-light-text">Ultra Clean Portfolio Template</h3>
+                    <p class="text-xs text-dark-muted light:text-light-muted">เทมเพลตเว็บไซต์ส่วนตัวสำหรับนักพัฒนา ดีไซน์เรียบหรู รองรับ Responsive และ Dark Theme</p>
+                    <a href="contact.html" class="w-full inline-block text-center py-2 rounded-xl bg-dark-cardSec light:bg-light-cardSec border border-dark-border light:border-light-border text-xs text-dark-text light:text-light-text hover:bg-dark-border/40 light:hover:bg-light-border/40 transition-clean">
+                        สั่งซื้อ / สอบถาม
+                    </a>
+                </div>
+
+                <!-- Product 2 -->
+                <div class="bg-dark-card light:bg-light-card border border-dark-border light:border-light-border rounded-2xl p-5 shadow-sm space-y-3">
+                    <div class="flex justify-between items-start">
+                        <span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono bg-dark-cardSec light:bg-light-cardSec border border-dark-border light:border-light-border text-dark-accent light:text-light-accent">Service</span>
+                        <span class="text-xs font-mono font-semibold text-dark-text light:text-light-text">เริ่มต้น ฿15,000</span>
+                    </div>
+                    <h3 class="text-sm font-semibold text-dark-text light:text-light-text">Custom Web Application</h3>
+                    <p class="text-xs text-dark-muted light:text-light-muted">รับออกแบบและพัฒนาระบบเว็บแอปพลิเคชันตามโจทย์ธุรกิจด้วย React, Next.js และ Node.js</p>
+                    <a href="contact.html" class="w-full inline-block text-center py-2 rounded-xl bg-dark-cardSec light:bg-light-cardSec border border-dark-border light:border-light-border text-xs text-dark-text light:text-light-text hover:bg-dark-border/40 light:hover:bg-light-border/40 transition-clean">
+                        ปรึกษาโครงการ
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-dark-border light:border-light-border py-6 text-center text-xs text-dark-muted light:text-light-muted font-mono">
+        © 2026 อเล็กซ์ ริเวร่า. สงวนลิขสิทธิ์ทั้งหมด
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

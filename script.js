@@ -1,10 +1,23 @@
-// Initialize Feather Icons
+/**
+ * Developer Portfolio - Ultra Clean Minimal Script
+ */
+
 document.addEventListener('DOMContentLoaded', () => {
-    feather.replace();
+    // 1. Initialize Feather Icons
+    if (typeof feather !== 'undefined') {
+        feather.replace();
+    }
+
+    // 2. Initialize Dark / Light Theme Status
     initTheme();
+
+    // 3. Highlight Current Active Tab in Navigation Bar based on URL
+    setActiveTabByUrl();
 });
 
-// Theme Toggle Functionality
+/**
+ * Toggle Theme Function (Dark / Light)
+ */
 function toggleTheme() {
     const html = document.documentElement;
     if (html.classList.contains('dark')) {
@@ -16,67 +29,42 @@ function toggleTheme() {
         html.classList.add('dark');
         localStorage.setItem('theme', 'dark');
     }
-    // Re-render icons after DOM modification
-    setTimeout(() => feather.replace(), 50);
-}
-
-// Initialize Theme Preference from LocalStorage
-function initTheme() {
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'light') {
-        document.documentElement.classList.remove('dark');
-        document.documentElement.classList.add('light');
-    } else {
-        document.documentElement.classList.add('dark');
-        document.documentElement.classList.remove('light');
+    
+    // Refresh Feather Icons after theme switch
+    if (typeof feather !== 'undefined') {
+        setTimeout(() => feather.replace(), 50);
     }
 }
 
-// Tab Switching & Filtering Functionality
-function switchTab(tabKey) {
-    const buttons = document.querySelectorAll('.tab-btn');
-    const items = document.querySelectorAll('.portfolio-item');
-
-    // Update active tab buttons visual state
-    buttons.forEach(btn => {
-        if (btn.getAttribute('data-tab') === tabKey) {
-            btn.classList.add('active');
-        } else {
-            btn.classList.remove('active');
-        }
-    });
-
-    // Filter Items by category
-    items.forEach(item => {
-        const category = item.getAttribute('data-category');
-        if (tabKey === 'all' || category === tabKey) {
-            item.classList.remove('hidden-tab');
-        } else {
-            item.classList.add('hidden-tab');
-        }
-    });
+/**
+ * Restore User Theme Preference from LocalStorage
+ */
+function initTheme() {
+    const savedTheme = localStorage.getItem('theme');
+    const html = document.documentElement;
+    
+    if (savedTheme === 'light') {
+        html.classList.remove('dark');
+        html.classList.add('light');
+    } else {
+        html.classList.add('dark');
+        html.classList.remove('light');
+    }
 }
 
-// Copy Email to Clipboard
-function copyEmail(e) {
-    e.preventDefault();
-    const email = "alex.rivera@dev.io";
-    const copyTextSpan = document.getElementById('copy-text');
-    
-    // Standard fallback copy technique for iframe environments
-    const el = document.createElement('textarea');
-    el.value = email;
-    document.body.appendChild(el);
-    el.select();
-    document.execCommand('copy');
-    document.body.removeChild(el);
+/**
+ * Dynamically check current location and set active status on Tab Bar
+ */
+function setActiveTabByUrl() {
+    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    const navLinks = document.querySelectorAll('nav .tab-btn');
 
-    const originalText = copyTextSpan.innerText;
-    copyTextSpan.innerText = "Copied to Clipboard!";
-    copyTextSpan.classList.add('text-dark-accent', 'light:text-light-accent');
-
-    setTimeout(() => {
-        copyTextSpan.innerText = originalText;
-        copyTextSpan.classList.remove('text-dark-accent', 'light:text-light-accent');
-    }, 2000);
+    navLinks.forEach(link => {
+        const href = link.getAttribute('href');
+        if (href === currentPage || (currentPage === '' && href === 'index.html')) {
+            link.classList.add('active');
+        } else {
+            link.classList.remove('active');
+        }
+    });
 }
